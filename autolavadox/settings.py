@@ -123,7 +123,7 @@ MENU_ORDER = [
 # Application definition
 
 INSTALLED_APPS = [
-    'exile_ui',
+    'exileui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

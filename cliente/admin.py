@@ -1,5 +1,5 @@
 from django.contrib import admin
-from exile_ui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
+from exileui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
 import nested_admin
 import models
 
@@ -17,7 +17,7 @@ class ClienteAdmin(admin.ModelAdmin):
     list_filter = ['nombre', 'apellidos', 'identificacion']
     search_fields = ['nombre', 'apellidos', 'identificacion']
 # end class
-
+admin_site._registry = admin.site._registry
 admin_site.register(models.Cliente, ClienteAdmin)
 admin_site.register(models.TipoVehiculo)
 admin_site.register(models.Vehiculo)

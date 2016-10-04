@@ -1,5 +1,5 @@
 from django.contrib import admin
-from exile_ui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
+from exileui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
 import models
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from exile_ui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
+from exileui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
 import models
 import forms
 # Register your models here.
@@ -7,8 +7,8 @@ import forms
 
 class ServicioAdmin(admin.ModelAdmin):
     list_display = ['vehiculo', 'fecha', 'tipo', 'valor', 'comision', 'pago']
-    list_filter = ['vehiculo', 'fecha', 'tipo', 'valor', 'comision', 'pago']
-    search_fields = ['vehiculo', 'fecha', 'tipo', 'valor', 'comision', 'pago']
+    list_filter = ['vehiculo', 'fecha', 'tipo', 'valor']
+    search_fields = ['vehiculo', 'fecha', 'tipo', 'valor']
     list_editable = ['pago']
     form = forms.ServicioForm
 
