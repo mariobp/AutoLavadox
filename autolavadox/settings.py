@@ -38,13 +38,24 @@ EXILE_UI = {
             'login': '/media/piscix_logo/Icono-s-t.png'
         },
         'icons': {
-            'question': {
+            'cliente': {
                 'icon': 'directions_walk',
-                'groups': [
-                    'Preguntas'
+                'group': [
+                    'Cliente'
                 ],
                 'models': {
-                    'Pregunta': {'icon': 'event', 'group': 'Empleados'}
+                    'Cliente': {'icon': 'event', 'group': 'Cliente'},
+                    'TipoVehiculo': {'icon': 'event', 'group': 'Cliente'},
+                    'Vehiculo': {'icon': 'event', 'group': 'Cliente'}
+                }
+            },
+            'empleados': {
+                'icon': 'directions_walk',
+                'groups': [
+                    'Empleado'
+                ],
+                'models': {
+                    'Empleado': {'icon': 'event', 'group': 'Empleado'}
                 },
             },
             'auth': {
@@ -66,9 +77,17 @@ EXILE_UI = {
 
 MENU_ORDER = [
     {
-        'name': 'question',
+        'name': 'empleados',
         'models': [
-            'Pregunta'
+            'Empleado'
+        ]
+    },
+    {
+        'name': 'cliente',
+        'models': [
+            'Cliente',
+            'TipoVehiculo',
+            'Vehiculo'
         ]
     },
     {
@@ -94,8 +113,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nested_admin',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
+    'operacion.apps.OperacionConfig',
 ]
 
 MIDDLEWARE = [

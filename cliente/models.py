@@ -23,9 +23,30 @@ class TipoVehiculo(models.Model):
 # end class
 
 
+class Cliente(models.Model):
+    identificacion = models.CharField(max_length=20, unique=True)
+    nombre = models.CharField(max_length=100)
+    apellidos = models.CharField(max_length=300)
+
+    def __unicode__(self):
+        return '%s %s' % (self.nombre, self.apellidos)
+    # end def
+
+    def __str__(self):
+        return '%s %s' % (self.nombre, self.apellidos)
+    # end def
+
+    class Meta:
+        verbose_name = "Cliente"
+        verbose_name_plural = "Clientes"
+    # end class
+# end class
+
+
 class Vehiculo(models.Model):
     placa = models.CharField(max_length=10, unique=True)
     tipo = models.ForeignKey(TipoVehiculo)
+    cliente = models.ForeignKey(Cliente)
 
     def __unicode__(self):
         return self.placa
@@ -40,23 +61,3 @@ class Vehiculo(models.Model):
         verbose_name_plural = "Vehiculos"
     # end class
 # end class
-
-
-class Cliente(models.Model):
-    identificacion = models.CharField(max_length=20, unique=True)
-    nombre = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=300)
-    vehiculos = models.ManyToManyField(Vehihulo, null=True, blank=True)
-
-    def __unicode__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
-    # end def
-
-    def __str__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
-    # end def
-
-    class Meta:
-        verbose_name = "Trabajador"
-        verbose_name_plural = "Trabajadores"
-    # end class
