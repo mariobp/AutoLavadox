@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for autolavadox project.
 
@@ -26,11 +27,67 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+EXILE_UI = {
+    'site_title': 'LavaAutox',
+    'site_header': 'LavaAutox',
+    'index_title': 'Software para lavaautos',
+    'media': {
+        'logo': {
+            'dashboard': '/media/piscix_logo/Icono-f-t.png',
+            'page': '/media/piscix_logo/Icono-200px.png',
+            'login': '/media/piscix_logo/Icono-s-t.png'
+        },
+        'icons': {
+            'question': {
+                'icon': 'directions_walk',
+                'groups': [
+                    'Preguntas'
+                ],
+                'models': {
+                    'Pregunta': {'icon': 'event', 'group': 'Empleados'}
+                },
+            },
+            'auth': {
+                'icon': 'security',
+                'groups': [
+                    'Seguridad',
+                ],
+                'models': {
+                    'Group': {'icon': 'people', 'group': 'Seguridad'},
+                    'User': {'icon': 'person', 'group': 'Seguridad'}
+                }
+            },
+            'logout': {
+                'icon': 'exit_to_app',
+            }
+        }
+    }
+}
+
+MENU_ORDER = [
+    {
+        'name': 'question',
+        'models': [
+            'Pregunta'
+        ]
+    },
+    {
+        'name': 'auth',
+        'models': [
+            'Group',
+            'User'
+        ]
+    },
+    {
+        'name': 'logout'
+    }
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'exile_ui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +95,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'empleados.apps.EmpleadosConfig',
+    'cliente.apps.ClienteConfig',
 ]
 
 MIDDLEWARE = [

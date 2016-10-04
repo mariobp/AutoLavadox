@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from exile_ui.admin import admin_site
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^dashboard/', admin_site.urls),
 ]
