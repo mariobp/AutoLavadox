@@ -131,7 +131,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nested_admin',
-    'searchableselect',
+    'django_select2',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',

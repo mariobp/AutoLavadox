@@ -32,16 +32,16 @@ class Servicio(models.Model):
     tipo = models.ForeignKey(TipoServicio)
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
     vehiculo = models.ForeignKey(cliente.Vehiculo)
-    valor = models.FloatField()
-    comision = models.FloatField(verbose_name="comisión")
+    valor = models.FloatField(default=0)
+    comision = models.FloatField(verbose_name="comisión", default=0)
     pago = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return '%s %s - %s' % (self.cliente.nombre, self.cliente.apellidos, self.tipo.nombre)
+        return '%s %s - %s' % (self.vehiculo.cliente.nombre, self.vehiculo.cliente.apellidos, self.tipo.nombre)
     # end def
 
     def __str__(self):
-        return '%s %s - %s' % (self.cliente.nombre, self.cliente.apellidos, self.tipo.nombre)
+        return '%s %s - %s' % (self.vehiculo.cliente.nombre, self.vehiculo.cliente.apellidos, self.tipo.nombre)
     # end def
 
     class Meta:
