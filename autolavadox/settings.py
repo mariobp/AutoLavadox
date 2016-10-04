@@ -58,6 +58,16 @@ EXILE_UI = {
                     'Empleado': {'icon': 'event', 'group': 'Empleado'}
                 },
             },
+            'operacion': {
+                'icon': 'directions_walk',
+                'groups': [
+                    'Operacion'
+                ],
+                'models': {
+                    'TipoServicio': {'icon': 'event', 'group': 'Operacion'},
+                    'Servicio': {'icon': 'event', 'group': 'Operacion'}
+                },
+            },
             'auth': {
                 'icon': 'security',
                 'groups': [
@@ -91,6 +101,13 @@ MENU_ORDER = [
         ]
     },
     {
+        'name': 'operacion',
+        'models': [
+            'TipoServicio',
+            'Servicio'
+        ]
+    },
+    {
         'name': 'auth',
         'models': [
             'Group',
@@ -114,6 +131,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nested_admin',
+    'searchableselect',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',

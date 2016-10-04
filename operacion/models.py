@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from cliente import models as cliente
+from empleados import models as empleado
 
 
 # Create your models here.
@@ -28,9 +29,12 @@ class TipoServicio(models.Model):
 
 
 class Servicio(models.Model):
-    cliente = models.ForeignKey(cliente.Cliente)
     tipo = models.ForeignKey(TipoServicio)
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
+    vehiculo = models.ForeignKey(cliente.Vehiculo)
+    valor = models.FloatField()
+    comision = models.FloatField(verbose_name="comisión")
+    pago = models.BooleanField(default=False)
 
     def __unicode__(self):
         return '%s %s - %s' % (self.cliente.nombre, self.cliente.apellidos, self.tipo.nombre)

@@ -20,4 +20,5 @@ from exile_ui.admin import admin_site
 urlpatterns = [
     url(r'^dashboard/', admin_site.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
+    url('^searchableselect/', include('searchableselect.urls')),
 ]
