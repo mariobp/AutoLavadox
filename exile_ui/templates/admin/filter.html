@@ -1,0 +1,9 @@
+{% load i18n %}
+<div class="campo">
+    <label for="slt">{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</label>
+    <select id="slt">
+      {% for choice in choices %}
+      <option {% if choice.selected %}selected{% endif %} href="{{ choice.query_string|iriencode }}">{{ choice.display }}</option>
+      {% endfor %}
+    </select>
+</div>

@@ -1,0 +1,80 @@
+{% extends "admin/index.html" %}
+{% load i18n exfilters%}
+
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo;
+{% for app in app_list %}
+{{ app.name }}
+{% endfor %}
+</div>
+
+{% endblock %}
+{% endif %}
+{% if icons %}
+{% block search-subcontent %}
+
+<div class="search ex-card">
+    <i class="micon">search</i>
+    <input id="subdashboard-search" type="text" placeholder="{% trans 'Search' %}">
+</div>
+{% endblock %}
+{% block subcontent %}
+<div id="subdashboard">
+    <div class="items">
+        <ul></ul>
+    </div>
+</div>
+    {% with app_list.0 as app %}
+    {% with app.app_label|lower as app_name %}
+    <script type="text/javascript">
+        (function($){
+            {% autoescape off %}
+            var json = {% ex_applist app.models app_name %};
+            {% endautoescape %}
+            function filter(data, str) {
+                var res = {}
+                for(var key in data){
+                    res[key] = $(data[key]).filter(function (i,n){
+                        return (n.name.toLowerCase().indexOf(str.toLowerCase()) > -1? true: false)
+                    })
+                }
+                return res;
+            }
+            function dash(data) {
+                console.log(data);
+                var context = $('#subdashboard .items');
+                $(context).html('');
+                for(var key in data){
+                    if (data[key].length > 0){
+                        $(context).append('<div class="'+key+'"><h1>'+key+'</h1><ul></ul><br></div>');
+                        var ul = $(context).find('.'+key+' ul');
+                        $.each(data[key], function(i, val) {
+                            $(ul).html($(ul).html()+'<li><a href="'+val.url+'"><div><i class="micon">'+val.icon+'</i></div><div><span>'+val.name+'</span></div></a></li>');
+                        })
+                    }
+                }
+
+                // $.each(data, function(i, val) {
+                //         $(context).html($(context).html()+'<li><a href="'+val.url+'"><div><i class="micon">'+val.icon+'</i></div><div><span>'+val.name+'</span></div></a></li>');
+                // })
+            }
+            dash(json);
+            $('#subdashboard-search').keyup(function(e){
+                var res = filter(json, $(this).val());
+                dash(res);
+                e.preventDefault();
+            });
+        })(django.jQuery);
+    </script>
+    {% endwith %}
+    {% endwith%}
+{% endblock %}
+{% block content %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% endif %}
+{% block sidebar %}{% endblock %}

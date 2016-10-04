@@ -1,0 +1,15 @@
+{% load admin_static%}
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js'%}"></script>
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js'%}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js'%}"></script>
+<script type="text/javascript">
+	window.jQuery = django.jQuery;
+</script>
+<script type="text/javascript" src="{% static 'admin/js/exile-ui.js'%}"></script>
+<script type="text/javascript" src="{% static 'admin/js/ripple.js'%}"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script type="text/javascript" src="{% static 'admin/js/notix.js'%}"></script>
+<script type="text/javascript">
+	window.$ = django.jQuery;
+</script>

@@ -1,0 +1,47 @@
+{% load %}
+{% load i18n admin_static exfilters %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{site_title}}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/fonts.css" %}{% endblock %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard-ui.css'%}">
+    {% include "admin/script.html" %}
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <div class="logo"><div style="background-image: url('{{logo.dashboard}}');width:550px;height:550px;"><h2>{{title}}</h2></div></div>
+            </td>
+            <td>
+                <ul>
+                {% if app_list %}
+                    {% for app in app_list %}
+                        {% if app.has_module_perms %}
+                        <li>
+                            <a href="{{app.app_url}}">
+                                <span class="ico">{% if icons|exsub:app.app_label|exsub:'icon' %}<i class="micon">{{icons|exsub:app.app_label|exsub:'icon'}}</i>{% endif %}</span>
+                                <span class="name">{{app.name}}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        <a href="{% url 'admin:logout' %}">
+                            <span class="ico">{% if icons|exsub:'logout'|exsub:'icon' %}<i class="micon">{{icons|exsub:'logout'|exsub:'icon'}}</i>{% endif %}</span>
+                            <span class="name">{% trans 'Log out' %}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <p>{% trans "You don't have permission to edit anything." %}</p>
+                {% endif %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+
+</body>
+</html>

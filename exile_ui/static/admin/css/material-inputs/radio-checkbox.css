@@ -1,0 +1,32 @@
+/*input[type='checkbox'], input[type='radio'] {
+    vertical-align: super !important;
+    font-family: 'Material Icons';
+    visibility: hidden;
+    margin-right: 7px;
+}
+
+input[type='checkbox']::before, input[type='radio']::before {
+    visibility: visible;
+    background: transparent;
+    font-size: 24px;
+    display: block;
+    position: relative;
+    left: 0;
+    z-index: 1;
+}
+
+input[type='checkbox']::before{
+    content: "check_box_outline_blank";
+}
+
+input[type='checkbox']:checked::before {
+    content: "check_box";
+}
+
+input[type='radio']::before {
+    content: "radio_button_unchecked";
+}
+
+input[type='radio']:checked::before {
+    content: "radio_button_checked";
+}*/

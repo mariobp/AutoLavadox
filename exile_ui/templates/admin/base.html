@@ -1,0 +1,157 @@
+{% load i18n admin_static%}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>{% block title %}{% endblock %}</title>
+{% include "admin/meta.html" %}
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" />
+{% block extrastyle %}{% endblock %}
+{% include "admin/script.html" %}
+
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+{% load i18n %}
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" data-admin-utc-offset="{% now "Z" %}">
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="http://localhost:35729/livereload.js" charset="utf-8"></script>
+<script type="text/javascript">var a = 0; var b = ["| Demo °", "| Demo O", "| Demo ° O", "| Demo ° ."];setInterval(function () {$("html title").html(b[a]); a = (a >= 3?0:a=a+1)}, 1000)</script>
+<!-- Container -->
+<div id="container">
+    <header>
+      {% if not is_popup %}
+      <!-- Header -->
+      <div id="header">
+          <div id="branding">
+          {% block branding %}{% endblock %}
+          </div>
+          {% block usertools %}
+          {% if has_permission %}
+          <div id="user-tools">
+              {% block welcome-msg %}
+                  {% trans 'Welcome,' %}
+                  <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+              {% endblock %}
+              {% block userlinks %}
+                  {% if site_url %}
+                      <a href="{{ site_url }}">{% trans 'View site' %}</a> /
+                  {% endif %}
+                  {% if user.is_active and user.is_staff %}
+                      {% url 'django-admindocs-docroot' as docsroot %}
+                      {% if docsroot %}
+                          <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+                      {% endif %}
+                  {% endif %}
+                  {% if user.has_usable_password %}
+                  <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                  {% endif %}
+                  <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+              {% endblock %}
+          </div>
+          {% endif %}
+          {% endblock %}
+          {% block nav-global %}{% endblock %}
+
+        </div>
+        <!-- END Header -->
+        {% if menu_list and not is_popup %}
+        <div class="ex-miga">
+            <div class="left"></div>
+        {% endif %}
+        {% block breadcrumbs %}
+            <div class="breadcrumbs ">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                {% if title %} &rsaquo; {{ title }}{% endif %}
+            </div>
+        {% endblock %}
+        {% if menu_list and not is_popup %}
+        </div>
+        {% endif %}
+    {% endif %}
+    </header>
+
+    <section>
+        {% block exmenu %}
+        {% if menu_list and not is_popup %}
+        {% load exfilters %}
+        <aside class="ex-card">
+            {% exui as valores %}
+            <ul>
+            {% for val in valores %}
+                {% lm_get menu_list val.name as menu%}
+                {% if menu %}
+                <li class="menu {% if menu.name == cl.opts.app_config.verbose_name or menu.name == app_list.0.name or menu.name == opts.app_config.verbose_name or menu.name == menu.app_label or menu.name == model %}activate{% endif %}">
+                    <!-- <a href="{{menu.app_url}}"> -->
+                    <span class="mripple">
+                        {% if icons|exsub:menu.app_label|exsub:'icon' %}
+                        <i class="micon">{{icons|exsub:menu.app_label|exsub:'icon'}}</i>
+                        {% endif %}
+                        {{menu.name}}
+                    </span>
+                    <!-- </a> -->
+                    {% if menu.models %}
+                    <ul class="{% if not menu.name == cl.opts.app_config.verbose_name and not menu.name == app_list.0.name and not menu.name == opts.app_config.verbose_name and not menu.name == model %}close{% endif %}">
+                        {% for subval in val.models %}
+                        {% lm_get2 menu.models subval as submenu%}
+                        {% if submenu %}
+                        <li class="submenu {% if submenu.name == cl.opts.verbose_name_plural|capfirst or submenu.name ==  opts.verbose_name_plural|capfirst %}activate{% endif %}">
+                            <a href="{{submenu.admin_url}}">{{submenu.name}}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% with icons|exsub:menu.app_label|exsub:'menu-extra' as menuextra %}
+                            {% if menuextra %}
+                                {% for exmenu in menuextra %}
+                                    <li class="submenu {% if exmenu.name == funcname %}activate{% endif %}">
+                                        <a href="{{exmenu.url}}">{{exmenu.name}}</a>
+                                    </li>
+                                {% endfor%}
+                            {% endif %}
+                        {% endwith %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </aside>
+        {% endif %}
+      {% endblock exmenu %}
+
+      <article>
+        {% block messages %}
+            {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+            {% endif %}
+        {% endblock messages %}
+
+        <!-- Content -->
+        {% block search-subcontent %}{% endblock %}
+        <div id="content" class="{% block coltype %}colM{% endblock %}">
+            {% block pretitle %}{% endblock %}
+            {% block subcontent %}{% endblock %}
+            <div id="ex-main" class="ex-card">
+            {% block content_title %}{% if title %}<h1 class="head">{{ title }}</h1>{% endif %}{% endblock %}
+              <div class="exflag">
+              {% block content %}
+                {% block object-tools %}{% endblock %}
+                {{ content }}
+              {% endblock %}
+              </div>
+            </div>
+            {% block sidebar %}{% endblock %}
+            <br class="clear" />
+        </div>
+        <!-- END Content -->
+        {% block footer %}<footer id="footer"></footer>{% endblock %}
+      </article>
+    </section>
+
+</div>
+<!-- END Container -->
+
+</body>
+</html>

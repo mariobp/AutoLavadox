@@ -1,0 +1,94 @@
+{% load i18n admin_static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{% static 'admin/css/login.css'%}">
+</head>
+
+<body>
+    <div id="sheet">
+        <div id="logo" {% if user.is_authenticated or form.errors or form.non_field_errors %}class="err"{% endif %} style="background-image: url('{{img}}');"></div>
+        {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">
+            <i class="micon">error_outline</i> {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+        </p>
+        {% endif %}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+            <p class="errornote">
+                <i class="micon">error_outline</i> {{ error }}
+            </p>
+            {% endfor %}
+        {% endif %}
+        {% if user.is_authenticated %}
+        <p class="errornote">
+            {% blocktrans with username=request.user.get_username trimmed %} You are authenticated as {{ username }}, but are not authorized to access this page. Would you like to login to a different account? {% endblocktrans %}
+        </p>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+            <div class="form-row">
+                <div class="group">
+                    <input id="id_username" maxlength="254" name="username" type="text" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    {{ form.username.label_tag }}
+                </div>
+                {{ form.username.errors }}
+            </div>
+            <div class="form-row">
+                <div class="group">
+                    <input id="id_password" name="password" type="password" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    {{ form.password.label_tag }}
+                </div>
+                {{ form.password.errors }}
+                <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+            <div class="submit-row">
+                <input type="submit" value="{% trans 'Log in' %}" />
+            </div>
+            {% url 'admin_password_reset' as password_reset_url %}
+            {% if password_reset_url %}
+            <div class="password-reset-link">
+                <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+            </div>
+            {% endif %}
+        </form>
+        <script type="text/javascript">
+            function removeclass(c) {
+                setTimeout(function() {
+                    document.querySelector('#logo').className = "";
+                    if (c){
+                        c();
+                    }
+                }, 600);
+            }
+            document.getElementById('id_username').focus()
+            removeclass();
+            var btn = document.querySelector('.submit-row input[type="submit"]');
+            btn.onclick = function(){
+                var u = document.querySelector('#id_username').validity.valueMissing
+                var p = document.querySelector('#id_password').validity.valueMissing
+                console.log(u, p);
+                if (u || p){
+                    document.querySelector('#logo').className = "err";
+                    removeclass();
+                }else {
+                    document.querySelector('#logo').className = "ok";
+                    removeclass(function () {
+                        document.querySelector('#logo').className = "open";
+                        document.querySelector('#login-form').submit();
+                    });
+                }
+                return false;
+            }
+        </script>
+    </div>
+</body>
+
+</html>

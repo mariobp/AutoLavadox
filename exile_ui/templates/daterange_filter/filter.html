@@ -1,0 +1,20 @@
+{% load i18n admin_static %}
+<div class="ex-date-filter">
+  <label>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</label>
+  {% with choices.0 as i %}
+  <form method="GET" action="">
+      {{ spec.form.media }}
+      <ul>
+        {{ spec.form.as_ul }}
+        <li class="submit-row">
+          {#create hidden inputs to preserve values from other filters and search field#}
+          {% for k, v in i.get_query.items %}
+                  <input type="hidden" name="{{ k }}" value="{{ v }}">
+          {% endfor %}
+        <input type="submit" value="{% trans "Search" %}">
+        <input type="reset" value="{% trans "Clear" %}">
+      </li>
+    </ul>
+  </form>
+</div>
+{% endwith %}

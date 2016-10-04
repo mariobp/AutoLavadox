@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {%if logo.page%}
+        <a href="{% url 'admin:index' %}"><img src="{{logo.page}}" alt="{{ site_header|default:_('Django administration') }}"></a>
+    {% else %}
+        <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+    {% endif %}
+
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
