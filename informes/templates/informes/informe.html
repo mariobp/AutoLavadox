@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		@page {
+		    size: legal landscape;
+			margin: .5cm .5cm .5cm .5cm;
+			font-size: 8px;
+		}
+		table{
+			width: 100%;
+			border: solid 1px black;
+		}
+	</style>
+</head>
+<body>
+	<table>
+	<tr>
+	{% for header in headers %}
+		<th>{{header}}</th>
+	{% endfor %}
+	</tr>
+	{% for row in dataset %}
+		<tr>
+			{% for col in row %}
+				<td>{{col}}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+	</body>
+</html>
