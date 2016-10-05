@@ -9,12 +9,13 @@ class OperarioAdmin(nested_admin.NestedModelAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     search_fields = list_display
+    form = forms.OperarioForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
         if obj:
-            kwargs['form'] = forms.OperarioForm
+            kwargs['form'] = forms.OperarioFormEdit
         # end if
-        return super(forms.OperarioForm, self).get_form(request, obj, *args, **kwargs)
+        return super(OperarioAdmin, self).get_form(request, obj, *args, **kwargs)
     # end def
 # end class
 

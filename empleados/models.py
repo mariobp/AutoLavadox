@@ -15,11 +15,11 @@ class Persona(User):
     imagen = models.ImageField(upload_to="avatar", null=True, blank=True)
 
     def __unicode__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
+        return '%s %s' % (self.last_name, self.first_name)
     # end def
 
     def __str__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
+        return '%s %s' % (self.last_name, self.first_name)
     # end def
 # end class
 

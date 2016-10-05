@@ -21,7 +21,7 @@ class OperarioForm(UserCreationForm):
 
     class Meta:
         model = models.Empleado
-        fields = ['username', 'password1', 'password2', 'email', 'first_name', 
+        fields = ['username', 'password1', 'password2', 'email', 'first_name',
                   'last_name', 'identificacion', 'direccion', 'telefono', 'nacimiento', 'imagen']
     # end class
 
@@ -33,4 +33,32 @@ class OperarioForm(UserCreationForm):
         return operario
     # end def
 # end class
+
+
+class OperarioFormEdit(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(OperarioFormEdit, self).__init__(*args, **kwargs)
+        self.fields['email'].label = "Correo Electrtónico"
+        self.fields['first_name'].label = "Nombre"
+        self.fields['last_name'].label = "Apellidos"
+        self.fields['nacimiento'].widget = DatePickerWidget(
+            attrs={'class': 'date'},
+            format="%m/%d/%Y")
+        self.fields['telefono'].widget = forms.NumberInput()
+    # end def
+
+    class Meta:
+        model = models.Empleado
+        exclude = ['password1', 'password2', ]
+        fields = ['username', 'email', 'first_name',
+                  'last_name', 'identificacion', 'direccion', 'telefono', 'nacimiento', 'imagen']
+    # end class
+
+    def save(self, commit=True):
+        operario = super(OperarioFormEdit, self).save(commit)
+        operario.is_staff = True
+        operario.is_superuser = True
+        operario.save()
+        return operario
+    # end def
 # end class
