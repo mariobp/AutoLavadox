@@ -20,7 +20,22 @@ class OperarioAdmin(nested_admin.NestedModelAdmin):
 # end class
 
 
+class RecepcionistaAdmin(nested_admin.NestedModelAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name',
+                    'direccion', 'telefono', 'nacimiento')
+    search_fields = list_display
+    form = forms.RecepcionistaForm
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        if obj:
+            kwargs['form'] = forms.RecepcionistaFormEdit
+        # end if
+        return super(RecepcionistaAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
+# end class
+
+
 # Register your models here.
 exileui.register(models.Empleado, OperarioAdmin)
-exileui.register(models.Recepcionista)
+exileui.register(models.Recepcionista, RecepcionistaAdmin)
 exileui.register(models.Cajero)
