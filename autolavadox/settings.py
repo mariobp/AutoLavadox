@@ -90,7 +90,9 @@ MENU_ORDER = [
     {
         'name': 'empleados',
         'models': [
-            'Empleado'
+            'Empleado',
+            'Recepcionista',
+            'Cajero'
         ]
     },
     {

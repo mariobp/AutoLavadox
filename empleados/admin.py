@@ -5,3 +5,5 @@ import models
 
 # Register your models here.
 exileui.register(models.Empleado)
+exileui.register(models.Recepcionista)
+exileui.register(models.Cajero)

@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
 
 from django.db import models
-import re
 from django.core import validators
+import re
 
 
 # Create your models here.
 class TipoVehiculo(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
+    descripcion = models.CharField(max_length=1000)
     estado = models.BooleanField(default=True)
 
     def __unicode__(self):
