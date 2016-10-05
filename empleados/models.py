@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 class Persona(User):
     identificacion = models.CharField(max_length=20, unique=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('No valida'), 'invalid')])
     direccion = models.CharField(max_length=30)
+    nacimiento = models.DateField(verbose_name="Fecha de nacimiento")
     telefono = models.CharField(max_length=10)
     imagen = models.ImageField(upload_to="avatar", null=True, blank=True)
 
