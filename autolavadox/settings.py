@@ -39,34 +39,34 @@ EXILE_UI = {
         },
         'icons': {
             'empleados': {
-                'icon': 'directions_walk',
+                'icon': 'people',
                 'groups': [
                     'Empleado'
                 ],
                 'models': {
-                    'Empleado': {'icon': 'event', 'group': 'Empleado'}
+                    'Empleado': {'icon': 'people', 'group': 'Empleado'}
                 },
             },
             'cliente': {
-                'icon': 'directions_walk',
+                'icon': 'person',
                 'group': [
                     'Cliente'
                 ],
                 'models': {
-                    'Cliente': {'icon': 'event', 'group': 'Cliente'},
-                    'TipoVehiculo': {'icon': 'event', 'group': 'Cliente'},
-                    'Vehiculo': {'icon': 'event', 'group': 'Cliente'}
+                    'Cliente': {'icon': 'person', 'group': 'Cliente'},
+                    'TipoVehiculo': {'icon': 'settings', 'group': 'Cliente'},
+                    'Vehiculo': {'icon': 'directions_car', 'group': 'Cliente'}
                 }
             },
             'operacion': {
-                'icon': 'directions_walk',
+                'icon': 'local_car_wash',
                 'groups': [
                     'Operacion'
                 ],
                 'models': {
-                    'TipoServicio': {'icon': 'event', 'group': 'Operacion'},
-                    'Servicio': {'icon': 'event', 'group': 'Operacion'},
-                    'Orden': {'icon': 'event', 'group': 'Operacion'}
+                    'TipoServicio': {'icon': 'settings', 'group': 'Operacion'},
+                    'Servicio': {'icon': 'build', 'group': 'Operacion'},
+                    'Orden': {'icon': 'assignment', 'group': 'Operacion'}
                 },
             },
             'auth': {
@@ -219,3 +219,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
