@@ -11,24 +11,35 @@ from django_select2.forms import (
 class ServicioForm(forms.ModelForm):
     class Meta:
         model = models.Servicio
-        exclude = ()
+        exclude = ('vehiculo',)
         fields = {
             'tipo',
-            'vehiculo'
+            'empleado'
         }
         widgets = {
             'tipo': Select2Widget,
-            'vehiculo': Select2Widget
+            'empleado': Select2Widget
+        }
+    # end class
+# end class
+
+
+class OrdenForm(forms.ModelForm):
+    class Meta:
+        model = models.Orden
+        exclude = ('valor', 'fecha')
+        fields = {
+            'observacion',
+            'vehiculo'
+        }
+        widgets = {
+            'vehiculo': Select2Widget,
+            'observacion': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
         }
     # end class
 
     def save(self, commit=True):
-        servicio = super(ServicioForm, self).save(commit)
-        servicio.save()
-        print servicio.tipo
-        servicio.valor = servicio.tipo.costo
-        servicio.comision = servicio.tipo.costo * (servicio.tipo.comision/100)
-        servicio.save()
-        return servicio
-    # end def
+        orden = super(OrdenForm, self).save(commit)
+        orden.save()
+    # end class
 # end class

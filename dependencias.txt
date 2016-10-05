@@ -4,3 +4,4 @@ django-nested-admin==3.0.10
 django-import-export==0.5.1
 django_select2
 exileui
+django-import-export

@@ -4,4 +4,5 @@ import models
 
 
 # Register your models here.
+admin_site._registry = admin.site._registry
 admin_site.register(models.Empleado)

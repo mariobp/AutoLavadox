@@ -38,6 +38,15 @@ EXILE_UI = {
             'login': '/media/piscix_logo/Icono-s-t.png'
         },
         'icons': {
+            'empleados': {
+                'icon': 'directions_walk',
+                'groups': [
+                    'Empleado'
+                ],
+                'models': {
+                    'Empleado': {'icon': 'event', 'group': 'Empleado'}
+                },
+            },
             'cliente': {
                 'icon': 'directions_walk',
                 'group': [
@@ -49,15 +58,6 @@ EXILE_UI = {
                     'Vehiculo': {'icon': 'event', 'group': 'Cliente'}
                 }
             },
-            'empleados': {
-                'icon': 'directions_walk',
-                'groups': [
-                    'Empleado'
-                ],
-                'models': {
-                    'Empleado': {'icon': 'event', 'group': 'Empleado'}
-                },
-            },
             'operacion': {
                 'icon': 'directions_walk',
                 'groups': [
@@ -65,7 +65,8 @@ EXILE_UI = {
                 ],
                 'models': {
                     'TipoServicio': {'icon': 'event', 'group': 'Operacion'},
-                    'Servicio': {'icon': 'event', 'group': 'Operacion'}
+                    'Servicio': {'icon': 'event', 'group': 'Operacion'},
+                    'Orden': {'icon': 'event', 'group': 'Operacion'}
                 },
             },
             'auth': {
@@ -104,7 +105,8 @@ MENU_ORDER = [
         'name': 'operacion',
         'models': [
             'TipoServicio',
-            'Servicio'
+            'Servicio',
+            'Orden'
         ]
     },
     {
@@ -132,6 +134,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nested_admin',
     'django_select2',
+    'daterange_filter',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',
