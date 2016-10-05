@@ -1,0 +1,60 @@
+{% load static %}
+<html lang="es">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Angular Material style sheet -->
+        <link rel="stylesheet" href="{% static 'bower_components/angular-material/angular-material.min.css' %}">
+    </head>
+    <body ng-app="App" ng-cloak ng-controller="AppCtrl">
+        <!--
+    Your HTML content here
+  -->
+        <div layout="column" layout-fill>
+            <md-toolbar md-colors="{background: 'blue'}">
+
+                <div class="md-toolbar-tools">
+                    <span>Luxury Service</span>
+
+                    <!-- fill up the space between left and right area -->
+                    <span flex></span>
+
+                    <div class=""></div>
+                    <md-button>
+                        Dashboard
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <section>
+                <md-subheader md-colors="{background: 'blue'}">
+                  <md-grid-list md-cols-sm="12" md-cols-md="6" md-cols-lg="6" md-cols-gt-lg="6"  md-row-height="20px">
+                    <md-grid-tile>
+                        <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display">
+                          <span md-highlight-text="searchText">{{item.display}}</span>
+                        </md-autocomplete>
+                    </md-grid-tile>
+                    <md-grid-tile>
+                      Nombre Identificacion
+                    </md-grid-tile>
+                  </md-grid-list>
+                </md-subheader>
+            </section>
+            <md-content>
+
+            </md-content>
+        </div>
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="{% static 'bower_components/angular/angular.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-animate/angular-animate.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-aria/angular-aria.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-messages/angular-messages.min.js' %}"></script>
+        <!-- Angular Material Library -->
+        <script src="{% static 'bower_components/angular-material/angular-material.min.js' %}"></script>
+        <script src="{% static 'js/app.js' %}" type="text/javascript"></script>
+        <!-- Your application bootstrap  -->
+    </body>
+</html>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->

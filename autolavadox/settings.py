@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',
+    'interface'
 ]
 
 MIDDLEWARE = [

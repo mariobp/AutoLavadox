@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from exileui.admin import exileui
+from interface import views
 
 urlpatterns = [
     url(r'^dashboard/', exileui.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
-    url(r'^select2/', include('django_select2.urls'))
+    url(r'^select2/', include('django_select2.urls')),
+    url(r'^$', views.index, name="index")
 ]
