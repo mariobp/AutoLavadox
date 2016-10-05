@@ -1,5 +1,5 @@
 from django.contrib import admin
-from exileui.admin import admin_site, ExStacked, ExTabular, DateRangeEX
+from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 import models
 import forms
 from daterange_filter.filter import DateRangeFilter
@@ -41,7 +41,6 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.save()
 # end if
 
-admin_site._registry = admin.site._registry
-admin_site.register(models.TipoServicio)
-admin_site.register(models.Servicio, ServicioAdmin)
-admin_site.register(models.Orden, OrdenAdmin)
+exileui.register(models.TipoServicio)
+exileui.register(models.Servicio, ServicioAdmin)
+exileui.register(models.Orden, OrdenAdmin)

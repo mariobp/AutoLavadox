@@ -7,7 +7,7 @@
     @licence: Creative Common
 """
 from django.contrib import admin
-from exile_ui.admin import admin_site
+from exile_ui.admin import exileui
 from import_export.formats import base_formats
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 from import_export import resources, fields
@@ -29,7 +29,7 @@ def register_export(model, resource_class):
 	registry[model] = resource_class
 # end def
 
-old_register = admin_site.register
+old_register = exileui.register
 
 def register(model, *args):
     if model in registry:
@@ -47,4 +47,4 @@ def register(model, *args):
 # end def
 
 
-admin_site.register = register
+exileui.register = register
