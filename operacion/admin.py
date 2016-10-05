@@ -41,7 +41,6 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.save()
 # end if
 
-
 admin_site._registry = admin.site._registry
 admin_site.register(models.TipoServicio)
 admin_site.register(models.Servicio, ServicioAdmin)

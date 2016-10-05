@@ -4,13 +4,15 @@ from __future__ import unicode_literals
 from django.db import models
 from cliente import models as cliente
 from empleados import models as empleado
+from django.core import validators
+import re
 
 
 # Create your models here.
 class TipoServicio(models.Model):
     nombre = models.CharField(max_length=500, unique=True)
-    costo = models.FloatField()
-    comision = models.FloatField("Comisión")
+    costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
+    comision = models.FloatField("Comisión", validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]{1,2}.[0-9]*|[1-9]+[0-9]{1,2}$'), ('Comisión no valida'), 'invalid')])
     state = models.BooleanField(default=True)
 
     def __unicode__(self):
