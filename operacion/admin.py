@@ -23,6 +23,22 @@ class OrdenAdmin(admin.ModelAdmin):
     list_display = ['fecha', 'vehiculo', 'valor', 'comision', 'pago']
     list_editable = ['pago']
     form = forms.OrdenForm
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        total = 0
+        comi = 0
+        for s in models.Servicio.objects.filter(orden=obj):
+            print s
+            s.valor = s.tipo.costo
+            s.comision = s.tipo.costo * (s.tipo.comision/100)
+            comi += s.comision
+            total += s.valor
+            s.save()
+        # end for
+        obj.valor = total
+        obj.comision = comi
+        obj.save()
 # end if
 
 

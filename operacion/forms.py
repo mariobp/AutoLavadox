@@ -27,7 +27,7 @@ class ServicioForm(forms.ModelForm):
 class OrdenForm(forms.ModelForm):
     class Meta:
         model = models.Orden
-        exclude = ('valor', 'fecha')
+        exclude = ('valor',)
         fields = {
             'observacion',
             'vehiculo'
@@ -36,10 +36,5 @@ class OrdenForm(forms.ModelForm):
             'vehiculo': Select2Widget,
             'observacion': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
         }
-    # end class
-
-    def save(self, commit=True):
-        orden = super(OrdenForm, self).save(commit)
-        orden.save()
     # end class
 # end class
