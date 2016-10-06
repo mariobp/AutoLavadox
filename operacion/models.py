@@ -13,7 +13,7 @@ class TipoServicio(models.Model):
     nombre = models.CharField(max_length=500, unique=True)
     costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
     comision = models.FloatField("Comisión", validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]{1,2}.[0-9]*|[1-9]+[0-9]{1,2}$'), ('Comisión no valida'), 'invalid')])
-    vehiculos = models.ManyToManyField(cliente.TipoVehiculo, blank=True, null=True)
+    vehiculos = models.ManyToManyField(cliente.TipoVehiculo)
     state = models.BooleanField(default=True)
 
     def __unicode__(self):
