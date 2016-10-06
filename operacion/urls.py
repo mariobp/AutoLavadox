@@ -2,7 +2,7 @@ from django.conf.urls import url
 import views
 
 
-# url ws de tipo de vehiculos
+# url ws de tipo de servicios porvehiculo
 urlpatterns = [
     url(r'^ws/tipo/servicio/$', views.TiposServicios.as_view(), name='ws_tipo_servicio'),
 ]

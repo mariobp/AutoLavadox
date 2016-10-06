@@ -33,7 +33,7 @@ class TipoServicio(models.Model):
 
 class Orden(models.Model):
     entrada = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    fin = models.DateField(blank=True, null=True)
+    fin = models.DateTimeField(blank=True, null=True)
     recepcionista = models.ForeignKey(empleado.Recepcionista, related_name='recepcionista', null=True, blank=True)
     cajero = models.ForeignKey(empleado.Cajero, related_name='cajero', null=True, blank=True)
     vehiculo = models.ForeignKey(cliente.Vehiculo, null=True, blank=True)
