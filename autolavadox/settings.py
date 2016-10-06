@@ -137,6 +137,7 @@ INSTALLED_APPS = [
     'nested_admin',
     'django_select2',
     'daterange_filter',
+    'supra',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',

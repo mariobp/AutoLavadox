@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core import validators
 import re
+from supra import views as supra
 
 
 # Create your models here.
@@ -49,7 +50,7 @@ class Cliente(models.Model):
 class Vehiculo(models.Model):
     placa = models.CharField(max_length=10, unique=True)
     tipo = models.ForeignKey(TipoVehiculo)
-    cliente = models.ForeignKey(Cliente)
+    cliente = models.ForeignKey(Cliente, null=True, blank=True)
 
     def __unicode__(self):
         return self.placa

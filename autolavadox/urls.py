@@ -20,5 +20,7 @@ from exileui.admin import exileui
 urlpatterns = [
     url(r'^dashboard/', exileui.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
-    url(r'^select2/', include('django_select2.urls'))
+    url(r'^select2/', include('django_select2.urls')),
+    url(r'^empleados/', include('empleados.urls', namespace='empleado')),
+    url(r'^cliente/', include('cliente.urls', namespace='cliente')),
 ]
