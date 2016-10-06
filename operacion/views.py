@@ -62,3 +62,17 @@ class CloseOrden(supra.SupraFormView):
         return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
     # end def
 # end class
+
+
+class WsServiciosOrden(supra.SupraListView):
+    model = models.Servicio
+    search_key = 'q'
+    list_display = ['id', 'valor', 'tipos', 'estado']
+    list_filter = ['orden__id']
+    search_fields = ['orden__id']
+    paginate_by = 1000
+
+    class Renderer:
+        tipos = 'tipo__nombre'
+    # end class
+# end class
