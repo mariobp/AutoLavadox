@@ -1,0 +1,107 @@
+{% load static %}
+<html lang="es" ng-app="App" ng-cloak>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Angular Material style sheet -->
+        <link rel="stylesheet" href="{% static 'bower_components/angular-material/angular-material.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" >
+    </head>
+    <body ng-controller="AppCtrl" class="color-fondo">
+        <!--
+    Your HTML content here
+  -->
+            <md-toolbar md-colors="{background: 'blue'}">
+
+                <div class="md-toolbar-tools">
+                    <span>Luxury Service</span>
+
+                    <!-- fill up the space between left and right area -->
+                    <span flex></span>
+
+                    <div class=""></div>
+                    <md-button>
+                        Dashboard
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <section>
+                <md-subheader class="padding-0 color-fondo">
+                  <div class="layout-row" layout="row">
+                    <div flex="40" class="bidi" flex-xs="100">
+                      <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" placeholder="Placa Vehículo" flex-gt-xs>
+                        <span md-highlight-text="searchText">{{item.display}}</span>
+                      </md-autocomplete >
+                    </div>
+                    <div flex="40" flex-xs="100">
+                        <md-input-container>
+                          <label>Nombre del Cliente</label>
+                          <input ng-model="cliente.nombre" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                    <div flex="40" flex-xs="100">
+                        <md-input-container>
+                          <label>identificación</label>
+                          <input ng-model="cliente.identificacion" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                  </div>
+                </md-subheader>
+            </section>
+            <md-content>
+              <div class="layout-row color-fondo" layout="row" layout-xs="column" layout-align="center stretch">
+                      <md-card flex="20" flex-xs="100">
+                       <md-card-content>
+                          <h3>En Servicio</h3>
+                          <md-divider></md-divider>
+                          <md-radio-group ng-model="selectedId" >
+                            <div ng-repeat='placa in placas' class="row">
+                              <div flex layout='row' layout-padding layout-align="start center" >
+                                <md-radio-button flex
+                                    ng-value="placa.id"
+                                    class="md-primary" >
+                                  [[placa.numero]]
+                                </md-radio-button>
+                              </div>
+                            </div>
+                          </md-radio-group>
+                       </md-card-content>
+                      </md-card>
+                  <md-card flex="80" flex-xs="100">
+                   <md-card-content>
+                     <md-tabs md-dynamic-height md-border-bottom>
+                        <md-tab label="Servicos Aplicables">
+                           <md-list-item ng-repeat="servicio in servicios">
+                             <p>[[servicio.nombre]]</p>
+                             <md-checkbox class="md-secondary" ng-model="servicio.select"></md-checkbox>
+                           </md-list-item>
+                        </md-tab>
+                        <md-tab label="Servicios Terminados">
+                        </md-tab>
+                     </md-tabs>
+                   </md-card-content>
+                      <md-card-footer>
+                       <md-divider></md-divider>
+                       <p class="center">
+                         Total x servicios
+                         <h2>$900.222</h2>
+                       </p>
+                     </md-card-footer>
+                  </md-card>
+              </div>
+            </md-content>
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="{% static 'bower_components/angular/angular.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-animate/angular-animate.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-aria/angular-aria.min.js' %}"></script>
+        <script src="{% static 'bower_components/angular-messages/angular-messages.min.js' %}"></script>
+        <!-- Angular Material Library -->
+        <script src="{% static 'bower_components/angular-material/angular-material.min.js' %}"></script>
+        <script src="{% static 'js/app.js' %}" type="text/javascript"></script>
+        <!-- Your application bootstrap  -->
+    </body>
+</html>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->
