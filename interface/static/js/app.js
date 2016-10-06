@@ -5,8 +5,27 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	$interpolateProvider.endSymbol(']]');
 })
 
-.controller('AppCtrl', function($scope, $http) {
-    $scope.hola = "Hola Mundo";
+.controller('AppCtrl', function($scope, $http, $location, $mdDialog) {
+
+    $scope.cerrarSesion = function(){
+        $http({
+          'url': '/empleados/logout/',
+          'method': 'GET',
+        }).then(function doneCallbacks(response){
+            location.href = "/login/";
+        }, function failCallbacks(response){
+            $mdDialog.show(
+              $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('Error del servidor')
+                .textContent('Hay un error, contacte a el administrador.')
+                .ariaLabel('Alert Dialog Error')
+                .ok('OK')
+            );
+        });
+    };
+
     $scope.placas = [{
         id: 1,
         numero: "720WW"

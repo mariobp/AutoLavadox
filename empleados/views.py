@@ -24,6 +24,7 @@ class Login(supra.SupraSession):
 
 
 class Logout(TemplateView):
+    #
     def dispatch(self, request, *args, **kwargs):
         logout(request, **kwargs)
         return HttpResponse('{"res":"ok"}', content_type="application/json", status=201)

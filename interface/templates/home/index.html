@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="{% static 'bower_components/angular-material/angular-material.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}" >
     </head>
-    <body ng-controller="AppCtrl" class="color-fondo">
+    <body ng-controller="AppCtrl" class="color-fondo" id="popupContainer">
         <!--
     Your HTML content here
   -->
@@ -20,7 +20,11 @@
 
                     <div class=""></div>
                     <md-button>
-                        Dashboard
+                      <md-icon md-svg-src="media/iconos/ic_exit.svg" aria-label="Exit" ng-click="cerrarSesion()">
+                        <md-tooltip md-direction="bottom">
+                          Cerrar sesión
+                        </md-tooltip>
+                      </md-icon>
                     </md-button>
                 </div>
             </md-toolbar>
