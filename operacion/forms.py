@@ -17,6 +17,15 @@ class AddOrdenForm(forms.ModelForm):
 # end class
 
 
+class AddServicioForm(forms.ModelForm):
+    class Meta:
+        model = models.Servicio
+        fields = ['orden', 'tipo', 'operario']
+        exclude = ['valor', 'comision', 'observacion', 'valor', 'estado', 'inicio', 'fin', 'status']
+    # end class
+# end class
+
+
 class ServicioForm(forms.ModelForm):
     class Meta:
         model = models.Servicio

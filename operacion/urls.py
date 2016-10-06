@@ -18,3 +18,9 @@ urlpatterns += [
 urlpatterns += [
     url(r'^ws/servicios/orden/$', views.WsServiciosOrden.as_view(), name='wsservorden'),
 ]
+
+# lista de servicion por orden
+urlpatterns += [
+    url(r'^add/servicio/$', views.AddServicio.as_view(), name='addservicio'),
+    url(r'^edit/servicio/(?P<pk>\d+)/$', views.AddServicio.as_view(), name='editservicio'),
+]

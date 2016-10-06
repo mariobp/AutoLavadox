@@ -76,3 +76,10 @@ class WsServiciosOrden(supra.SupraListView):
         tipos = 'tipo__nombre'
     # end class
 # end class
+
+
+class AddServicio(supra.SupraFormView):
+    model = models.Servicio
+    form_class = forms.AddServicioForm
+    template_name = 'operacion/addservicio.html'
+# end class
