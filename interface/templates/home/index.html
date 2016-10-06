@@ -25,17 +25,27 @@
                 </div>
             </md-toolbar>
             <section>
-                <md-subheader md-colors="{background: 'blue'}">
-                  <md-grid-list md-cols-sm="12" md-cols-md="6" md-cols-lg="6" md-cols-gt-lg="6"  md-row-height="20px">
-                    <md-grid-tile>
-                        <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display">
-                          <span md-highlight-text="searchText">{{item.display}}</span>
-                        </md-autocomplete>
-                    </md-grid-tile>
-                    <md-grid-tile>
-                      Nombre Identificacion
-                    </md-grid-tile>
-                  </md-grid-list>
+                <md-subheader>
+                  <div layout-gt-xs="row">
+                    <div flex-gt-xs>
+                      <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" md-floating-label="Placa Vehículo" flex-gt-xs>
+                        <span md-highlight-text="searchText">{{item.display}}</span>
+                      </md-autocomplete >
+                    </div>
+                    <div flex-gt-xs>
+                        <md-input-container class="md-block">
+                          <label>Nombre del Cliente</label>
+                          <input ng-model="cliente.nombre" ng-disabled="true">
+                          <md-icon  md-svg-src="/media/iconos/ic_search.svg" aria-label="search" class="default"></md-icon>
+                        </md-input-container>
+                    </div>
+                    <div flex-gt-xs>
+                        <md-input-container class="md-block">
+                          <label>identificación</label>
+                          <input ng-model="cliente.identificacion" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                  </div>
                 </md-subheader>
             </section>
             <md-content>
