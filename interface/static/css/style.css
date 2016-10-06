@@ -59,3 +59,17 @@
 .color-fondo{
   background-color: rgb(225, 245, 254);
 }
+
+.autocomplete-pd{
+  margin-left: -10px;
+  padding-top: 10px;
+}
+
+.pd-0-6{
+  padding-left: 6px;
+}
+
+
+md-checkbox.md-checked.blue .md-icon {
+ background-color: #29b6f6;
+}

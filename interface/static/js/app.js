@@ -46,4 +46,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         id:6
       }
     ];
+
+    $scope.tipos = [
+      {
+        id:1,
+        nombre: "Camión"
+      },
+      {
+        id:2,
+        nombre: "Deportivo"
+      }
+    ];
 });

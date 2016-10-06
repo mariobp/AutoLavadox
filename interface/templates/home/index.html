@@ -25,25 +25,37 @@
                 </div>
             </md-toolbar>
             <section>
-                <md-subheader class="padding-0 color-fondo">
-                  <div class="layout-row" layout="row">
-                    <div flex="40" class="bidi" flex-xs="100">
-                      <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" placeholder="Placa Vehículo" flex-gt-xs>
-                        <span md-highlight-text="searchText">{{item.display}}</span>
-                      </md-autocomplete >
-                    </div>
-                    <div flex="40" flex-xs="100">
-                        <md-input-container>
-                          <label>Nombre del Cliente</label>
-                          <input ng-model="cliente.nombre" ng-disabled="true">
-                        </md-input-container>
-                    </div>
-                    <div flex="40" flex-xs="100">
-                        <md-input-container>
-                          <label>identificación</label>
-                          <input ng-model="cliente.identificacion" ng-disabled="true">
-                        </md-input-container>
-                    </div>
+                <md-subheader class="color-fondo">
+                  <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                      <div flex-gt-xs="100" flex-gt-dm="50" layout-sm="column">
+                          <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                              <div class="md-block autocomplete-pd" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
+                                <md-autocomplete  md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" placeholder="Placa Vehículo">
+                                  <span md-highlight-text="searchText">[[item.display]]</span>
+                                </md-autocomplete >
+                              </div>
+                              <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
+                                <label>Tipo de Vehiculo</label>
+                                <md-select ng-model="user">
+                                  <md-option ng-repeat="tipo in tipos" value="[[tipo.id]]">
+                                    [[tipo.nombre]]
+                                  </md-option>
+                                </md-select>
+                              </md-input-container>
+                          </div>
+                      </div>
+                      <div flex-gt-xs="100" flex-gt-dm="50" layout-sm="column">
+                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                            <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
+                              <label>Nombre del Cliente</label>
+                              <input ng-model="cliente.nombre" ng-disabled="true">
+                            </md-input-container>
+                            <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
+                              <label>identificación</label>
+                              <input ng-model="cliente.identificacion" ng-disabled="true">
+                            </md-input-container>
+                        </div>
+                      </div>
                   </div>
                 </md-subheader>
             </section>
@@ -72,7 +84,7 @@
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
                              <p>[[servicio.nombre]]</p>
-                             <md-checkbox class="md-secondary" ng-model="servicio.select"></md-checkbox>
+                             <md-checkbox class="blue" ng-model="servicio.select"></md-checkbox>
                            </md-list-item>
                         </md-tab>
                         <md-tab label="Servicios Terminados">
