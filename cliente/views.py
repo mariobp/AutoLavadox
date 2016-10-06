@@ -1,6 +1,13 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from supra import views as supra
 import models
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import re
+from django.shortcuts import HttpResponse
+from django.views.generic import TemplateView
+import forms
 
 
 class TiposVehiculos(supra.SupraListView):
@@ -22,18 +29,15 @@ class VehiculoInfo(supra.SupraListView):
 
 class VehiculoAdd(supra.SupraFormView):
     model = models.Vehiculo
+    form_class = forms.AddVehivuloForm
+    template_name = 'cliente/addvehiculo.html'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        motorizado = request.POST.get('motorizado', '')
-        n_pedido = request.POST.get('pedido', 0)
-        pedido = models.PedidoWS.objects.filter(
-            id=n_pedido, motorizado__motorizado__identifier=motorizado).first()
-        if pedido:
-            models.PedidoWs.objects.filter(
-                id=int(n_pedido)).update(activado=False)
-            return super(CancelarPWService, self).dispatch(request, *args, **kwargs)
-        # end if
-        return HttpResponse('[{"status":false}]', content_type='application/json', status=404)
+        return super(VehiculoAdd, self).dispatch(request, *args, **kwargs)
     # end def
 # end class
+
+
+def validNum(cad):
+    return re.match('^\d+$', cad)

@@ -32,11 +32,10 @@ class TipoServicio(models.Model):
 
 
 class Orden(models.Model):
-    fecha = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    entrega = models.DateField(auto_now_add=True, blank=True, null=True)
+    entrada = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     fin = models.DateField(blank=True, null=True)
-    recepcionista = models.ForeignKey(empleado.Recepcionista, related_name='recepcionista')
-    cajero = models.ForeignKey(empleado.Cajero, related_name='cajero')
+    recepcionista = models.ForeignKey(empleado.Recepcionista, related_name='recepcionista', null=True, blank=True)
+    cajero = models.ForeignKey(empleado.Cajero, related_name='cajero', null=True, blank=True)
     vehiculo = models.ForeignKey(cliente.Vehiculo, null=True, blank=True)
     observacion = models.CharField(max_length=1000, null=True, blank=True)
     valor = models.FloatField(default=0)
