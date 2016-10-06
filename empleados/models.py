@@ -3,24 +3,46 @@ from __future__ import unicode_literals
 from django.db import models
 import re
 from django.core import validators
+from django.contrib.auth.models import User
 
 
-# Create your models here.
-class Empleado(models.Model):
+# Create your models
+class Persona(User):
     identificacion = models.CharField(max_length=20, unique=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('No valida'), 'invalid')])
-    nombre = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=300)
+    direccion = models.CharField(max_length=30)
+    nacimiento = models.DateField(verbose_name="Fecha de nacimiento")
+    telefono = models.CharField(max_length=10)
+    imagen = models.ImageField(upload_to="avatar", null=True, blank=True)
 
     def __unicode__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
+        return '%s %s' % (self.last_name, self.first_name)
     # end def
 
     def __str__(self):
-        return '%s %s' % (self.nombre, self.apellidos)
+        return '%s %s' % (self.last_name, self.first_name)
     # end def
+# end class
 
+
+class Empleado(Persona):
     class Meta:
-        verbose_name = "Trabajador"
-        verbose_name_plural = "Trabajadores"
+        verbose_name = "Operario"
+        verbose_name_plural = "Operarios"
+    # end class
+# end class
+
+
+class Recepcionista(Persona):
+    class Meta:
+        verbose_name = "Recepcionistas"
+        verbose_name_plural = "Recepcionistas"
+    # end class
+# end class
+
+
+class Cajero(Persona):
+    class Meta:
+        verbose_name = "Cajero"
+        verbose_name_plural = "Cajeros"
     # end class
 # end class

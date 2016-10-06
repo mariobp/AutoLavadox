@@ -1,13 +1,15 @@
 from __future__ import unicode_literals
 
 from django.db import models
-import re
 from django.core import validators
+import re
+from supra import views as supra
 
 
 # Create your models here.
 class TipoVehiculo(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
+    descripcion = models.CharField(max_length=1000)
     estado = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -48,7 +50,7 @@ class Cliente(models.Model):
 class Vehiculo(models.Model):
     placa = models.CharField(max_length=10, unique=True)
     tipo = models.ForeignKey(TipoVehiculo)
-    cliente = models.ForeignKey(Cliente)
+    cliente = models.ForeignKey(Cliente, null=True, blank=True)
 
     def __unicode__(self):
         return self.placa

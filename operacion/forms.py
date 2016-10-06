@@ -14,11 +14,11 @@ class ServicioForm(forms.ModelForm):
         exclude = ('vehiculo',)
         fields = {
             'tipo',
-            'empleado'
+            'operario'
         }
         widgets = {
             'tipo': Select2Widget,
-            'empleado': Select2Widget
+            'operario': Select2Widget
         }
     # end class
 # end class

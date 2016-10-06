@@ -24,7 +24,9 @@ urlpatterns = [
     url(r'^dashboard/', exileui.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^select2/', include('django_select2.urls')),
-    url(r'^$', views.index, name="index")
+    url(r'^empleados/', include('empleados.urls', namespace='empleado')),
+    url(r'^cliente/', include('cliente.urls', namespace='cliente')),
+    url(r'^operacion/', include('operacion.urls', namespace='operacion')),
 ]
 
 if settings.DEBUG:

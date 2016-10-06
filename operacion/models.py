@@ -13,6 +13,7 @@ class TipoServicio(models.Model):
     nombre = models.CharField(max_length=500, unique=True)
     costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
     comision = models.FloatField("Comisión", validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]{1,2}.[0-9]*|[1-9]+[0-9]{1,2}$'), ('Comisión no valida'), 'invalid')])
+    vehiculos = models.ManyToManyField(cliente.TipoVehiculo, blank=True, null=True)
     state = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -33,6 +34,9 @@ class TipoServicio(models.Model):
 class Orden(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     entrega = models.DateField(auto_now_add=True, blank=True, null=True)
+    fin = models.DateField(blank=True, null=True)
+    recepcionista = models.ForeignKey(empleado.Recepcionista, related_name='recepcionista')
+    cajero = models.ForeignKey(empleado.Cajero, related_name='cajero')
     vehiculo = models.ForeignKey(cliente.Vehiculo, null=True, blank=True)
     observacion = models.CharField(max_length=1000, null=True, blank=True)
     valor = models.FloatField(default=0)
@@ -57,11 +61,14 @@ class Orden(models.Model):
 
 class Servicio(models.Model):
     orden = models.ForeignKey(Orden, null=True, blank=True)
-    empleado = models.ForeignKey(empleado.Empleado)
+    operario = models.ForeignKey(empleado.Empleado, null=True, blank=True, related_name='operario')
     tipo = models.ForeignKey(TipoServicio)
     valor = models.FloatField(default=0)
     comision = models.FloatField(verbose_name="comisión", default=0)
     estado = models.BooleanField(default=False)
+    inicio = models.DateTimeField(null=True, blank=True)
+    fin = models.DateTimeField(null=True, blank=True)
+    status = models.BooleanField(default=True)
 
     def __unicode__(self):
         return '%s' % (self.tipo.nombre)
