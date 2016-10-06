@@ -8,6 +8,15 @@ from django_select2.forms import (
 )
 
 
+class AddOrdenForm(forms.ModelForm):
+    class Meta:
+        model = models.Orden
+        fields = ['recepcionista', 'vehiculo', ]
+        exclude = ['fin', 'cajero', 'observacion', 'valor', 'comision', ]
+    # end class
+# end class
+
+
 class ServicioForm(forms.ModelForm):
     class Meta:
         model = models.Servicio

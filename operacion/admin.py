@@ -20,7 +20,7 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['fecha', 'vehiculo', 'valor', 'comision', 'pago']
+    list_display = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
     list_editable = ['pago']
     form = forms.OrdenForm
 
