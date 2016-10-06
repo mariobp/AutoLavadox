@@ -22,10 +22,16 @@ class TiposVehiculos(supra.SupraListView):
 class VehiculoInfo(supra.SupraListView):
     model = models.Vehiculo
     search_key = 'q'
-    list_display = ['placa', 'cliente__nombre', 'cliente__apellidos']
+    list_display = ['placa', 'nombre', 'apellidos', 'cedula', 'tipov']
     search_fields = ['placa']
     list_filter = ['placa']
     paginate_by = 1
+
+    class Renderer:
+        cedula = 'cliente__identificacion'
+        nombre = 'cliente__nombre'
+        apellidos = 'cliente__apellidos'
+        tipov = 'tipo__nombre'
 # end if
 
 
