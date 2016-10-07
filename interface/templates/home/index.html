@@ -30,36 +30,26 @@
             </md-toolbar>
             <section>
                 <md-subheader class="color-fondo">
+                      <md-autocomplete md-no-float md-selected-item="selectedItem"  md-autofocus md-min-length="0" md-autoselect="true" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual()"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Placa Vehículo">
+                        <span md-highlight-text="search">[[vehiculo.placa]]</span>
+                         <md-not-found>
+                          No hay ninguna placa de numero "[[search]]"
+                          <a ng-click="nuevo(searchText)"> Quiere registrar el vechiculo?</a>
+                        </md-not-found>
+                      </md-autocomplete >
                   <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                      <div flex-gt-xs="100" flex-gt-dm="50" layout-sm="column">
-                          <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                              <div class="md-block autocomplete-pd" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
-                                <md-autocomplete  md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" placeholder="Placa Vehículo">
-                                  <span md-highlight-text="searchText">[[item.display]]</span>
-                                </md-autocomplete >
-                              </div>
-                              <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
-                                <label>Tipo de Vehiculo</label>
-                                <md-select ng-model="user">
-                                  <md-option ng-repeat="tipo in tipos" value="[[tipo.id]]">
-                                    [[tipo.nombre]]
-                                  </md-option>
-                                </md-select>
-                              </md-input-container>
-                          </div>
-                      </div>
-                      <div flex-gt-xs="100" flex-gt-dm="50" layout-sm="column">
-                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                            <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
-                              <label>Nombre del Cliente</label>
-                              <input ng-model="cliente.nombre" ng-disabled="true">
-                            </md-input-container>
-                            <md-input-container class="md-block pd-0-6" flex-gt-sm="50" flex-gt-xs="100" flex-gt-dm="50">
-                              <label>identificación</label>
-                              <input ng-model="cliente.identificacion" ng-disabled="true">
-                            </md-input-container>
-                        </div>
-                      </div>
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>Tipo de vehículo</label>
+                        <input ng-model="tipo" ng-disabled="true">
+                      </md-input-container>
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>Nombre del Cliente</label>
+                        <input ng-model="nombre" ng-disabled="true">
+                      </md-input-container>
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>identificación</label>
+                        <input ng-model="identificacion" ng-disabled="true">
+                      </md-input-container>
                   </div>
                 </md-subheader>
             </section>
@@ -75,7 +65,7 @@
                                 <md-radio-button flex
                                     ng-value="placa.id"
                                     class="md-primary" >
-                                  [[placa.numero]]
+                                  [[placa.placa]]
                                 </md-radio-button>
                               </div>
                             </div>

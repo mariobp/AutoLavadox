@@ -6,39 +6,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 })
 
 .controller('AppCtrl', function($scope, $http, $location, $mdDialog) {
-
-    $scope.cerrarSesion = function(){
-        $http({
-          'url': '/empleados/logout/',
-          'method': 'GET',
-        }).then(function doneCallbacks(response){
-            location.href = "/login/";
-        }, function failCallbacks(response){
-            $mdDialog.show(
-              $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('Error del servidor')
-                .textContent('Hay un error, contacte a el administrador.')
-                .ariaLabel('Alert Dialog Error')
-                .ok('OK')
-            );
-        });
-    };
-
-    $scope.placas = [{
-        id: 1,
-        numero: "720WW"
-    }, {
-        id: 2,
-        numero: "541MF"
-    }, {
-        id: 3,
-        numero: "666XX"
-    }, ];
-
-    $scope.selectedId = 2;
-
+    $scope.search = "";
+    $scope.vehiculos = [];
+    $scope.nombre = "";
+    $scope.identificacion = "";
+    $scope.placas = [];
+    $scope.tipo = "";
     $scope.servicios = [
       {
         nombre: "Lavado",
@@ -65,15 +38,72 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         id:6
       }
     ];
+    $scope.tipos = [];
+    $scope.dialog = function(){
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(true)
+          .title('Error del servidor')
+          .textContent('Hay un error, contacte a el administrador.')
+          .ariaLabel('Alert Dialog Error')
+          .ok('OK')
+      );
+    };
 
-    $scope.tipos = [
-      {
-        id:1,
-        nombre: "Camión"
-      },
-      {
-        id:2,
-        nombre: "Deportivo"
+    $scope.cerrarSesion = function(){
+        $http({
+          'url': '/empleados/logout/',
+          'method': 'GET',
+        }).then(function doneCallbacks(response){
+            location.href = "/login/";
+        }, function failCallbacks(response){
+            $scope.dialog();
+        });
+    };
+
+    $scope.listVehiculos = function(searchText){
+        $http({
+          'url': '/cliente/vehiculo/?q='+ $scope.search,
+          'method': 'GET'
+        }).then(function doneCallbacks(response){
+            $scope.vehiculos = response.data.object_list;
+        },function failCallbacks(response){
+            $scope.dialog();
+        });
+    };
+    $scope.listVehiculos();
+
+    $scope.vehiculoActual = function(){
+      console.log($scope.selectedItem);
+      if ($scope.selectedItem) {
+          $scope.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
+          $scope.identificacion = $scope.selectedItem.cedula;
+          $scope.tipo = $scope.selectedItem.tipov;
+          if (!$scope.placas.includes($scope.selectedItem)) {
+              $scope.placas.push($scope.selectedItem);
+          }
+      }else {
+          $scope.nombre = "";
+          $scope.identificacion = "";
+          $scope.tipo = "";
       }
-    ];
+    };
+
+    $scope.tipoVehiculo = function(){
+        $http({
+          'url': '/cliente/tipo/vehiculo/',
+          'method': 'GET'
+        }).then(function doneCallbacks(response){
+            $scope.tipos = response.data.object_list;
+        },function failCallbacks(response){
+            $scope.dialog();
+        });
+    };
+    $scope.tipoVehiculo();
+
+    $scope.nuevo = function(placa) {
+          alert("Registrando");
+    };
+
 });
