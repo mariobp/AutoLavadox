@@ -18,6 +18,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.selectedPlaca = {};
 		$scope.operarios = [];
 		$scope.totalService= 0;
+		$scope.habilitarOrden = true;
 		var data = {};
     $scope.dialogError = function(){
       $mdDialog.show(
@@ -100,21 +101,38 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.dialogError();
 					});
 				}else if ($scope.selectedPlaca.ordenv) {
+					$scope.servicios = [];
+					$scope.totalService = 0;
 					$http({
 						'url': '/operacion/ws/servicios/orden/?q='+ $scope.selectedPlaca.ordenv,
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
-							$scope.servicios = response.data.object_list;
-							$scope.servicios.forEach(function(item){
+							var data = response.data.object_list;
+							$scope.serviciosPorHacer = data;
+							data.forEach(function(item){
+								$scope.servicios.push(item);
 								$scope.totalService+= item.valor;
 							});
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
+					$http({
+						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
+						'method': 'GET'
+					}).then(function doneCallbacks(response){
+								var data = response.data.object_list;
+								data.forEach(function(item){
+									$scope.servicios.push(item);
+								});
+					}, function failCallbacks(response){
+							if (response.status == 500) {
+								$scope.dialogError();
+							}
+					});
 				}
-
 		};
 
+		//Agrega servicio
 		function registrarServicio(data, servicio){
 				$http({
 					'url': '/operacion/add/servicio/',
@@ -134,18 +152,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						);
 				}, function failCallbacks(response){
 						if (response.status == 500) {
-							$mdDialog.show(
-								$mdDialog.alert()
-									.parent(angular.element(document.querySelector('#popupContainer')))
-									.clickOutsideToClose(true)
-									.title('Error del servidor')
-									.textContent('Hay un error, contacte a el administrador.')
-									.ariaLabel('Alert Dialog Error')
-									.ok('OK')
-							);
+								$scope.dialogError();
 						}
 				});
 		}
+
 
 		$scope.changeCheck = function (servicio) {
 			if(servicio.checked){
@@ -167,15 +178,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
-								$mdDialog.show(
-									$mdDialog.alert()
-										.parent(angular.element(document.querySelector('#popupContainer')))
-										.clickOutsideToClose(true)
-										.title('Error del servidor')
-										.textContent('Hay un error, contacte a el administrador.')
-										.ariaLabel('Alert Dialog Error')
-										.ok('OK')
-								);
+								$scope.dialogError();
 							}
 						});
 				}, function() {
@@ -205,24 +208,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									servicio.checked = !servicio.checked;
 							}, function failCallbacks(response){
 									if (response.status == 500) {
-										$mdDialog.show(
-											$mdDialog.alert()
-												.parent(angular.element(document.querySelector('#popupContainer')))
-												.clickOutsideToClose(true)
-												.title('Error del servidor')
-												.textContent('Hay un error, contacte a el administrador.')
-												.ariaLabel('Alert Dialog Error')
-												.ok('OK')
-										);
+											$scope.dialogError();
 									}
 							});
 					}
 			}
 		};
 
+		//Servicio para asignar un operario a un servicio
 		$scope.asignarOperario = function(operario, servicio){
-				console.log(servicio);
-				console.log($scope.selectedPlaca);
 				if($scope.selectedPlaca.ordenv){
 					data.orden = $scope.selectedPlaca.ordenv;
 					data.tipo = servicio.tipoid;
@@ -245,15 +239,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
-								$mdDialog.show(
-									$mdDialog.alert()
-										.parent(angular.element(document.querySelector('#popupContainer')))
-										.clickOutsideToClose(true)
-										.title('Error del servidor')
-										.textContent('Hay un error, contacte a el administrador.')
-										.ariaLabel('Alert Dialog Error')
-										.ok('OK')
-								);
+									$scope.dialogError();
 							}
 					});
 				}else {
@@ -270,7 +256,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}).then(function doneCallbacks(response){
 						$scope.operarios = response.data.object_list;
 				}, function failCallbacks(response){
-						$scope.dialogError();
+						if (response.status == 500) {
+								$scope.dialogError();
+						}
 				});
 		};
 		$scope.operariosList();
@@ -286,10 +274,68 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.placas.push(item);
 						});
 				}, function failCallbacks(response){
-						$scope.dialogError();
+						if (response.status == 500) {
+								$scope.dialogError();
+						}
 				});
 		};
 		$scope.ordenesPendientes();
+
+		$scope.servicioListo = function(service){
+			function findService(item){
+					return item === service;
+			}
+
+			function habilitar(){
+					var n = $scope.serviciosPorHacer.length;
+					$scope.serviciosPorHacer.forEach(function(item){
+							if(item.estado){
+								n = n - 1;
+							}
+					});
+					if(n===0){
+						$scope.habilitarOrden = false;
+					}else {
+						$scope.habilitarOrden = true;
+					}
+			}
+
+			function enviar(){
+				$http({
+					'url': '/operacion/ok/servicio/'+ service.id+'/',
+					'method': 'GET'
+				}).then(function doneCallbacks(response){
+						var num = $scope.servicios.find(findService);
+						service.estado = !service.estado;
+						num.estado = service.estado;
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Guardado Exitoso')
+				        .hideDelay(3000)
+						);
+				},function failCallbacks(response){
+						if (response.status == 500) {
+								$scope.dialogError();
+						}
+				});
+			}
+			enviar();
+			habilitar();
+		};
+
+		$scope.cerrarOrden = function(){
+				$http({
+					'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
+					'method': 'GET'
+				}).then(function doneCallbacks(response){
+						$scope.servicios = [];
+						$scope.serviciosPorHacer = [];
+				},function failCallbacks(response){
+						if (response.status == 500) {
+								$scope.dialogError();
+						}
+				});
+		};
 
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {

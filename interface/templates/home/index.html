@@ -78,7 +78,7 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
-                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.terminado" ng-class="{'blue': !servicio.terminado}" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
+                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-class="{'blue': !servicio.estado}" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
                              <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                               <md-menu class="md-secondary" >
                                   <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -96,7 +96,7 @@
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
                           <md-list-item ng-repeat="servicio in serviciosPorHacer">
-                            <md-checkbox class="blue" ng-model="servicioSelect" ng-click=""></md-checkbox>
+                            <md-checkbox class="blue" ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
                             <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                           </md-list-item>
                         </md-tab>
@@ -104,10 +104,17 @@
                    </md-card-content>
                       <md-card-footer>
                        <md-divider></md-divider>
-                       <p class="center">
-                         Total x servicios
-                         <h2>$[[totalService]]</h2>
-                       </p>
+                       <div layout="row" layout-align="center center">
+                        <div flex="50">
+                           <p class="center">
+                             Total x servicios
+                             <h2>$[[totalService]]</h2>
+                           </p>
+                        </div>
+                        <div flex="50">
+                          <md-button ng-disabled="habilitarOrden" class="md-raised md-primary">Finalizar Orden</md-button>
+                        </div>
+                       </div>
                      </md-card-footer>
                   </md-card>
               </div>
