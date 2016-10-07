@@ -25,3 +25,9 @@ urlpatterns += [
     url(r'^edit/servicio/(?P<pk>\d+)/$', views.AddServicio.as_view(), name='editservicio'),
     url(r'^ok/servicio/(?P<pk>\d+)/$', views.OkService.as_view(), name='okservice'),
 ]
+
+
+# url de ordenes pendientes
+urlpatterns += [
+    url(r'^get/ordenes/pendientes/$', views.GetOrdenesPendientes.as_view(), name='get_orden_pendien'),
+]

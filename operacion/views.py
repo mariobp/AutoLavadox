@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from supra import views as supra
+from cliente import models as cliente
 import models
 import forms
 from django.utils.decorators import method_decorator
@@ -136,5 +137,21 @@ class OkService(supra.SupraFormView):
             # end if
         # end if
         return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+# end class
+
+
+class GetOrdenesPendientes(supra.SupraListView):
+    model = cliente.Vehiculo
+    list_display = ['id', 'placa', 'ordenv']
+    paginate_by = 1000
+
+    class Renderer:
+        ordenv = 'orden__id'
+    # end class
+
+    def get_queryset(self):
+        queryset = super(GetOrdenesPendientes, self).get_queryset()
+        return queryset.filter(orden__pago=False)
     # end def
 # end class
