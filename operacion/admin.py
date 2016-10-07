@@ -41,6 +41,12 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.save()
 # end if
 
-exileui.register(models.TipoServicio)
+
+class TipoAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'costo', 'comision', 'state')
+    filter_horizontal = ('vehiculos',)
+# end class
+
+exileui.register(models.TipoServicio, TipoAdmin)
 exileui.register(models.Servicio, ServicioAdmin)
 exileui.register(models.Orden, OrdenAdmin)
