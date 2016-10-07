@@ -115,7 +115,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		};
 
-		function registrarServicio(data){
+		function registrarServicio(data, servicio){
 				$http({
 					'url': '/operacion/add/servicio/',
 					'method': 'POST',
@@ -125,7 +125,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					 }
 				}).then(function doneCallbacks(response){
 						console.log(response);
-						$mdDialog.hide();
+						service.id = response.data.id;
+						service.tipoid = response.data.tipo;
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -154,12 +155,33 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .ok('Si')
 	      .cancel('No');
 				$mdDialog.show(confirm).then(function() {
-					servicio.checked = !servicio.checked;
+					$http({
+						'url':'/cancel/servicio/'+servicio.id,
+						'method': 'GET'
+					}).then(function doneCallbacks(response){
+							servicio.checked = !servicio.checked;
+							$mdToast.show(
+								$mdToast.simple()
+									.textContent('Servicio cancelado')
+					        .hideDelay(3000)
+							);
+					}, function failCallbacks(response){
+							if (response.status == 500) {
+								$mdDialog.show(
+									$mdDialog.alert()
+										.parent(angular.element(document.querySelector('#popupContainer')))
+										.clickOutsideToClose(true)
+										.title('Error del servidor')
+										.textContent('Hay un error, contacte a el administrador.')
+										.ariaLabel('Alert Dialog Error')
+										.ok('OK')
+								);
+							}
+						});
 				}, function() {
 
 				});
 			}else {
-
 					if ($scope.selectedPlaca.ordenv) {
 							data.orden = $scope.selectedPlaca.ordenv;
 							data.tipo = servicio.id;
@@ -179,7 +201,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.orden = response.data.id;
 									data.tipo = servicio.id;
 									data.operario = servicio.operario;
-									registrarServicio(data);
+									registrarServicio(data, servicio);
 									servicio.checked = !servicio.checked;
 							}, function failCallbacks(response){
 									if (response.status == 500) {
