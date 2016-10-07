@@ -5,7 +5,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	$interpolateProvider.endSymbol(']]');
 })
 
-.controller('AppCtrl', function($scope, $http, $location, $mdDialog) {
+.controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast) {
     $scope.search = "";
     $scope.vehiculos = [];
     $scope.nombre = "";
@@ -14,7 +14,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.tipo = "";
     $scope.servicios = [];
     $scope.tipos = [];
-		$scope.selectedService = {};
+		$scope.selectedPlaca = {};
 		$scope.operarios = [];
     $scope.dialogError = function(){
       $mdDialog.show(
@@ -87,19 +87,18 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
-				console.log($scope.selectedService);
-				if ($scope.selectedService.tipoid) {
+				if ($scope.selectedPlaca.tipoid) {
 					$http({
-						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedService.tipoid,
+						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipoid,
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
-				}else if ($scope.selectedService.ordenv) {
+				}else if ($scope.selectedPlaca.ordenv) {
 					$http({
-						'url': '/operacion/ws/servicios/orden/?q='+ $scope.selectedService.ordenv,
+						'url': '/operacion/ws/servicios/orden/?q='+ $scope.selectedPlaca.ordenv,
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
@@ -111,7 +110,51 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		$scope.changeCheck = function (servicio) {
-			servicio.checked = !servicio.checked;
+			if(servicio.checked){
+				servicio.checked = !servicio.checked;
+				console.log($scope.selectedPlaca);
+				console.log(servicio);
+			}
+		};
+
+		$scope.asignarOperario = function(operario, servicio){
+				console.log(servicio);
+				console.log($scope.selectedPlaca);
+				if($scope.selectedPlaca.ordenv){
+					var data = {};
+					data.orden = $scope.selectedPlaca.ordenv;
+					data.tipo = servicio.tipoid;
+					data.operario = operario.id;
+					$http({
+						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
+						 'method': 'POST',
+						 'data': $httpParamSerializer(data),
+			 			  headers: {
+			 						'Content-Type': 'application/x-www-form-urlencoded'
+			 				},
+					}).then(function doneCallbacks(response){
+							servicio.operario =  operario.id;
+							servicio.operario_nombre = operario.nombre;
+							$mdDialog.hide();
+							$mdToast.show(
+								$mdToast.simple()
+									.textContent('Guardado Exitoso')
+					        .hideDelay(3000)
+							);
+					}, function failCallbacks(response){
+							if (response.status == 500) {
+								$mdDialog.show(
+									$mdDialog.alert()
+										.parent(angular.element(document.querySelector('#popupContainer')))
+										.clickOutsideToClose(true)
+										.title('Error del servidor')
+										.textContent('Hay un error, contacte a el administrador.')
+										.ariaLabel('Alert Dialog Error')
+										.ok('OK')
+								);
+							}
+					});
+				}
 		};
 
 		//Lista de operarios
@@ -143,16 +186,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 		$scope.ordenesPendientes();
 
-		$scope.asignarOperario = function(operario, servicio){
-				console.log("entro");
-				servicio.operario =  operario.nombre;
-		};
-
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
         $mdDialog.show({
           templateUrl: '/template/add/',
-          parent: angular.element(document.body),
 					controller: 'DialogController',
           clickOutsideToClose:true,
 					locals: {
