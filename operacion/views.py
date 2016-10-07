@@ -26,6 +26,11 @@ class AddOrdenForm(supra.SupraFormView):
     model = models.Orden
     form_class = forms.AddOrdenForm
     template_name = 'operacion/addorden.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(AddOrdenForm, self).dispatch(*args, **kwargs)
+    # end def
 # end class
 
 
@@ -82,7 +87,7 @@ class WsServiciosOrden(supra.SupraListView):
     def get_queryset(self):
         print self.request
         queryset = super(WsServiciosOrden, self).get_queryset()
-
+        obj = queryset.filter(orden__vehiculo__tipo=1)
         return queryset
     # end def
 # end class

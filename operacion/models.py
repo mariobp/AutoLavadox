@@ -44,7 +44,10 @@ class Orden(models.Model):
     activo = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return '%s %s - %s' % (self.vehiculo.cliente.nombre, self.vehiculo.cliente.apellidos, self.vehiculo.placa)
+        return '%s %s - %s' % (
+            self.vehiculo.cliente.nombre if self.vehiculo.cliente.nombre else "cliente",
+            self.vehiculo.cliente.apellidos if self.vehiculo.cliente.apellidos else " cliente",
+            self.vehiculo.placa)
     # end def
 
     def __str__(self):
