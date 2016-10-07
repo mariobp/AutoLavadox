@@ -12,3 +12,8 @@ def index(request):
 def login(request):
     return render(request, 'home/login.html')
 # end def
+
+
+def addvehiculo(request):
+    return render(request, 'home/addvehiculo.html')
+# end def    

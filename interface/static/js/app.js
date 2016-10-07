@@ -103,7 +103,17 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.tipoVehiculo();
 
     $scope.nuevo = function(placa) {
-          alert("Registrando");
+        $mdDialog.show({
+          templateUrl: '/template/add/',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+           // Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
+        });
     };
 
 });
