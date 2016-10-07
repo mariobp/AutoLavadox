@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load informe_extra %}
 <html>
 <head>
 	<title></title>
@@ -28,6 +29,11 @@
 			{% endfor %}
 		</tr>
 		{% endfor %}
+		<tr>
+			<td colspan="4">Total</td>
+			<td>{{dataset|valor}}</td>
+			<td>{{dataset|comision}}</td>
+		</tr>
 	</table>
 	</body>
 </html>

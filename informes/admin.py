@@ -24,15 +24,15 @@ class ServiciosSource(resources.ModelResource):
     operario = fields.Field(
         column_name="Operario",
         attribute="operario",
-        widget=widgets.ForeignKeyWidget(empleados.Empleado, 'operario')
+        widget=widgets.ForeignKeyWidget(empleados.Empleado, 'last_name')
     )
     tipo = fields.Field(
         column_name="Tipo",
         attribute="tipo",
-        widget=widgets.ForeignKeyWidget(operacion.TipoServicio, 'tipo')
+        widget=widgets.ForeignKeyWidget(operacion.TipoServicio, 'nombre')
     )
     fin = fields.Field(
-        column_name="fecha_nacimiento",
+        column_name="Fecha de realizacion",
         attribute="fin",
         widget=widgets.DateTimeWidget(format="%Y-%m-%d %H:%M:%S")
     )
@@ -45,6 +45,7 @@ class ServiciosSource(resources.ModelResource):
         attribute="comision",
 
     )
+
 
     class Meta:
         model = operacion.Servicio
