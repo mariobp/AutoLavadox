@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="{% static 'bower_components/angular-material/angular-material.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}" >
     </head>
-    <body ng-controller="AppCtrl" class="color-fondo">
+    <body ng-controller="AppCtrl" class="color-fondo" id="popupContainer">
         <!--
     Your HTML content here
   -->
@@ -20,30 +20,36 @@
 
                     <div class=""></div>
                     <md-button>
-                        Dashboard
+                      <md-icon md-svg-src="media/iconos/ic_exit.svg" aria-label="Exit" ng-click="cerrarSesion()">
+                        <md-tooltip md-direction="bottom">
+                          Cerrar sesión
+                        </md-tooltip>
+                      </md-icon>
                     </md-button>
                 </div>
             </md-toolbar>
             <section>
-                <md-subheader class="padding-0 color-fondo">
-                  <div class="layout-row" layout="row">
-                    <div flex="40" class="bidi" flex-xs="100">
-                      <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in query(searchText)" md-item-text="item.display" placeholder="Placa Vehículo" flex-gt-xs>
-                        <span md-highlight-text="searchText">{{item.display}}</span>
+                <md-subheader class="color-fondo">
+                      <md-autocomplete md-no-float md-selected-item="selectedItem"  md-autofocus md-min-length="0" md-autoselect="true" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual()"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Placa Vehículo">
+                        <span md-highlight-text="search">[[vehiculo.placa]]</span>
+                         <md-not-found>
+                          No hay ninguna placa de numero "[[search]]"
+                          <a ng-click="nuevo(searchText)"> - Click para registrar el vechiculo</a>
+                        </md-not-found>
                       </md-autocomplete >
-                    </div>
-                    <div flex="40" flex-xs="100">
-                        <md-input-container>
-                          <label>Nombre del Cliente</label>
-                          <input ng-model="cliente.nombre" ng-disabled="true">
-                        </md-input-container>
-                    </div>
-                    <div flex="40" flex-xs="100">
-                        <md-input-container>
-                          <label>identificación</label>
-                          <input ng-model="cliente.identificacion" ng-disabled="true">
-                        </md-input-container>
-                    </div>
+                  <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>Tipo de vehículo</label>
+                        <input ng-model="tipo" ng-disabled="true">
+                      </md-input-container>
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>Nombre del Cliente</label>
+                        <input ng-model="nombre" ng-disabled="true">
+                      </md-input-container>
+                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                        <label>identificación</label>
+                        <input ng-model="identificacion" ng-disabled="true">
+                      </md-input-container>
                   </div>
                 </md-subheader>
             </section>
@@ -59,7 +65,7 @@
                                 <md-radio-button flex
                                     ng-value="placa.id"
                                     class="md-primary" >
-                                  [[placa.numero]]
+                                  [[placa.placa]]
                                 </md-radio-button>
                               </div>
                             </div>
@@ -72,7 +78,7 @@
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
                              <p>[[servicio.nombre]]</p>
-                             <md-checkbox class="md-secondary" ng-model="servicio.select"></md-checkbox>
+                             <md-checkbox class="blue" ng-model="servicio.select"></md-checkbox>
                            </md-list-item>
                         </md-tab>
                         <md-tab label="Servicios Terminados">

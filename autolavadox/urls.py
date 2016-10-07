@@ -17,14 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from exileui.admin import exileui
-from interface import views
 import settings
 
 urlpatterns = [
     url(r'^dashboard/', exileui.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^select2/', include('django_select2.urls')),
-    url(r'^$', views.index, name="index"),
+    url(r'^', include('interface.urls')),
     url(r'^empleados/', include('empleados.urls', namespace='empleado')),
     url(r'^cliente/', include('cliente.urls', namespace='cliente')),
     url(r'^operacion/', include('operacion.urls', namespace='operacion')),
