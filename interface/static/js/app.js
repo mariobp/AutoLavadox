@@ -13,9 +13,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.placas = [];
     $scope.tipo = "";
     $scope.servicios = [];
+		$scope.serviciosPorHacer = [];
     $scope.tipos = [];
 		$scope.selectedPlaca = {};
 		$scope.operarios = [];
+		$scope.totalService= 0;
+		var data = {};
     $scope.dialogError = function(){
       $mdDialog.show(
         $mdDialog.alert()
@@ -102,6 +105,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
+							$scope.servicios.forEach(function(item){
+								$scope.totalService+= item.valor;
+							});
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
@@ -111,9 +117,28 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		$scope.changeCheck = function (servicio) {
 			if(servicio.checked){
-				servicio.checked = !servicio.checked;
+			  var confirm = $mdDialog.confirm()
+	      .title('Estas seguro que quieres cancelar?')
+	      .ariaLabel('Lucky day')
+	      .ok('Si')
+	      .cancel('No');
+				$mdDialog.show(confirm).then(function() {
+					servicio.checked = !servicio.checked;
+				}, function() {
+
+				});
 				console.log($scope.selectedPlaca);
 				console.log(servicio);
+			}else {
+					servicio.checked = !servicio.checked;
+					$http({
+						'url': '/operacion/add/orden/',
+						'method': 'POST',
+						'data': $httpParamSerializer(data),
+						 headers: {
+								 'Content-Type': 'application/x-www-form-urlencoded'
+						 },
+					})
 			}
 		};
 
@@ -121,7 +146,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				console.log(servicio);
 				console.log($scope.selectedPlaca);
 				if($scope.selectedPlaca.ordenv){
-					var data = {};
 					data.orden = $scope.selectedPlaca.ordenv;
 					data.tipo = servicio.tipoid;
 					data.operario = operario.id;
@@ -196,7 +220,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						tipos:$scope.tipos,
 						placa: $scope.search
 					}
-
            // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
