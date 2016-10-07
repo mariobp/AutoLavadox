@@ -45,8 +45,8 @@ class Orden(models.Model):
 
     def __unicode__(self):
         return '%s %s - %s' % (
-            self.vehiculo.cliente.nombre if self.vehiculo.cliente.nombre else "cliente",
-            self.vehiculo.cliente.apellidos if self.vehiculo.cliente.apellidos else " cliente",
+            self.vehiculo.cliente.nombre if self.vehiculo.cliente else "cliente",
+            self.vehiculo.cliente.apellidos if self.vehiculo.cliente else " cliente",
             self.vehiculo.placa)
     # end def
 
