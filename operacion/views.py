@@ -145,9 +145,30 @@ class OkService(supra.SupraFormView):
 # end class
 
 
+class CancelService(supra.SupraFormView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(OkService, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        if re.match('^\d+$', id):
+            servicio = models.Servicio.objects.filter(id=int(id)).first()
+            if servicio:
+                servicio.status = False
+                servicio.save()
+                return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
+            # end if
+        # end if
+        return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+# end class
+
+
 class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
-    list_display = ['id', 'placa', 'ordenv']
+    list_display = ['id', 'placa', 'ordenv', 'tipo']
     paginate_by = 1000
 
     class Renderer:

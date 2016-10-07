@@ -24,6 +24,7 @@ urlpatterns += [
     url(r'^add/servicio/$', views.AddServicio.as_view(), name='addservicio'),
     url(r'^edit/servicio/(?P<pk>\d+)/$', views.AddServicio.as_view(), name='editservicio'),
     url(r'^ok/servicio/(?P<pk>\d+)/$', views.OkService.as_view(), name='okservice'),
+    url(r'^cancel/servicio/(?P<pk>\d+)/$', views.CancelService.as_view(), name='okservice'),
 ]
 
 

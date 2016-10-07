@@ -7,7 +7,7 @@
     @licence: Creative Common
 """
 from django.contrib import admin
-from exile_ui.admin import exileui
+from exileui.admin import exileui
 from import_export.formats import base_formats
 from import_export.admin import ExportMixin, ImportExportModelAdmin
 from import_export import resources, fields
