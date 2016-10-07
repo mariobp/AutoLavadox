@@ -22,6 +22,23 @@ class TiposServicios(supra.SupraListView):
 # end class
 
 
+class TiposServiciosPorAplicar(supra.SupraListView):
+    model = models.TipoServicio
+    list_display = ['id', 'nombre']
+    paginate_by = 1000
+
+    def get_queryset(self):
+        print self.request
+        # models.TipoServicio.objects.filter(vehiculos__id=12)
+        tipo = self.request.GET.get('tipo', False)
+        orden = self.request.GET.get('orden', False)
+        queryset = super(TiposServiciosPorAplicar, self).get_queryset()
+        obj = queryset
+        return queryset.filter(vehiculos__id=int(tipo) if tipo else 0).exclude(servicio__orden__id=int(orden) if orden else 0)
+    # end def
+# end class
+
+
 class AddOrdenForm(supra.SupraFormView):
     model = models.Orden
     form_class = forms.AddOrdenForm
@@ -95,9 +112,8 @@ class WsServiciosOrden(supra.SupraListView):
     # end def
 
     def get_queryset(self):
-        print self.request
         queryset = super(WsServiciosOrden, self).get_queryset()
-        obj = queryset.filter(orden__vehiculo__tipo=1)
+        obj = queryset.filter(status=True)
         return queryset
     # end def
 # end class
@@ -178,6 +194,19 @@ class CancelService(supra.SupraFormView):
     # end def
 
     def get(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        if re.match('^\d+$', id):
+            servicio = models.Servicio.objects.filter(id=int(id)).first()
+            if servicio:
+                servicio.status = False
+                servicio.save()
+                return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
+            # end if
+        # end if
+        return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+
+    def post(self, request, *args, **kwargs):
         id = kwargs['pk']
         if re.match('^\d+$', id):
             servicio = models.Servicio.objects.filter(id=int(id)).first()

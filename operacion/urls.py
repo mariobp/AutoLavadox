@@ -5,6 +5,7 @@ import views
 # url ws de tipo de servicios porvehiculo
 urlpatterns = [
     url(r'^ws/tipo/servicio/$', views.TiposServicios.as_view(), name='ws_tipo_servicio'),
+    url(r'^ws/tipo/servicio/por/asignar/$', views.TiposServiciosPorAplicar.as_view(), name='ws_tipo_servici_a_realizar'),
 ]
 
 # url de registro, edicion de orden
