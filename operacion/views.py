@@ -85,16 +85,15 @@ class WsServiciosOrden(supra.SupraListView):
         return True
     # end def
 
-<<<<<<< HEAD
     def operario_nombre(self, obj, row):
         return u'%s %s' % (obj.operario_n, obj.operario_a)
-=======
+    # end def
+
     def get_queryset(self):
         print self.request
         queryset = super(WsServiciosOrden, self).get_queryset()
 
         return queryset
->>>>>>> 932fdb90cce9b568aaddb78b0793b04b6f90b18f
     # end def
 # end class
 
