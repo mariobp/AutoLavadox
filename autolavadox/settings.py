@@ -31,6 +31,7 @@ EXILE_UI = {
     'site_title': 'LavaAutox',
     'site_header': 'LavaAutox',
     'index_title': 'Software para lavaautos',
+    'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
             'dashboard': '/media/piscix_logo/Icono-f-t.png',

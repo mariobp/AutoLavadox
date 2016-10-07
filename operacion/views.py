@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from supra import views as supra
+from cliente import models as cliente
 import models
 import forms
 from django.utils.decorators import method_decorator
@@ -14,7 +15,9 @@ from django.utils import timezone
 class TiposServicios(supra.SupraListView):
     model = models.TipoServicio
     list_display = ['id', 'nombre']
+    search_key = 'q'
     list_filter = ['vehiculos__id']
+    search_fields = ['vehiculos__id']
     paginate_by = 1000
 # end class
 
@@ -113,6 +116,7 @@ class OkService(supra.SupraFormView):
                     order.save()
                     return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
                 # end if
+                order.valor = order.valor - servicio.valor
                 servicio.estado = False
                 servicio.save()
                 return HttpResponse('{"info":"Ok cancel"}', content_type='application/json', status=201)
@@ -123,7 +127,6 @@ class OkService(supra.SupraFormView):
 
     def post(self, request, *args, **kwargs):
         id = kwargs['pk']
-        print id,"llegada"
         if re.match('^\d+$', id):
             orden = models.Orden.objects.filter(id=int(id)).first()
             if orden:
@@ -134,5 +137,21 @@ class OkService(supra.SupraFormView):
             # end if
         # end if
         return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+# end class
+
+
+class GetOrdenesPendientes(supra.SupraListView):
+    model = cliente.Vehiculo
+    list_display = ['id', 'placa', 'ordenv']
+    paginate_by = 1000
+
+    class Renderer:
+        ordenv = 'orden__id'
+    # end class
+
+    def get_queryset(self):
+        queryset = super(GetOrdenesPendientes, self).get_queryset()
+        return queryset.filter(orden__pago=False)
     # end def
 # end class
