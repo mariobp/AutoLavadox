@@ -73,15 +73,25 @@ class CloseOrden(supra.SupraFormView):
 
 class WsServiciosOrden(supra.SupraListView):
     model = models.Servicio
-    list_display = ['id', 'valor', 'nombre', 'estado', 'operario', 'checked']
+    search_key = 'q'
+    list_display = ['id', 'valor', 'nombre', 'estado', 'operario', 'tipoid', 'checked', 'operario_nombre']
+    list_filter = ['orden__id']
+    search_fields = ['orden__id']
     paginate_by = 1000
 
     class Renderer:
         nombre = 'tipo__nombre'
+        tipoid = 'tipo__id'
+        operario_n = "operario__first_name"
+        operario_a = "operario__last_name"
     # end class
 
     def checked(self, obj, row):
         return True
+    # end def
+
+    def operario_nombre(self, obj, row):
+        return u'%s %s' % (obj.operario_n, obj.operario_a)
     # end def
 
     def get_queryset(self):
@@ -97,6 +107,11 @@ class AddServicio(supra.SupraFormView):
     model = models.Servicio
     form_class = forms.AddServicioForm
     template_name = 'operacion/addservicio.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(AddServicio, self).dispatch(*args, **kwargs)
+    # end def
 # end class
 
 
