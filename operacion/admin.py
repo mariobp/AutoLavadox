@@ -15,6 +15,9 @@ class ServicioInline(admin.StackedInline):
 
 class ServicioAdmin(admin.ModelAdmin):
     form = forms.ServicioForm
+    list_display = ['orden', 'operario', 'tipo', 'inicio', 'fin', 'estado']
+    list_filter = ['orden', 'operario', 'tipo', 'estado', ('inicio', DateRangeEX)]
+    list_editable = ['estado']
 # end class
 
 
@@ -29,7 +32,6 @@ class OrdenAdmin(admin.ModelAdmin):
         total = 0
         comi = 0
         for s in models.Servicio.objects.filter(orden=obj):
-            print s
             s.valor = s.tipo.costo
             s.comision = s.tipo.costo * (s.tipo.comision/100)
             comi += s.comision
@@ -39,7 +41,8 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.valor = total
         obj.comision = comi
         obj.save()
-# end if
+    # end if
+# end class
 
 
 class TipoAdmin(admin.ModelAdmin):
