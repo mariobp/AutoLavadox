@@ -143,12 +143,12 @@ class OkService(supra.SupraFormView):
             servicio = models.Servicio.objects.filter(id=int(id)).first()
             if servicio:
                 if servicio.status:
+                    tem_o = models.Servicio.objects.filter(id=int(id)).values_list('orden__id', 'orden__entrada').first()
+                    if not tem_o:
+                        return HttpResponse('{"info":"Not Order"}', content_type='application/json', status=204)
+                    # end if
+                    order = models.Orden.objects.filter(id=tem_o[0]).first()
                     if not servicio.estado:
-                        tem_o = models.Servicio.objects.filter(id=int(id)).values_list('orden__id', 'orden__entrada').first()
-                        if not tem_o:
-                            return HttpResponse('{"info":"Not Order"}', content_type='application/json', status=204)
-                        # end if
-                        order = models.Orden.objects.filter(id=tem_o[0]).first()
                         servicios = models.Servicio.objects.filter(orden=order).latest('fin')
                         servicio.inicio = servicios.fin if servicios else tem_o[1]
                         servicio.comision = servicio.tipo.costo*(servicio.tipo.comision/100)
@@ -162,6 +162,7 @@ class OkService(supra.SupraFormView):
                         return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
                     # end if
                     order.valor = order.valor - servicio.valor
+                    order.comision = order.comision - servicio.comision
                     servicio.estado = False
                     servicio.save()
                     return HttpResponse('{"info":"Ok cancel"}', content_type='application/json', status=201)
