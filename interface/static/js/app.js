@@ -12,34 +12,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.identificacion = "";
     $scope.placas = [];
     $scope.tipo = "";
-    $scope.servicios = [
-      {
-        nombre: "Lavado",
-        id:1
-      },
-      {
-        nombre: "Pulida",
-        id:2
-      },
-      {
-        nombre: "Cambio de aceite",
-        id:3
-      },
-      {
-        nombre: "Lavado",
-        id:4
-      },
-      {
-        nombre: "Pulida",
-        id:5
-      },
-      {
-        nombre: "Cambio de aceite",
-        id:6
-      }
-    ];
+    $scope.servicios = [];
     $scope.tipos = [];
-    $scope.dialog = function(){
+		$scope.selectedService = {};
+		$scope.operarios = [];
+    $scope.dialogError = function(){
       $mdDialog.show(
         $mdDialog.alert()
           .parent(angular.element(document.querySelector('#popupContainer')))
@@ -51,6 +28,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       );
     };
 
+		//Servicio para cerrar sesión
     $scope.cerrarSesion = function(){
         $http({
           'url': '/empleados/logout/',
@@ -58,10 +36,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         }).then(function doneCallbacks(response){
             location.href = "/login/";
         }, function failCallbacks(response){
-            $scope.dialog();
+            $scope.dialogError();
         });
     };
 
+		//Lista de vehiculos
     $scope.listVehiculos = function(searchText){
         $http({
           'url': '/cliente/vehiculo/?q='+ $scope.search,
@@ -69,11 +48,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         }).then(function doneCallbacks(response){
             $scope.vehiculos = response.data.object_list;
         },function failCallbacks(response){
-            $scope.dialog();
+            $scope.dialogError();
         });
     };
     $scope.listVehiculos();
 
+		//Vehiculo seleccionado
     $scope.vehiculoActual = function(){
       console.log($scope.selectedItem);
       if ($scope.selectedItem) {
@@ -92,6 +72,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       }
     };
 
+		//Servicio de los tipos de vehiculos
     $scope.tipoVehiculo = function(){
         $http({
           'url': '/cliente/tipo/vehiculo/',
@@ -99,11 +80,70 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         }).then(function doneCallbacks(response){
             $scope.tipos = response.data.object_list;
         },function failCallbacks(response){
-            $scope.dialog();
+            $scope.dialogError();
         });
     };
     $scope.tipoVehiculo();
 
+		//Lista de servicios aplicables
+		$scope.serviciosList = function(){
+				console.log($scope.selectedService);
+				if ($scope.selectedService.tipoid) {
+					$http({
+						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedService.tipoid,
+						'method': 'GET',
+					}).then(function doneCallbacks(response){
+							$scope.servicios = response.data.object_list;
+					}, function failCallbacks(response){
+							$scope.dialogError();
+					});
+				}else if ($scope.selectedService.ordenv) {
+					$http({
+						'url': '/operacion/ws/servicios/orden/?q='+ $scope.selectedService.ordenv,
+						'method': 'GET',
+					}).then(function doneCallbacks(response){
+							$scope.servicios = response.data.object_list;
+					}, function failCallbacks(response){
+							$scope.dialogError();
+					});
+				}
+
+		};
+
+		$scope.changeCheck = function (servicio) {
+			servicio.checked = !servicio.checked;
+		};
+		
+		//Lista de operarios
+		$scope.operariosList = function () {
+				$http({
+					'url':'/empleados/operarios/',
+					'method': 'GET'
+				}).then(function doneCallbacks(response){
+						$scope.operarios = response.data.object_list;
+				}, function failCallbacks(response){
+						$scope.dialogError();
+				});
+		};
+		$scope.operariosList();
+
+		//Ordenes sin terminar
+		$scope.ordenesPendientes = function(){
+				$http({
+					'url': '/operacion/get/ordenes/pendientes/',
+					'method': 'GET'
+				}).then(function doneCallbacks(response){
+						var data = response.data.object_list;
+						data.forEach(function(item){
+							$scope.placas.push(item);
+						});
+				}, function failCallbacks(response){
+						$scope.dialogError();
+				});
+		};
+		$scope.ordenesPendientes();
+
+		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
         $mdDialog.show({
           templateUrl: '/template/add/',

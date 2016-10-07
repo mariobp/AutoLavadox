@@ -59,14 +59,15 @@
                        <md-card-content>
                           <h3>En Servicio</h3>
                           <md-divider></md-divider>
-                          <md-radio-group ng-model="selectedId" >
+                          <md-radio-group ng-model="selectedService" ng-change="serviciosList()">
                             <div ng-repeat='placa in placas' class="row">
                               <div flex layout='row' layout-padding layout-align="start center" >
                                 <md-radio-button flex
-                                    ng-value="placa.id"
+                                    ng-value="placa"
                                     class="md-primary" >
                                   [[placa.placa]]
                                 </md-radio-button>
+                                <md-icon class="" ng-if="placa.ordenv" aria-label="Person" md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
                               </div>
                             </div>
                           </md-radio-group>
@@ -77,8 +78,13 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
+                            <md-checkbox class="blue" ng-model="servicioSelect" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
                              <p>[[servicio.nombre]]</p>
-                             <md-checkbox class="blue" ng-model="servicio.select"></md-checkbox>
+                            <md-icon class="md-secondary"  aria-label="Person" md-svg-icon="/media/iconos/ic_person.svg">
+                              <md-select ng-model="servicio.operario" ng-click="" placeholder="Operario" class="md-no-underline">
+                               <md-option value="[[operario]]" ng-repeat="operario in operarios">[[operario.nombre]]</md-option>
+                             </md-select>
+                            </md-icon>
                            </md-list-item>
                         </md-tab>
                         <md-tab label="Servicios Terminados">
