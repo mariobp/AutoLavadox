@@ -115,6 +115,37 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		};
 
+		function registrarServicio(data){
+				$http({
+					'url': '/operacion/add/servicio/',
+					'method': 'POST',
+					'data': $httpParamSerializer(data),
+					 headers: {
+							 'Content-Type': 'application/x-www-form-urlencoded'
+					 }
+				}).then(function doneCallbacks(response){
+						console.log(response);
+						$mdDialog.hide();
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Guardado Exitoso')
+								.hideDelay(3000)
+						);
+				}, function failCallbacks(response){
+						if (response.status == 500) {
+							$mdDialog.show(
+								$mdDialog.alert()
+									.parent(angular.element(document.querySelector('#popupContainer')))
+									.clickOutsideToClose(true)
+									.title('Error del servidor')
+									.textContent('Hay un error, contacte a el administrador.')
+									.ariaLabel('Alert Dialog Error')
+									.ok('OK')
+							);
+						}
+				});
+		}
+
 		$scope.changeCheck = function (servicio) {
 			if(servicio.checked){
 			  var confirm = $mdDialog.confirm()
@@ -127,18 +158,43 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}, function() {
 
 				});
-				console.log($scope.selectedPlaca);
-				console.log(servicio);
 			}else {
-					servicio.checked = !servicio.checked;
-					$http({
-						'url': '/operacion/add/orden/',
-						'method': 'POST',
-						'data': $httpParamSerializer(data),
-						 headers: {
-								 'Content-Type': 'application/x-www-form-urlencoded'
-						 },
-					})
+
+					if ($scope.selectedPlaca.ordenv) {
+							data.orden = $scope.selectedPlaca.ordenv;
+							data.tipo = servicio.id;
+							data.operario = servicio.operario;
+							registrarServicio(data);
+					}else {
+							data.vehiculo = $scope.selectedPlaca.id;
+							$http({
+								'url': '/operacion/add/orden/',
+								'method': 'POST',
+								'data': $httpParamSerializer(data),
+								 headers: {
+										 'Content-Type': 'application/x-www-form-urlencoded'
+								 },
+							}).then(function doneCallbacks(response){
+									$scope.selectedPlaca.ordenv = response.data.id;
+									data.orden = response.data.id;
+									data.tipo = servicio.id;
+									data.operario = servicio.operario;
+									registrarServicio(data);
+									servicio.checked = !servicio.checked;
+							}, function failCallbacks(response){
+									if (response.status == 500) {
+										$mdDialog.show(
+											$mdDialog.alert()
+												.parent(angular.element(document.querySelector('#popupContainer')))
+												.clickOutsideToClose(true)
+												.title('Error del servidor')
+												.textContent('Hay un error, contacte a el administrador.')
+												.ariaLabel('Alert Dialog Error')
+												.ok('OK')
+										);
+									}
+							});
+					}
 			}
 		};
 
@@ -178,6 +234,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								);
 							}
 					});
+				}else {
+						servicio.operario =  operario.id;
+						servicio.operario_nombre = operario.nombre;
 				}
 		};
 
