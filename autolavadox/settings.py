@@ -132,6 +132,7 @@ MENU_ORDER = [
 
 INSTALLED_APPS = [
     'exileui',
+    'informes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,7 +146,8 @@ INSTALLED_APPS = [
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',
-    'interface'
+    'interface',
+    'import_export'
 ]
 
 MIDDLEWARE = [

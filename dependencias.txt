@@ -6,3 +6,5 @@ django_select2
 exileui
 Pillow
 supra
+xhtml2pdf
+html5lib==1.0b8

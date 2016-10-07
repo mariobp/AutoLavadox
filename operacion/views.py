@@ -85,8 +85,16 @@ class WsServiciosOrden(supra.SupraListView):
         return True
     # end def
 
+<<<<<<< HEAD
     def operario_nombre(self, obj, row):
         return u'%s %s' % (obj.operario_n, obj.operario_a)
+=======
+    def get_queryset(self):
+        print self.request
+        queryset = super(WsServiciosOrden, self).get_queryset()
+
+        return queryset
+>>>>>>> 932fdb90cce9b568aaddb78b0793b04b6f90b18f
     # end def
 # end class
 
@@ -114,28 +122,30 @@ class OkService(supra.SupraFormView):
         if re.match('^\d+$', id):
             servicio = models.Servicio.objects.filter(id=int(id)).first()
             if servicio:
-                if not servicio.estado:
-                    tem_o = models.Servicio.objects.filter(id=int(id)).values_list('orden__id', 'orden__entrada').first()
-                    if not tem_o:
-                        return HttpResponse('{"info":"Not Order"}', content_type='application/json', status=204)
+                if servicio.status:
+                    if not servicio.estado:
+                        tem_o = models.Servicio.objects.filter(id=int(id)).values_list('orden__id', 'orden__entrada').first()
+                        if not tem_o:
+                            return HttpResponse('{"info":"Not Order"}', content_type='application/json', status=204)
+                        # end if
+                        order = models.Orden.objects.filter(id=tem_o[0]).first()
+                        servicios = models.Servicio.objects.filter(orden=order).latest('fin')
+                        servicio.inicio = servicios.fin if servicios else tem_o[1]
+                        servicio.comision = servicio.tipo.costo*(servicio.tipo.comision/100)
+                        servicio.valor = servicio.tipo.costo
+                        servicio.fin = timezone.now()
+                        servicio.estado = True
+                        servicio.save()
+                        order.valor = order.valor + servicio.valor
+                        order.comision = order.comision + servicio.comision
+                        order.save()
+                        return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
                     # end if
-                    order = models.Orden.objects.filter(id=tem_o[0]).first()
-                    servicios = models.Servicio.objects.filter(orden=order).latest('fin')
-                    servicio.inicio = servicios.fin if servicios else tem_o[1]
-                    servicio.comision = servicio.tipo.costo*(servicio.tipo.comision/100)
-                    servicio.valor = servicio.tipo.costo
-                    servicio.fin = timezone.now()
-                    servicio.estado = True
+                    order.valor = order.valor - servicio.valor
+                    servicio.estado = False
                     servicio.save()
-                    order.valor = order.valor + servicio.valor
-                    order.comision = order.comision + servicio.comision
-                    order.save()
-                    return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
+                    return HttpResponse('{"info":"Ok cancel"}', content_type='application/json', status=201)
                 # end if
-                order.valor = order.valor - servicio.valor
-                servicio.estado = False
-                servicio.save()
-                return HttpResponse('{"info":"Ok cancel"}', content_type='application/json', status=201)
             # end if
         # end if
         return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
@@ -157,9 +167,30 @@ class OkService(supra.SupraFormView):
 # end class
 
 
+class CancelService(supra.SupraFormView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(OkService, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        if re.match('^\d+$', id):
+            servicio = models.Servicio.objects.filter(id=int(id)).first()
+            if servicio:
+                servicio.status = False
+                servicio.save()
+                return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
+            # end if
+        # end if
+        return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+# end class
+
+
 class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
-    list_display = ['id', 'placa', 'ordenv']
+    list_display = ['id', 'placa', 'ordenv', 'tipo']
     paginate_by = 1000
 
     class Renderer:
