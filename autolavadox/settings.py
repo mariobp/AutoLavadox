@@ -45,7 +45,10 @@ EXILE_UI = {
                     'Empleado'
                 ],
                 'models': {
-                    'Empleado': {'icon': 'people', 'group': 'Empleado'}
+                    'Empleado': {'icon': 'people', 'group': 'Empleado'},
+                    'Cajero': {'icon': 'people', 'group': 'Empleado'},
+                    'Recepcionista': {'icon': 'people', 'group': 'Empleado'},
+
                 },
             },
             'cliente': {
