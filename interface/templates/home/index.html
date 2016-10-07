@@ -33,24 +33,24 @@
                       <md-autocomplete md-no-float md-selected-item="selectedItem"  md-autofocus md-min-length="0" md-autoselect="true" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual()"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Placa Vehículo">
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
-                          No hay ninguna placa de numero "[[search]]"
-                          <a ng-click="nuevo(searchText)"> - Click para registrar el vechiculo</a>
+                          No hay hay resultados para "[[search]]"
+                          <a ng-click="nuevo(searchText)" class="blue">Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
-                  <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                        <label>Tipo de vehículo</label>
-                        <input ng-model="tipo" ng-disabled="true">
-                      </md-input-container>
-                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                        <label>Nombre del Cliente</label>
-                        <input ng-model="nombre" ng-disabled="true">
-                      </md-input-container>
-                      <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                        <label>identificación</label>
-                        <input ng-model="identificacion" ng-disabled="true">
-                      </md-input-container>
-                  </div>
+                      <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                            <label>Tipo de vehículo</label>
+                            <input ng-model="tipo" ng-disabled="true">
+                          </md-input-container>
+                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                            <label>Nombre del Cliente</label>
+                            <input ng-model="nombre" ng-disabled="true">
+                          </md-input-container>
+                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                            <label>identificación</label>
+                            <input ng-model="identificacion" ng-disabled="true">
+                          </md-input-container>
+                      </div>
                 </md-subheader>
             </section>
             <md-content>
@@ -66,8 +66,8 @@
                                     ng-value="placa"
                                     class="md-primary" >
                                   [[placa.placa]]
+                                   <md-icon class="" ng-if="placa.ordenv" aria-label="Person" md-svg-icon="/media/iconos/ic_assignment.svg"></md-icon>
                                 </md-radio-button>
-                                <md-icon class="" ng-if="placa.ordenv" aria-label="Person" md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
                               </div>
                             </div>
                           </md-radio-group>
@@ -78,13 +78,20 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
-                            <md-checkbox class="blue" ng-model="servicioSelect" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
-                             <p>[[servicio.nombre]]</p>
-                            <md-icon class="md-secondary"  aria-label="Person" md-svg-icon="/media/iconos/ic_person.svg">
-                              <md-select ng-model="servicio.operario" ng-click="" placeholder="Operario" class="md-no-underline">
-                               <md-option value="[[operario]]" ng-repeat="operario in operarios">[[operario.nombre]]</md-option>
-                             </md-select>
-                            </md-icon>
+                             <md-checkbox class="blue" ng-model="servicioSelect" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
+                             <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario]]</span></p>
+                              <md-menu class="md-secondary" >
+                                  <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                      <md-icon aria-label="Person"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
+                                  </md-button>
+                                  <md-menu-content width="4">
+                                    <md-menu-item ng-repeat="operario in operarios">
+                                      <md-button ng-click="asignarOperario(operario, servicio)">
+                                        [[operario.nombre]]
+                                      </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                              </md-menu>
                            </md-list-item>
                         </md-tab>
                         <md-tab label="Servicios Terminados">

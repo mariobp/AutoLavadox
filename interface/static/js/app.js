@@ -113,7 +113,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.changeCheck = function (servicio) {
 			servicio.checked = !servicio.checked;
 		};
-		
+
 		//Lista de operarios
 		$scope.operariosList = function () {
 				$http({
@@ -142,6 +142,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				});
 		};
 		$scope.ordenesPendientes();
+
+		$scope.asignarOperario = function(operario, servicio){
+				console.log("entro");
+				servicio.operario =  operario.nombre;
+		};
 
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
