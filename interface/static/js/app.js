@@ -113,6 +113,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$scope.servicios.push(item);
 								$scope.totalService+= item.valor;
 							});
+							habilitar();
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
@@ -143,8 +144,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					 }
 				}).then(function doneCallbacks(response){
 						console.log(response);
-						service.id = response.data.id;
-						service.tipoid = response.data.tipo;
+						servicio.id = response.data.id;
+						servicio.tipoid = response.data.tipo;
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -167,7 +168,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .cancel('No');
 				$mdDialog.show(confirm).then(function() {
 					$http({
-						'url':'/cancel/servicio/'+servicio.id,
+						'url':'/operacion/cancel/servicio/'+servicio.id+'/',
 						'method': 'GET'
 					}).then(function doneCallbacks(response){
 							servicio.checked = !servicio.checked;
@@ -206,6 +207,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
 									servicio.checked = !servicio.checked;
+										$mdToast.show(
+											$mdToast.simple()
+												.textContent('Servicio asignado')
+								        .hideDelay(3000)
+										);
 							}, function failCallbacks(response){
 									if (response.status == 500) {
 											$scope.dialogError();
@@ -281,13 +287,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 		$scope.ordenesPendientes();
 
-		$scope.servicioListo = function(service){
-			function findService(item){
-					return item === service;
-			}
-
-			function habilitar(){
-					var n = $scope.serviciosPorHacer.length;
+		function habilitar(){
+				var n = $scope.serviciosPorHacer.length;
+				if (n>0) {
 					$scope.serviciosPorHacer.forEach(function(item){
 							if(item.estado){
 								n = n - 1;
@@ -298,6 +300,22 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					}else {
 						$scope.habilitarOrden = true;
 					}
+				}else {
+					$scope.habilitarOrden = true;
+				}
+
+		}
+
+		function removeFromArray(array, element){
+			var index = array.indexOf(element);
+			if (index > -1) {
+			  array.splice(index, 1);
+			}
+		}
+
+		$scope.servicioListo = function(service){
+			function findService(item){
+					return item === service;
 			}
 
 			function enviar(){
@@ -305,9 +323,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					'url': '/operacion/ok/servicio/'+ service.id+'/',
 					'method': 'GET'
 				}).then(function doneCallbacks(response){
+						console.log(response);
 						var num = $scope.servicios.find(findService);
+						console.log(num);
+						console.log(service);
 						service.estado = !service.estado;
 						num.estado = service.estado;
+						habilitar();
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -320,21 +342,37 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				});
 			}
 			enviar();
-			habilitar();
 		};
 
 		$scope.cerrarOrden = function(){
-				$http({
-					'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
-					'method': 'GET'
-				}).then(function doneCallbacks(response){
-						$scope.servicios = [];
-						$scope.serviciosPorHacer = [];
-				},function failCallbacks(response){
-						if (response.status == 500) {
-								$scope.dialogError();
-						}
+			  var confirm = $mdDialog.confirm()
+	      .title('Estas seguro que quieres cerrar la Orden?')
+				.textContent('No se podra modificar una vez se cierre.')
+	      .ariaLabel('DD')
+	      .ok('Si')
+	      .cancel('Cancelar');
+				$mdDialog.show(confirm).then(function() {
+						$http({
+							'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
+							'method': 'GET'
+						}).then(function doneCallbacks(response){
+								$scope.servicios = [];
+								$scope.serviciosPorHacer = [];
+								removeFromArray($scope.placas, $scope.selectedPlaca);
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent('Orden finalizada')
+						        .hideDelay(3000)
+								);
+						},function failCallbacks(response){
+								if (response.status == 500) {
+										$scope.dialogError();
+								}
+						});
+				}, function() {
+
 				});
+
 		};
 
 		//Agrega nuevo vechiculo
