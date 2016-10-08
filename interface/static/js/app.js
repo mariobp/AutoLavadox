@@ -160,7 +160,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 
 		$scope.changeCheck = function (servicio) {
-			if(servicio.checked){
+			if(servicio.status){
 			  var confirm = $mdDialog.confirm()
 	      .title('Estas seguro que quieres cancelar?')
 	      .ariaLabel('Lucky day')
@@ -171,7 +171,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'url':'/operacion/cancel/servicio/'+servicio.id+'/',
 						'method': 'GET'
 					}).then(function doneCallbacks(response){
-							servicio.checked = !servicio.checked;
+							servicio.status = !servicio.status;
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
@@ -206,7 +206,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.tipo = servicio.id;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
-									servicio.checked = !servicio.checked;
+									servicio.status = !servicio.status;
 										$mdToast.show(
 											$mdToast.simple()
 												.textContent('Servicio asignado')
