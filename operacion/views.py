@@ -14,7 +14,7 @@ from django.utils import timezone
 
 class TiposServicios(supra.SupraListView):
     model = models.TipoServicio
-    list_display = ['id', 'nombre']
+    list_display = ['id', 'nombre', 'costo']
     search_key = 'q'
     list_filter = ['vehiculos__id']
     search_fields = ['vehiculos__id']
@@ -24,12 +24,10 @@ class TiposServicios(supra.SupraListView):
 
 class TiposServiciosPorAplicar(supra.SupraListView):
     model = models.TipoServicio
-    list_display = ['id', 'nombre']
+    list_display = ['id', 'nombre', 'costo']
     paginate_by = 1000
 
     def get_queryset(self):
-        print self.request
-        # models.TipoServicio.objects.filter(vehiculos__id=12)
         tipo = self.request.GET.get('tipo', False)
         orden = self.request.GET.get('orden', False)
         queryset = super(TiposServiciosPorAplicar, self).get_queryset()
