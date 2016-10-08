@@ -111,8 +111,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serviciosPorHacer = data;
 							data.forEach(function(item){
 								$scope.servicios.push(item);
-								$scope.totalService+= item.valor;
 							});
+							valor(data);
 							habilitar();
 					}, function failCallbacks(response){
 							$scope.dialogError();
@@ -133,6 +133,17 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}
 		};
 
+		function valor(array){
+			$scope.totalService = 0;
+			console.log(array);
+			array.forEach(function(item){
+
+				if (item.status) {
+					$scope.totalService+= item.valor;
+				}
+			});
+		}
+
 		//Agrega servicio
 		function registrarServicio(data, servicio){
 				$http({
@@ -147,6 +158,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						servicio.tipoid = response.data.tipo;
 						servicio.status = !servicio.status;
 						$scope.serviciosPorHacer.push(servicio);
+						valor($scope.serviciosPorHacer);
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -174,6 +186,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					}).then(function doneCallbacks(response){
 							servicio.status = !servicio.status;
 							removeFromArray($scope.serviciosPorHacer, servicio);
+							valor($scope.serviciosPorHacer);
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
@@ -189,6 +202,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				});
 			}else {
 					if ($scope.selectedPlaca.ordenv) {
+						console.log("ya existe una orden");
 							data.orden = $scope.selectedPlaca.ordenv;
 							data.tipo = $scope.selectedPlaca.tipo;
 							data.operario = servicio.operario;
@@ -204,11 +218,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								 },
 							}).then(function doneCallbacks(response){
 									$scope.selectedPlaca.ordenv = response.data.id;
+									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipoid;
 									data.orden = response.data.id;
-									data.tipo = $scope.selectedPlaca.tipo;
+									data.tipo = $scope.selectedPlaca.tipoid;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
-									servicio.status = !servicio.status;
 										$mdToast.show(
 											$mdToast.simple()
 												.textContent('Servicio asignado')
