@@ -34,7 +34,7 @@
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
-                          <a ng-click="nuevo(searchText)" class="blue">Click para registrar</a>
+                          <a ng-click="nuevo(searchText)" >Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
                       <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
@@ -78,7 +78,7 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0">
-                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-class="{'blue': !servicio.estado}" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
+                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
                              <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                               <md-menu class="md-secondary" >
                                   <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -101,7 +101,7 @@
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
                           <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0">
-                            <md-checkbox class="blue" ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
+                            <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
                             <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                           </md-list-item>
                           <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0">

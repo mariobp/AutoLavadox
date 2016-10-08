@@ -4,8 +4,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	$interpolateProvider.startSymbol('[[');
 	$interpolateProvider.endSymbol(']]');
 	 $mdThemingProvider.theme('default')
-    .primaryPalette('pink')
-    .accentPalette('orange');
+    .primaryPalette('teal', {
+			'default': '800'
+		})
+    .accentPalette('light-blue',{
+			'default': 'A400'
+		});
 })
 
 .controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast) {
