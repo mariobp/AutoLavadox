@@ -143,9 +143,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							 'Content-Type': 'application/x-www-form-urlencoded'
 					 }
 				}).then(function doneCallbacks(response){
-						console.log(response);
 						servicio.id = response.data.id;
 						servicio.tipoid = response.data.tipo;
+						servicio.status = !servicio.status;
+						$scope.serviciosPorHacer.push(servicio);
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -188,9 +189,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}else {
 					if ($scope.selectedPlaca.ordenv) {
 							data.orden = $scope.selectedPlaca.ordenv;
-							data.tipo = servicio.id;
+							data.tipo = $scope.selectedPlaca.tipo;
 							data.operario = servicio.operario;
-							registrarServicio(data);
+							registrarServicio(data, servicio);
 					}else {
 							data.vehiculo = $scope.selectedPlaca.id;
 							$http({
@@ -203,7 +204,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							}).then(function doneCallbacks(response){
 									$scope.selectedPlaca.ordenv = response.data.id;
 									data.orden = response.data.id;
-									data.tipo = servicio.id;
+									data.tipo = $scope.selectedPlaca.tipo;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
 									servicio.status = !servicio.status;

@@ -78,7 +78,7 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                            <md-list-item ng-repeat="servicio in servicios">
-                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-class="{'blue': !servicio.estado}" ng-click="changeCheck(servicio)" ng-checked="servicio.checked"></md-checkbox>
+                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-class="{'blue': !servicio.estado}" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
                              <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                               <md-menu class="md-secondary" >
                                   <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
