@@ -65,8 +65,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.listVehiculos();
 
 		//Vehiculo seleccionado
-    $scope.vehiculoActual = function(){
-      console.log($scope.selectedItem);
+    $scope.vehiculoActual = function($event){
+			function placaRepetida(vehiculo) {
+					return vehiculo.placa === $scope.selectedItem.placa;
+			}
       if ($scope.selectedItem) {
 					if ($scope.selectedItem.nombre && $scope.selectedItem.apellidos ) {
 						$scope.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
@@ -74,7 +76,19 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           $scope.identificacion = $scope.selectedItem.cedula;
           $scope.tipo = $scope.selectedItem.tipov;
           if (!$scope.placas.includes($scope.selectedItem)) {
-              $scope.placas.push($scope.selectedItem);
+							var result = $scope.placas.find(placaRepetida);
+						if (result === undefined) {
+						   $scope.placas.push($scope.selectedItem);
+						}else {
+							if (result.ordenv) {
+									$mdToast.show(
+										$mdToast.simple()
+											.textContent('Ya existe una orden para la placa '+ result.placa)
+											.hideDelay(4000)
+											.position('top start')
+									);
+							}
+						}
           }
       }else {
           $scope.nombre = "";
@@ -99,6 +113,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
 				if ($scope.selectedPlaca.tipoid) {
+					$scope.serviciosPorHacer = [];
 					$http({
 						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipoid,
 						'method': 'GET',
@@ -108,6 +123,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.dialogError();
 					});
 				}else if ($scope.selectedPlaca.ordenv) {
+					console.log("Entroooo");
 					$scope.servicios = [];
 					$scope.totalService = 0;
 					$http({
@@ -142,7 +158,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		function valor(array){
 			$scope.totalService = 0;
-			console.log(array);
 			array.forEach(function(item){
 
 				if (item.status) {
@@ -170,6 +185,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 								.hideDelay(3000)
+								.position('bottom start')
 						);
 				}, function failCallbacks(response){
 						if (response.status == 500) {
@@ -198,6 +214,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
 					        .hideDelay(3000)
+									.position('bottom start')
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
@@ -234,6 +251,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											$mdToast.simple()
 												.textContent('Servicio asignado')
 								        .hideDelay(3000)
+												.position('bottom start')
 										);
 							}, function failCallbacks(response){
 									if (response.status == 500) {
@@ -265,6 +283,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Guardado Exitoso')
 					        .hideDelay(3000)
+									.position('bottom start')
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
@@ -357,6 +376,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 				        .hideDelay(3000)
+								.position('bottom start')
 						);
 				},function failCallbacks(response){
 						if (response.status == 500) {
@@ -386,6 +406,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$mdToast.simple()
 										.textContent('Orden finalizada')
 						        .hideDelay(3000)
+										.position('bottom start')
 								);
 						},function failCallbacks(response){
 								if (response.status == 500) {
@@ -448,6 +469,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						$mdToast.simple()
 							.textContent('Guardado Exitoso')
 			        .hideDelay(3000)
+						  .position('bottom start')
 					);
 			}, function failCallbacks(response){
 					console.log(response);
@@ -458,14 +480,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent("Placa: " + response.data.placa[0])
-									.position("bottom")
+									.position('bottom start')
 					        .hideDelay(3000)
 							);
 						}else if(response.data.tipo){
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent("Tipo: " + response.data.tipo[0])
-									.position("bottom")
+									.position('bottom start')
 					        .hideDelay(3000)
 							);
 						}
