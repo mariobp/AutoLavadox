@@ -427,7 +427,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           clickOutsideToClose:true,
 					locals: {
 						tipos:$scope.tipos,
-						placa: $scope.search
+						placa: $scope.search,
+						placas: $scope.placas,
+						tipo: $scope.tipo,
+						nombre: $scope.nombre,
+						identificacion: $scope.identificacion
 					}
            // Only for -xs, -sm breakpoints.
         })
@@ -442,19 +446,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     };
 })
 
-.controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, tipos){
+.controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, tipo, nombre, identificacion){
 		$scope.tipos = tipos;
 		$scope.data = {};
 		$scope.data.placa = placa;
-		var formData = new FormData();
-
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
 		$scope.enviar = function(){
-			formData.append('placa', $scope.data.placa);
-			formData.append('tipo', $scope.data.tipo);
 			$http({
 				url:'/cliente/add/vehiculo/',
 				method: 'POST',
@@ -463,7 +463,19 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'Content-Type': 'application/x-www-form-urlencoded'
 				},
 			}).then(function doneCallbacks(response){
-					console.log(response);
+					var item = {};
+					item.placa = response.data.placa;
+					item.tipoid = response.data.tipo_id;
+					item.id = response.data.id;
+					placas.push(item);
+
+					function searchTipo(tipo){
+						return tipo.id == response.data.tipo_id;
+					}
+					var result = tipos.find(searchTipo);
+					tipo = result.nombre;
+					identificacion = "Sin registrar";
+					nombre = "Sin registrar";
 					$mdDialog.hide();
 					$mdToast.show(
 						$mdToast.simple()
@@ -474,8 +486,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}, function failCallbacks(response){
 					console.log(response);
 					if (response.status == 400) {
-						console.log("400");
-						console.log(response.data.placa);
 						if (response.data.placa) {
 							$mdToast.show(
 								$mdToast.simple()
