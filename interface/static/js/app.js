@@ -1,8 +1,11 @@
 angular.module('App', ['ngMaterial', 'ngMessages'])
 
-.config(function($interpolateProvider) {
+.config(function($interpolateProvider, $mdThemingProvider) {
 	$interpolateProvider.startSymbol('[[');
 	$interpolateProvider.endSymbol(']]');
+	 $mdThemingProvider.theme('default')
+    .primaryPalette('pink')
+    .accentPalette('orange');
 })
 
 .controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast) {
