@@ -46,6 +46,14 @@ class ServiciosSource(resources.ModelResource):
 
     )
 
+    def get_nombre(self):
+        nombre = " select  case when length(__u.first_name)==0 or  __u.first_name is null  then 'operario' else __u.first_name end||' '||case when length(__u.last_name)==0 or  __u.last_name is null  then 'operario' else __u.last_name end as nombre  from auth_user as __u where "
+    # end def
+
+    def export(self, queryset=None, *args, **kwargs):
+        queryset = queryset
+        return super(ClienteResource, self).export(queryset, *args, **kwargs)
+    # end def
 
     class Meta:
         model = operacion.Servicio
