@@ -173,6 +173,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'method': 'GET'
 					}).then(function doneCallbacks(response){
 							servicio.status = !servicio.status;
+							removeFromArray($scope.serviciosPorHacer, servicio);
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
@@ -226,7 +227,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.asignarOperario = function(operario, servicio){
 				if($scope.selectedPlaca.ordenv){
 					data.orden = $scope.selectedPlaca.ordenv;
-					data.tipo = servicio.tipoid;
+					data.tipo = $scope.selectedPlaca.tipo;
 					data.operario = operario.id;
 					$http({
 						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
@@ -290,7 +291,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		function habilitar(){
 				var n = $scope.serviciosPorHacer.length;
-				if (n>0) {
+				if (n > 0) {
 					$scope.serviciosPorHacer.forEach(function(item){
 							if(item.estado){
 								n = n - 1;

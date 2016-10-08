@@ -78,3 +78,7 @@ md-checkbox.md-checked.blue .md-icon {
   background-color: #F44336 !important;
   color: white !important;
 }
+
+.text-center{
+  text-align: center;
+}
