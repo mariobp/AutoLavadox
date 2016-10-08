@@ -34,7 +34,7 @@ class TiposServiciosPorAplicar(supra.SupraListView):
         orden = self.request.GET.get('orden', False)
         queryset = super(TiposServiciosPorAplicar, self).get_queryset()
         obj = queryset
-        return queryset.filter(vehiculos__id=int(tipo) if tipo else 0).exclude(servicio__orden__id=int(orden) if orden else 0)
+        return queryset.filter(vehiculos__id=int(tipo) if tipo else 0).exclude(servicio__orden__id=int(orden) if orden else 0, servicio__status=True)
     # end def
 # end class
 
@@ -73,7 +73,6 @@ class CloseOrden(supra.SupraFormView):
 
     def post(self, request, *args, **kwargs):
         id = kwargs['pk']
-        print id,"llegada"
         if re.match('^\d+$', id):
             orden = models.Orden.objects.filter(id=int(id)).first()
             if orden:
