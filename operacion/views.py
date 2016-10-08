@@ -114,7 +114,7 @@ class WsServiciosOrden(supra.SupraListView):
     def get_queryset(self):
         queryset = super(WsServiciosOrden, self).get_queryset()
         obj = queryset.filter(status=True)
-        return queryset
+        return obj
     # end def
 # end class
 
