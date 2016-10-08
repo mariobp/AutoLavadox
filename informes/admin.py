@@ -52,7 +52,8 @@ class ServiciosSource(resources.ModelResource):
 
     def export(self, queryset=None, *args, **kwargs):
         queryset = queryset
-        return super(ClienteResource, self).export(queryset, *args, **kwargs)
+        print queryset.query
+        return super(ServiciosSource, self).export(queryset, *args, **kwargs)
     # end def
 
     class Meta:
