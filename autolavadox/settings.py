@@ -34,9 +34,9 @@ EXILE_UI = {
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
-            'dashboard': '/media/piscix_logo/Icono-f-t.png',
-            'page': '/media/piscix_logo/Icono-200px.png',
-            'login': '/media/piscix_logo/Icono-s-t.png'
+            'dashboard': '/media/logo/carrito_mojado.svg',
+            'page': '/media/logo/carrito_mojado.svg',
+            'login': '/media/logo/carrito_mojado.png'
         },
         'icons': {
             'empleados': {
