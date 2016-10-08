@@ -191,7 +191,7 @@ class OkService(supra.SupraFormView):
 class CancelService(supra.SupraFormView):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
-        return super(OkService, self).dispatch(*args, **kwargs)
+        return super(CancelService, self).dispatch(*args, **kwargs)
     # end def
 
     def get(self, request, *args, **kwargs):
