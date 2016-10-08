@@ -7,6 +7,6 @@ urlpatterns = [
 ]
 
 # servicio que retorna los Operarios
-urlpatterns = [
+urlpatterns += [
     url(r'^operarios/$', views.WsOperarios.as_view(), name='operarios'),
 ]

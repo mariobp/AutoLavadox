@@ -45,7 +45,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           'url': '/empleados/logout/',
           'method': 'GET',
         }).then(function doneCallbacks(response){
-            location.href = "/login/";
+            location.href = "/empleados/login/";
         }, function failCallbacks(response){
             $scope.dialogError();
         });

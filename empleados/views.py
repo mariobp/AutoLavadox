@@ -4,22 +4,50 @@ from supra import views as supra
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import logout
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from supra import views as supra
+from django.contrib.auth import login, logout, authenticate
 
 
 # Create your views here.
+
 class Login(supra.SupraSession):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        obj = super(Login, self).dispatch(request, *args, **kwargs)
-        if request.user.is_authenticated():
-            if not models.Recepcionista.objects.filter(id=request.user.id).first():
-                return HttpResponse('{"res":"No cuenta con los permisos"}', content_type="application/json", status=201)
-            # end def
+    #model = models.Recepcionista
+    template_name = "empleados/login.html"
+
+    def form_valid(self, form):
+        instance = form.save()
+        for inline in self.validated_inilines:
+            inline.instance = instance
+            inline.save()
+        # end for
+        nex = self.request.GET.get('next', False)
+        if nex:
+            return HttpResponseRedirect(nex)
+        return HttpResponseRedirect('/')
+    # end def
+
+    def login(self, request, cleaned_data):
+        user = authenticate(username=cleaned_data[
+                            'username'], password=cleaned_data['password'])
+        if user is not None:
+            exist_obj = self.model.objects.filter(pk=user.pk).count()
+            if exist_obj and user.is_active:
+                login(request, user)
+                return user
+            # end if
         # end if
-        return obj
+        return HttpResponseRedirect('/empleados/login/')
+        # end def
+
+    def form_invalid(self, form):
+        errors = dict(form.errors)
+        print errors
+        for i in self.invalided_inilines:
+            errors['inlines'] = list(i.errors)
+        # end for
+        return render(self.request, self.template_name, {"form": form})
     # end def
 # end class
 
@@ -28,7 +56,7 @@ class Logout(TemplateView):
     #
     def dispatch(self, request, *args, **kwargs):
         logout(request, **kwargs)
-        return HttpResponse('{"res":"ok"}', content_type="application/json", status=201)
+        return HttpResponseRedirect('/')
     # end def
 # end class
 
