@@ -112,17 +112,17 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
-				if ($scope.selectedPlaca.tipoid) {
+				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serviciosPorHacer = [];
 					$http({
-						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipoid,
+						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipo,
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
-				}else if ($scope.selectedPlaca.ordenv) {
+				}else {
 					console.log("Entroooo");
 					$scope.servicios = [];
 					$scope.totalService = 0;
@@ -177,7 +177,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					 }
 				}).then(function doneCallbacks(response){
 						servicio.id = response.data.id;
-						servicio.tipoid = response.data.tipo;
+						servicio.tipo = response.data.tipo;
 						servicio.status = !servicio.status;
 						$scope.serviciosPorHacer.push(servicio);
 						valor($scope.serviciosPorHacer);
@@ -242,9 +242,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								 },
 							}).then(function doneCallbacks(response){
 									$scope.selectedPlaca.ordenv = response.data.id;
-									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipoid;
+									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipo;
 									data.orden = response.data.id;
-									data.tipo = $scope.selectedPlaca.tipoid;
+									data.tipo = $scope.selectedPlaca.tipo;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
 										$mdToast.show(
@@ -427,7 +427,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           clickOutsideToClose:true,
 					locals: {
 						tipos:$scope.tipos,
-						placa: $scope.search
+						placa: $scope.search,
+						placas: $scope.placas,
+						tipo: $scope.tipo,
+						nombre: $scope.nombre,
+						identificacion: $scope.identificacion
 					}
            // Only for -xs, -sm breakpoints.
         })
@@ -442,19 +446,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     };
 })
 
-.controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, tipos){
+.controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, tipo, nombre, identificacion){
 		$scope.tipos = tipos;
 		$scope.data = {};
 		$scope.data.placa = placa;
-		var formData = new FormData();
-
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
 		$scope.enviar = function(){
-			formData.append('placa', $scope.data.placa);
-			formData.append('tipo', $scope.data.tipo);
 			$http({
 				url:'/cliente/add/vehiculo/',
 				method: 'POST',
@@ -463,7 +463,19 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'Content-Type': 'application/x-www-form-urlencoded'
 				},
 			}).then(function doneCallbacks(response){
-					console.log(response);
+					var item = {};
+					item.placa = response.data.placa;
+					item.tipo = response.data.tipo_id;
+					item.id = response.data.id;
+					placas.push(item);
+
+					function searchTipo(tipo){
+						return tipo.id == response.data.tipo_id;
+					}
+					var result = tipos.find(searchTipo);
+					tipo = result.nombre;
+					identificacion = "Sin registrar";
+					nombre = "Sin registrar";
 					$mdDialog.hide();
 					$mdToast.show(
 						$mdToast.simple()
@@ -474,8 +486,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}, function failCallbacks(response){
 					console.log(response);
 					if (response.status == 400) {
-						console.log("400");
-						console.log(response.data.placa);
 						if (response.data.placa) {
 							$mdToast.show(
 								$mdToast.simple()
