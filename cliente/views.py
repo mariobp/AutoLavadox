@@ -25,7 +25,7 @@ class VehiculoInfo(supra.SupraListView):
     list_display = ['placa', 'nombre', 'apellidos', 'cedula', 'tipov', 'tipo', 'id']
     search_fields = ['placa']
     list_filter = ['placa']
-    paginate_by = 1
+    paginate_by = 5
 
     class Renderer:
         cedula = 'cliente__identificacion'
