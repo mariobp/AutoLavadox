@@ -7,10 +7,10 @@ from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 from cgi import escape
+from autolavadox.settings import HOST_MEDIA
 
 
 def render_to_pdf(template_src, context_dict):
-    print "contenido del tales"
     template = get_template(template_src)
     context = Context(context_dict)
     html = template.render(context)
@@ -25,6 +25,7 @@ def render_to_pdf(template_src, context_dict):
 
 class PDF(base_formats.Format):
     template = 'informes/informe.html'
+
     def get_title(self):
         return 'pdf'
     # end def
@@ -34,10 +35,11 @@ class PDF(base_formats.Format):
     # end def
 
     def export_data(self, dataset, **kwargs):
-        print "desde el pdf ", kwargs
+        print "desde el pdf ", kwargs, kwargs
         return render_to_pdf(
             self.template,
             {
+                'media': HOST_MEDIA,
                 'pagesize': 'A4',
                 'dataset': list(dataset),
                 'headers': dataset.headers

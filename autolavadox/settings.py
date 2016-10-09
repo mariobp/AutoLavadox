@@ -26,7 +26,10 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost'
+]
+
 EXILE_UI = {
     'site_title': 'LavaAutox',
     'site_header': 'LavaAutox',
@@ -248,4 +251,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
+HOST_MEDIA = 'http://127.0.0.1:8000/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

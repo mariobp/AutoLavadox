@@ -2,6 +2,7 @@ from django.contrib import admin
 from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 import models
 import forms
+from datetime import datetime
 from daterange_filter.filter import DateRangeFilter
 # Register your models here.
 
@@ -16,14 +17,30 @@ class ServicioInline(admin.StackedInline):
 class ServicioAdmin(admin.ModelAdmin):
     form = forms.ServicioForm
     list_display = ['orden', 'operario', 'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
-    list_filter = ['orden', 'operario', 'tipo', 'estado', ('inicio', DateRangeEX)]
+    list_filter = ['operario', 'tipo', 'estado', ('inicio', DateRangeEX)]
+    search_fields = ['orden__id', ]
     list_editable = ['estado']
+
+    def get_queryset(self, request):
+        queryset = super(ServicioAdmin, self).get_queryset(request)
+        drf__inicio__gte = request.GET.get('drf__inicio__gte', False)
+        drf__inicio__lte = request.GET.get('drf__inicio__lte', False)
+        now = datetime.now()
+        if not drf__inicio__gte and not drf__inicio__lte:
+            return queryset.filter(
+                inicio__year = now.year,
+                inicio__month = now.month,
+                inicio__day = now.day,
+            )
+        # end if
+        return queryset
+    # end def
 # end class
 
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', 'fin']
+    list_display = ['pk', 'entrada', 'vehiculo', 'valor', 'comision', 'pago', 'fin']
     list_filter = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', ('fin', DateRangeEX)]
     list_editable = ['pago']
     form = forms.OrdenForm
@@ -43,6 +60,21 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.comision = comi
         obj.save()
     # end if
+
+    def get_queryset(self, request):
+        queryset = super(OrdenAdmin, self).get_queryset(request)
+        drf__inicio__gte = request.GET.get('drf__entrada__gte', False)
+        drf__inicio__lte = request.GET.get('drf__entrada__lte', False)
+        now = datetime.now()
+        if not drf__inicio__gte and not drf__inicio__lte:
+            return queryset.filter(
+                entrada__year = now.year,
+                entrada__month = now.month,
+                entrada__day = now.day,
+            )
+        # end if
+        return queryset
+    # end def
 # end class
 
 

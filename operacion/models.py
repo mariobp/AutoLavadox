@@ -12,7 +12,7 @@ import re
 class TipoServicio(models.Model):
     nombre = models.CharField(max_length=500, unique=True)
     costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
-    comision = models.FloatField("Comisión", validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]{1,2}.[0-9]*|[1-9]+[0-9]{1,2}$'), ('Comisión no valida'), 'invalid')])
+    comision = models.FloatField("Comisión")
     vehiculos = models.ManyToManyField(cliente.TipoVehiculo)
     state = models.BooleanField(default=True)
 
@@ -44,14 +44,11 @@ class Orden(models.Model):
     activo = models.BooleanField(default=True)
 
     def __unicode__(self):
-        if not self.vehiculo:
-            return 'cliente cliente'
-        if not self.vehiculo.cliente:
-            return 'cliente cliente'
-        return '%s %s - %s' % (
-            self.vehiculo.cliente.nombre if self.vehiculo else "cliente",
-            self.vehiculo.cliente.apellidos if self.vehiculo.cliente else " cliente",
-            self.vehiculo.placa)
+        codigo = ""
+        for i in range(10-len(str(self.pk))):
+            codigo = codigo + "0"
+        # end for
+        return "#%s%d" % (codigo, self.pk)
     # end def
 
     def __str__(self):

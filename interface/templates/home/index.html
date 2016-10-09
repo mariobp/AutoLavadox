@@ -30,11 +30,11 @@
             </md-toolbar>
             <section>
                 <md-subheader class="color-fondo">
-                      <md-autocomplete md-no-float md-selected-item="selectedItem"  md-autofocus md-min-length="0" md-autoselect="true" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual()"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Placa Vehículo">
+                      <md-autocomplete md-no-float md-selected-item="selectedItem" md-min-length="0" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
-                          <a ng-click="nuevo(searchText)" >Click para registrar</a>
+                          <a ng-class="" ng-click="nuevo(searchText)" >Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
                       <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
@@ -57,7 +57,7 @@
               <div class="layout-row color-fondo" layout="row" layout-xs="column" layout-align="center stretch">
                       <md-card flex="20" flex-xs="100">
                        <md-card-content>
-                          <h3>En Servicio</h3>
+                          <h3>En servicio</h3>
                           <md-divider></md-divider>
                           <md-radio-group ng-model="selectedPlaca" ng-change="serviciosList()">
                             <div ng-repeat='placa in placas' class="row">
