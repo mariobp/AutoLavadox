@@ -15,7 +15,7 @@ class ServicioInline(admin.StackedInline):
 
 class ServicioAdmin(admin.ModelAdmin):
     form = forms.ServicioForm
-    list_display = ['orden', 'operario', 'tipo', 'inicio', 'fin', 'estado']
+    list_display = ['orden', 'operario', 'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
     list_filter = ['orden', 'operario', 'tipo', 'estado', ('inicio', DateRangeEX)]
     list_editable = ['estado']
 # end class
@@ -23,7 +23,8 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
+    list_display = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', 'fin']
+    list_filter = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', ('fin', DateRangeEX)]
     list_editable = ['pago']
     form = forms.OrdenForm
 

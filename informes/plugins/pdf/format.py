@@ -8,7 +8,9 @@ from django.template import Context
 from django.http import HttpResponse
 from cgi import escape
 
+
 def render_to_pdf(template_src, context_dict):
+    print "contenido del tales"
     template = get_template(template_src)
     context = Context(context_dict)
     html = template.render(context)
@@ -20,8 +22,9 @@ def render_to_pdf(template_src, context_dict):
     return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 # end def
 
-class PDF(base_formats.Format):
 
+class PDF(base_formats.Format):
+    template = 'informes/informe.html'
     def get_title(self):
         return 'pdf'
     # end def
@@ -31,8 +34,9 @@ class PDF(base_formats.Format):
     # end def
 
     def export_data(self, dataset, **kwargs):
+        print "desde el pdf ", kwargs
         return render_to_pdf(
-            'informes/informe.html',
+            self.template,
             {
                 'pagesize': 'A4',
                 'dataset': list(dataset),

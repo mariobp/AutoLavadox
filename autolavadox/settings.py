@@ -73,6 +73,15 @@ EXILE_UI = {
                     'Orden': {'icon': 'assignment', 'group': 'Operacion'}
                 },
             },
+            'estadistica': {
+                'icon': 'show_chart',
+                'groups': [
+                    'LocalEstadistica'
+                ],
+                'models': {
+                    'TiemposOrden': {'icon': 'alarm_on', 'group': 'LocalEstadistica'}
+                },
+            },
             'auth': {
                 'icon': 'security',
                 'groups': [
@@ -116,6 +125,12 @@ MENU_ORDER = [
         ]
     },
     {
+        'name': 'estadistica',
+        'models': [
+            'TiemposOrden'
+        ]
+    },
+    {
         'name': 'auth',
         'models': [
             'Group',
@@ -147,7 +162,8 @@ INSTALLED_APPS = [
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',
     'interface',
-    'import_export'
+    'import_export',
+    'estadistica'
 ]
 
 MIDDLEWARE = [

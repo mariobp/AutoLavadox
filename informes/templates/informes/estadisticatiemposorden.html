@@ -21,19 +21,16 @@
 	{% for header in headers %}
 		<th>{{header}}</th>
 	{% endfor %}
+    {{1|cabecera}}
 	</tr>
 	{% for row in dataset %}
 		<tr>
 			{% for col in row %}
 				<td>{{col}}</td>
 			{% endfor %}
+            {{row|cuerpo}}
 		</tr>
 		{% endfor %}
-		<tr>
-			<td colspan="4">Total</td>
-			<td>{{dataset|valor:4}}</td>
-			<td>{{dataset|valor:5}}</td>
-		</tr>
 	</table>
 	</body>
 </html>
