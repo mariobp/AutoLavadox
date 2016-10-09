@@ -365,7 +365,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					'url': '/operacion/ok/servicio/'+ service.id+'/',
 					'method': 'GET'
 				}).then(function doneCallbacks(response){
-						console.log(response);
 						var num = $scope.servicios.find(findService);
 						console.log(num);
 						console.log(service);
@@ -402,6 +401,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$scope.servicios = [];
 								$scope.serviciosPorHacer = [];
 								removeFromArray($scope.placas, $scope.selectedPlaca);
+								valor($scope.serviciosPorHacer);
 								$mdToast.show(
 									$mdToast.simple()
 										.textContent('Orden finalizada')
