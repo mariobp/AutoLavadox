@@ -230,7 +230,7 @@ class CancelService(supra.SupraFormView):
 class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
     list_display = ['id', 'placa', 'ordenv', 'tipo']
-    paginate_by = 1000
+    paginate_by = 5
 
     class Renderer:
         ordenv = 'orden__id'
