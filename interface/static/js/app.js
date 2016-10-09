@@ -112,17 +112,17 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
-				if ($scope.selectedPlaca.tipoid) {
+				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serviciosPorHacer = [];
 					$http({
-						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipoid,
+						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipo,
 						'method': 'GET',
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
 					}, function failCallbacks(response){
 							$scope.dialogError();
 					});
-				}else if ($scope.selectedPlaca.ordenv) {
+				}else {
 					console.log("Entroooo");
 					$scope.servicios = [];
 					$scope.totalService = 0;
@@ -177,7 +177,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					 }
 				}).then(function doneCallbacks(response){
 						servicio.id = response.data.id;
-						servicio.tipoid = response.data.tipo;
+						servicio.tipo = response.data.tipo;
 						servicio.status = !servicio.status;
 						$scope.serviciosPorHacer.push(servicio);
 						valor($scope.serviciosPorHacer);
@@ -242,9 +242,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								 },
 							}).then(function doneCallbacks(response){
 									$scope.selectedPlaca.ordenv = response.data.id;
-									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipoid;
+									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipo;
 									data.orden = response.data.id;
-									data.tipo = $scope.selectedPlaca.tipoid;
+									data.tipo = $scope.selectedPlaca.tipo;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
 										$mdToast.show(
@@ -465,7 +465,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}).then(function doneCallbacks(response){
 					var item = {};
 					item.placa = response.data.placa;
-					item.tipoid = response.data.tipo_id;
+					item.tipo = response.data.tipo_id;
 					item.id = response.data.id;
 					placas.push(item);
 
