@@ -123,7 +123,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.dialogError();
 					});
 				}else {
-					console.log("Entroooo");
 					$scope.servicios = [];
 					$scope.totalService = 0;
 					$http({
@@ -177,7 +176,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					 }
 				}).then(function doneCallbacks(response){
 						servicio.id = response.data.id;
-						servicio.tipo = response.data.tipo;
+						servicio.tipo = response.data.tipo_id;
 						servicio.status = !servicio.status;
 						$scope.serviciosPorHacer.push(servicio);
 						valor($scope.serviciosPorHacer);
@@ -227,8 +226,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}else {
 					if ($scope.selectedPlaca.ordenv) {
 						console.log("ya existe una orden");
+						console.log(servicio);
 							data.orden = $scope.selectedPlaca.ordenv;
-							data.tipo = $scope.selectedPlaca.tipo;
+							if (servicio.tipo) {
+									data.tipo = servicio.tipo;
+							} else {
+									data.tipo = servicio.id;
+							}
 							data.operario = servicio.operario;
 							registrarServicio(data, servicio);
 					}else {
@@ -244,7 +248,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$scope.selectedPlaca.ordenv = response.data.id;
 									$scope.selectedPlaca.tipo = $scope.selectedPlaca.tipo;
 									data.orden = response.data.id;
-									data.tipo = $scope.selectedPlaca.tipo;
+									data.tipo = servicio.id;
 									data.operario = servicio.operario;
 									registrarServicio(data, servicio);
 										$mdToast.show(

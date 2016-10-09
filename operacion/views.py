@@ -96,14 +96,13 @@ class CloseOrden(supra.SupraFormView):
 class WsServiciosOrden(supra.SupraListView):
     model = models.Servicio
     search_key = 'q'
-    list_display = ['id', 'valor', 'nombre', 'estado', 'operario', 'tipoid', 'status', 'operario_nombre']
+    list_display = ['id', 'valor', 'nombre', 'estado', 'operario', 'tipo', 'status', 'operario_nombre']
     list_filter = ['orden__id']
     search_fields = ['orden__id']
     paginate_by = 1000
 
     class Renderer:
         nombre = 'tipo__nombre'
-        tipoid = 'tipo__id'
         operario_n = "operario__first_name"
         operario_a = "operario__last_name"
     # end class
