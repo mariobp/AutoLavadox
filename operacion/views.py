@@ -38,9 +38,12 @@ class TiposServiciosPorAplicar(supra.SupraListView):
     def get_queryset(self):
         tipo = self.request.GET.get('tipo', False)
         orden = self.request.GET.get('orden', False)
+        print "lo q llega a este ",tipo, orden
         queryset = super(TiposServiciosPorAplicar, self).get_queryset()
         obj = queryset
-        return queryset.filter(vehiculos__id=int(tipo) if tipo and re.match('^\d+$', tipo) else 0).exclude(servicio__orden__id=int(orden) if orden and re.match('^\d+$', orden) else 0, servicio__status=True)
+        oper_ser = models.Servicio.objects.filter(orden__id=int(orden) if orden and re.match('^\d+$', orden) else 0, status=True).values_list('tipo__id', flat=True)
+        print list(oper_ser)
+        return queryset.filter(vehiculos__id=int(tipo) if tipo and re.match('^\d+$', tipo) else 0).exclude(id__in=list(oper_ser))
     # end def
 # end class
 
