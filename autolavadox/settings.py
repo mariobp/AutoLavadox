@@ -209,7 +209,7 @@ DATABASES = {
         'NAME': 'luxury',
         'USER': 'luxury',
         'PASSWORD': 'Exile*74522547',
-        'HOST': 'web535.webfaction.com',
+        'HOST': 'localhost',
         'POST': '5432'
     }
 }
