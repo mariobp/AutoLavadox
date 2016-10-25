@@ -209,7 +209,7 @@ DATABASES = {
         'NAME': 'luxury',
         'USER': 'luxury',
         'PASSWORD': 'Exile*74522547',
-        'HOST': 'exile.com.co',
+        'HOST': 'luxuryadmin.webfactional.com',
         'POST': '5432'
     }
 }
