@@ -254,4 +254,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/luxuryadmin/webapps/static/'
 
 MEDIA_URL = '/media/'
+HOST_MEDIA = 'http://luxuryadmin.webfactional.com/media/'
 MEDIA_ROOT = '/home/luxuryadmin/webapps/media/'
