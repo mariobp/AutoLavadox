@@ -3,7 +3,7 @@ $(document).on('ready', function() {
         return false;
     });
     $('.imprimir').on('click', function(event) {
-      window.open("http://192.168.2.107:8000/operacion/imprimir/orden/"+$(this).attr('href')+"/", '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes')
+      window.open("http://luxuryservice.com.co/operacion/imprimir/orden/"+$(this).attr('href')+"/", '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes')
         /*$.ajax({
             url: '/operacion/ws/imprimir/orden/?q=1',
             type: 'get',
