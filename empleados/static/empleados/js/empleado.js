@@ -13,7 +13,7 @@ $(document).on('ready', function(){
       var f1 = new Date(parseInt(r1[1]), parseInt(r1[0])-1 , parseInt(r1[2]));
       var f2 = new Date(parseInt(r2[1]), parseInt(r2[0])-1 , parseInt(r2[2]));
       if(f2 >f1){
-        window.location.href = "http://192.168.2.113:8000/empleados/excel/periodo/?ini="+ini.split("/").join("-")+"&fin="+fin.split("/").join("-");
+        window.location.href = "http://luxuryservice.com.co/empleados/excel/periodo/?ini="+ini.split("/").join("-")+"&fin="+fin.split("/").join("-");
       }else{
         alert("La fecha de Fin de periodo debe ser mayor, a la de inicio.")
       }
