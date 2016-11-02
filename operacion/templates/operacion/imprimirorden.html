@@ -32,14 +32,14 @@
     </script>
     <style>
         table {
-            font-family: arial, sans-serif;
+
             border-collapse: collapse;
             width: 80%;
         }
 
         td,
         th {
-            border: 1px solid #dddddd;
+            border: none;
             text-align: left;
             padding: 8px;
         }
@@ -51,6 +51,20 @@
         ul{
           list-style-type: none;
         }
+
+        #printableArea{
+          font-family: monospace;
+          font-size:smaller;
+          text-align: center;
+          text-align: -moz-center;
+        }
+
+        #cliente{
+          text-align:-moz-left;
+          text-align:left;
+          margin-left: 10px;
+        }
+
     </style>
     <style type="text/css">
         @media print {
@@ -59,13 +73,13 @@
                 margin: 0;
             }
             table {
-                font-family: arial, sans-serif;
+
                 border-collapse: collapse;
                 width: 100%;
             }
             td,
             th {
-                border: 1px solid #dddddd;
+                border: none !important;
                 text-align: left;
                 padding: 8px;
             }
@@ -76,13 +90,25 @@
             ul{
               list-style-type: none;
             }
+            #printableArea{
+              font-family: monospace;
+              text-align: center;
+              text-align: -moz-center;
+            }
+            #cliente{
+              text-align:-moz-left;
+              text-align:left;
+              margin-left: 10px;
+            }
+            .hiden{
+              display: none;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="printableArea">
-        ====================================++
         <ul>
           <li><img src="http://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
           <li>NIT: 45560342-1</li>
@@ -90,31 +116,41 @@
           <li>Direccion : Manga 4a. Av. Calle 29 No. 23A-18</li>
           <li>Telefono : 6430080</li>
         </ul>
-        <ul>
+        =======================================================
+        <ul id="cliente">
             <li>Orden : {{ o.id}}</li>
-            <li>Cliente : {{ o.vehiculo.cliente.nombre }} {{ o.vehiculo.cliente.apellidos }}</li>
+            <li>Cliente : {% if o.vehiculo.cliente %}{{ o.vehiculo.cliente.nombre }} {{ o.vehiculo.cliente.apellidos }}{% else %}-----{% endif %}</li>
             <li>Identificacion : {{ o.vehiculo.cliente.identificacion }}</li>
+            <li>Telefono: {{ o.vehiculo.cliente.celular }}</li>
+            <li>Direccion: {{ o.vehiculo.cliente.dirreccion }}</li>
             <li>Placa : {{ o.vehiculo.placa }}</li>
         </ul>
-        <table>
-            <tr>
-                <th>SERVICIOS AUTOMOVILES</th>
-                <th>VALOR UNITARIO</th>
-            </tr>
-            {% for ser in s %}
-            <tr>
-                <td>{{ ser.tipo.nombre }}</td>
-                <td>{{ ser.tipo.costo }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td>Total</td>
-                <td>{{ o.valor }}</td>
-            </tr>
-        </table>
+        =======================================================
+<div class="tabla">
+  <table>
+      <tr>
+          <th>SERVICIOS AUTOMOVILES</th>
+          <th>VALOR UNITARIO</th>
+      </tr>
+      {% for ser in s %}
+      <tr>
+          <td>{{ ser.tipo.nombre }}</td>
+          <td>{{ ser.tipo.costo }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+          <td>Total</td>
+          <td>{{ o.valor }}</td>
+      </tr>
+  </table>
+</div>
+
 
     </div>
-    <input type="button" onclick="printDiv('printableArea')" value="print a div!" />
+
+    <br>
+    <br>
+    <input class="hiden" type="button" onclick="printDiv('printableArea')" value="Re-imprimir!" />
 </body>
 
 </html>
