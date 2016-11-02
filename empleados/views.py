@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 import models
 from supra import views as supra
@@ -8,6 +9,11 @@ from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from supra import views as supra
 from django.contrib.auth import login, logout, authenticate
+from django.views.generic import View
+import csv
+from datetime import date
+from django.views.decorators.csrf import csrf_exempt
+from django.db import connection
 
 
 # Create your views here.
@@ -77,4 +83,68 @@ class WsOperarios(supra.SupraListView):
     def get_queryset(self):
         queryset = super(WsOperarios, self).get_queryset()
         return queryset
+# end class
+
+
+class Excel(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(Excel, self).dispatch(*args, **kwargs)
+    # end def
+    def post(self, request):
+        id_emp = request.GET.get('id', '0')
+        ini = request.GET.get('inicio', '2015-01-01')
+        fin = request.GET.get('fin', '%s-%s-%s' %
+                              (date.today().year, date.today().month, date.today().day))
+        estado = request.GET.get('estado', False)
+        # CURSOR DE LA INFO EMPLEADO
+        """
+        cursor = connection.cursor()
+        cursor.execute(
+                    'select get_info_empleados_report_act(%s,\'%s\',\'%s\',%s)' % (id_emp, ini, fin,'true' if estado else 'false'))
+
+        row = cursor.fetchone()
+        res = row[0]
+        """
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="Reporte Empleado.csv"'
+        #
+        writer = csv.writer(response)
+        writer.writerow(['Trabajador no encontrado'])
+        return response
+
+    def get(self, request):
+        print request.GET
+        id_emp = request.GET.get('id', '0')
+        ini = request.GET.get('ini', '2015-01-01')
+        fin = request.GET.get('fin', '%s-%s-%s' %
+                              (date.today().year, date.today().month, date.today().day))
+        estado = request.GET.get('estado', False)
+        # CURSOR DE LA INFO EMPLEADO
+        sql = """select ts.nombre from public.cliente_tipovehiculo as tv
+                inner join public.operacion_tiposervicio_vehiculos as ts_tv
+                on(tv.id=ts_tv.tipovehiculo_id)
+                inner join public.operacion_tiposervicio as ts
+                on (ts.id=ts_tv.tiposervicio_id) order by ts_tv.tipovehiculo_id asc,ts.id"""
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        print row[0]
+        r=0
+        lista =list()
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="Reporte Empleados.csv"'
+        writer = csv.writer(response)
+        while  r < len(row):
+            lista.append(row[r][0])
+            r=r+1
+        # end for
+        writer.writerow(lista)
+        # Create the HttpResponse object with the appropriate CSV header.
+
+        #
+        return response
+
+    # end def
 # end class

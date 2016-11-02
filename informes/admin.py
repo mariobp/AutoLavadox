@@ -139,6 +139,40 @@ class TiemposOrdenSource(resources.ModelResource):
 # end class
 
 
+class OperarioSource(resources.ModelResource):
+    pk = fields.Field(
+        column_name="id",
+        attribute="pk",
+    )
+
+    Identificacion = fields.Field(
+        column_name="Identificacion",
+        attribute="identificacion",
+    )
+
+    Nombre = fields.Field(
+        column_name="nombre",
+        attribute="first_name",
+    )
+    Apellidos = fields.Field(
+        column_name="apellidos",
+        attribute="last_name",
+    )
+
+    def export(self, queryset=None, *args, **kwargs):
+        queryset = queryset
+        return super(OperarioSource, self).export(queryset, *args, **kwargs)
+    # end def
+
+    class Meta:
+        model = empleados.Empleado
+        fields = ['pk','Identificacion', 'Nombre', 'Apellidos']
+        export_order = ['pk','Identificacion', 'Nombre', 'Apellidos']
+    # end class
+# end class
+
+
 reports.register_export(operacion.Servicio, ServiciosSource, "informes/informe.html")
 reports.register_export(operacion.Orden, OrdenSource, "informes/ordenes.html")
+reports.register_export(empleados.Empleado, OperarioSource, "informes/empledosproducido.html")
 reports.register_export(estadistica.TiemposOrden, TiemposOrdenSource, "informes/estadisticatiemposorden.html")

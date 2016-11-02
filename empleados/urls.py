@@ -9,4 +9,5 @@ urlpatterns = [
 # servicio que retorna los Operarios
 urlpatterns += [
     url(r'^operarios/$', views.WsOperarios.as_view(), name='operarios'),
+    url(r'^excel/periodo/$', views.Excel.as_view(), name='operarios'),
 ]

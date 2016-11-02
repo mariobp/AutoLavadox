@@ -15,6 +15,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +28,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', 'luxuryadmin.webfactional.com'
+    'localhost'
 ]
 
 EXILE_UI = {
@@ -260,3 +261,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://127.0.0.1:8000/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+print MEDIA_ROOT
