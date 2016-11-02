@@ -28,7 +28,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost','http://luxuryservice.com.co'
 ]
 
 EXILE_UI = {
@@ -259,6 +259,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-HOST_MEDIA = 'http://127.0.0.1:8000/media/'
+HOST_MEDIA = 'http://luxuryservice.com.co/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 print MEDIA_ROOT
