@@ -33,3 +33,11 @@ urlpatterns += [
 urlpatterns += [
     url(r'^get/ordenes/pendientes/$', views.GetOrdenesPendientes.as_view(), name='get_orden_pendien'),
 ]
+
+
+
+# url de ordenes pendientes
+urlpatterns += [
+    url(r'^imprimir/orden/(?P<pk>\d+)/$', views.ImprimirOrden.as_view(), name='get_orden_pendien'),
+    url(r'^ws/imprimir/orden/$', views.ServiciosOrden.as_view(), name='ws_imp_orden'),
+]

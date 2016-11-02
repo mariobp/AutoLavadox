@@ -243,3 +243,39 @@ class GetOrdenesPendientes(supra.SupraListView):
         return queryset.filter(orden__pago=False)
     # end def
 # end class
+
+
+class ImprimirOrden(supra.SupraFormView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(ImprimirOrden, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        orden = models.Orden.objects.filter(id=int(id)).first()
+        servicio = models.Servicio.objects.filter(orden__id=int(id))
+        return render(request,'operacion/imprimirorden.html',{'o':orden, 's':servicio})
+    # end def
+
+# end class
+
+
+class ServiciosOrden(supra.SupraListView):
+    model = models.Servicio
+    list_display = ['servicio', 'placa','costo','identificacion','nombre','apellidos','orden_id']
+    search_key = 'q'
+    list_filter = ['orden__id']
+    search_fields = ['orden__id']
+    paginate_by = 1000
+
+    class Renderer:
+        servicio = 'tipo__nombre'
+        placa = 'orden__vehiculo__placa'
+        identificacion = 'orden__vehiculo__cliente__identificacion'
+        nombre = 'orden__vehiculo__cliente__nombre'
+        apellidos = 'orden__vehiculo__cliente__apellidos'
+        costo = 'tipo__costo'
+        orden_id = 'orden__id'
+    # end class
+# end class

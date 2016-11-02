@@ -4,6 +4,7 @@ import models
 import forms
 from datetime import datetime
 from daterange_filter.filter import DateRangeFilter
+from django.utils.html import format_html
 # Register your models here.
 
 
@@ -40,9 +41,9 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['pk', 'entrada', 'vehiculo', 'valor', 'comision', 'pago', 'fin']
+    list_display = ['pk', 'fecha_orden', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'pago', 'fin', 'imprimir_orden']
     list_filter = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', ('fin', DateRangeEX)]
-    list_editable = ['pago']
+    list_editable = ['pago','vehiculo']
     form = forms.OrdenForm
 
     def save_model(self, request, obj, form, change):
@@ -61,6 +62,25 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.save()
     # end if
 
+    def imprimir_orden(self, obj):
+        return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
+    # end def
+
+    def nombre_cliente(self, obj):
+        return '%s %s'%(obj.vehiculo.cliente.nombre,obj.vehiculo.cliente.apellidos) if obj.vehiculo.cliente else '---- -----'
+    #end
+
+    def identificacion_cliente(self, obj):
+        return '%s'%(obj.vehiculo.cliente.identificacion) if obj.vehiculo.cliente else '-------'
+    #end
+
+    def fecha_orden(self, obj):
+        h = '0%d'%obj.entrada.hour if obj.entrada.hour <10 else '%d'%obj.entrada.hour
+        m = '0%d'%obj.entrada.minute if obj.entrada.minute <10 else '%d'%obj.entrada.minute
+        s = '0%d'%obj.entrada.second if obj.entrada.second <10 else '%d'%obj.entrada.second
+        return '%d-%d-%d %s:%s:%s'%(obj.entrada.day,obj.entrada.month,obj.entrada.year,h,m,s)
+    # end def
+
     def get_queryset(self, request):
         queryset = super(OrdenAdmin, self).get_queryset(request)
         drf__inicio__gte = request.GET.get('drf__entrada__gte', False)
@@ -75,6 +95,22 @@ class OrdenAdmin(admin.ModelAdmin):
         # end if
         return queryset
     # end def
+
+    class Media:
+        js = ('/static/operacion/js/operacion.js',)
+        css = {
+            'all': ('/static/operacion/css/operacion.css',)
+        }
+    # end class
+
+    imprimir_orden.allow_tags = True
+    imprimir_orden.short_description = 'Imprimir Orden'
+    nombre_cliente.allow_tags = True
+    nombre_cliente.short_description = 'Propietario'
+    identificacion_cliente.allow_tags = True
+    identificacion_cliente.short_description = 'Identificacion'
+    fecha_orden.allow_tags = True
+    fecha_orden.short_description = 'Realizacion'
 # end class
 
 
