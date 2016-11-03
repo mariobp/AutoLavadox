@@ -82,3 +82,12 @@ md-checkbox.md-checked.blue .md-icon {
 .text-center{
   text-align: center;
 }
+
+md-card-content{
+  max-height: 550px;
+}
+
+md-tab-content{
+  max-height: 535px;
+  overflow: auto;
+}
