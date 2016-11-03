@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from exileui.widgets import DatePickerWidget
 import models
+from django.contrib.admin.widgets import AdminDateWidget
 
 
 class OperarioForm(UserCreationForm):
@@ -14,10 +15,14 @@ class OperarioForm(UserCreationForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
+    # end class
 
     class Meta:
         model = models.Empleado
@@ -42,10 +47,14 @@ class OperarioFormEdit(forms.ModelForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
+    # end class
 
     class Meta:
         model = models.Empleado
@@ -73,8 +82,8 @@ class RecepcionistaForm(UserCreationForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
 
@@ -82,6 +91,10 @@ class RecepcionistaForm(UserCreationForm):
         model = models.Recepcionista
         fields = ['username', 'password1', 'password2', 'email', 'first_name',
                   'last_name', 'identificacion', 'direccion', 'telefono', 'nacimiento', 'imagen']
+    # end class
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -101,8 +114,8 @@ class RecepcionistaFormEdit(forms.ModelForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
 
@@ -111,6 +124,10 @@ class RecepcionistaFormEdit(forms.ModelForm):
         exclude = ['password1', 'password2', ]
         fields = ['username', 'email', 'first_name',
                   'last_name', 'identificacion', 'direccion', 'telefono', 'nacimiento', 'imagen']
+    # end class
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -132,10 +149,14 @@ class CajeroForm(UserCreationForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
+    # end class
 
     class Meta:
         model = models.Cajero
@@ -160,8 +181,8 @@ class CajeroFormEdit(forms.ModelForm):
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
         self.fields['nacimiento'].widget = DatePickerWidget(
-            attrs={'class': 'date'},
-            format="%m/%d/%Y")
+            attrs={'class': 'dateopera'},
+            format="%d/%m/%Y")
         self.fields['telefono'].widget = forms.NumberInput()
     # end def
 
@@ -170,6 +191,10 @@ class CajeroFormEdit(forms.ModelForm):
         exclude = ['password1', 'password2', ]
         fields = ['username', 'email', 'first_name',
                   'last_name', 'identificacion', 'direccion', 'telefono', 'nacimiento', 'imagen']
+    # end class
+
+    class Media:
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):

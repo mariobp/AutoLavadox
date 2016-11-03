@@ -1,0 +1,158 @@
+.group {
+    position: relative;
+    margin-bottom: 7px;
+    margin-top: 14px;
+    display: inline-block;
+    margin-right: 8px;
+}
+.group input {
+    font-size: 18px;
+    padding: 10px 0;
+    display: block;
+    width: 300px;
+    border: none;
+    border-bottom: 1px solid #757575;
+}
+.group input[disabled] {
+    background-color: transparent;
+}
+.group input.open, .group input:focus {
+    outline: none;
+}
+.group input.open~ .bar:after, .group input.open~ .bar:before, .group input:focus~ .bar:after, .group input:focus~ .bar:before {
+    width: 50%;
+}
+.group input.open~ .highlight, .group input:focus~ .highlight {
+    -webkit-animation: inputHighlighter 0.3s ease;
+    animation: inputHighlighter 0.3s ease;
+}
+.group input.open~ ul, .group input:focus~ ul {
+    display: block;
+    width: 300px;
+    height: inherit;
+}
+.group input.valid~ label, .group input:focus~ label, .group input:valid~ label, .group input[placeholder]~ label {
+    top: -20px;
+    font-size: 14px;
+    color: #5264AE;
+}
+.group> label {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+.group ul {
+    display: none;
+    padding: 0;
+    margin: -25px 0 0;
+    border-radius: 2px;
+    width: 0;
+    height: 0;
+    max-height: 350px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 100;
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: all 0.7s;
+}
+.group ul.open {
+    display: block;
+}
+.group ul> li {
+    list-style: none;
+    padding: 8px;
+    transition: all 0.7s;
+}
+.group ul> li:hover {
+    background: #00B0FF;
+    color: #fff;
+}
+.group ul> li> input[type="radio"] {
+    display: none;
+}
+.group label {
+    display: inline-block;
+    width: calc(100% - 30px);
+}
+.group ul> li> span.color {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.group .micon {
+    position: relative;
+    top: -2.2rem;
+    left: 17rem;
+    border-radius: 50%;
+}
+.group .micon:hover {
+    border-radius: 50%;
+    background-color: #00B0FF;
+    color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.group input[type="radio"] {
+    display: none;
+}
+.group .bar {
+    position: relative;
+    display: block;
+    width: 300px;
+}
+.group .bar:after, .group .bar:before {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: #5264AE;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+.group .bar:before {
+    left: 50%;
+}
+.group .bar:after {
+    right: 50%;
+}
+.group .highlight {
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+}
+@-webkit-keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+@keyframes inputHighlighter {
+    from {
+        background: #5264AE;
+    }
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+/*# sourceMappingURL=select.css.map */

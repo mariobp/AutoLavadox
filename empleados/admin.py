@@ -6,8 +6,9 @@ import forms
 
 
 class OperarioAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name',
+    list_display = ('identificacion', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
+    list_filter =( 'identificacion','first_name', 'last_name',('nacimiento', DateRangeEX))
     search_fields = list_display
     form = forms.OperarioForm
 
@@ -17,6 +18,10 @@ class OperarioAdmin(nested_admin.NestedModelAdmin):
         # end if
         return super(OperarioAdmin, self).get_form(request, obj, *args, **kwargs)
     # end def
+
+    class Media:
+        js = ('/static/empleados/js/empleado.js',)
+    # end class
 # end class
 
 
