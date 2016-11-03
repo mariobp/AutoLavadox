@@ -89,5 +89,5 @@ md-card-content{
 
 md-tab-content{
   max-height: 535px;
-  overflow: auto;
+  overflow: auto !important;
 }
