@@ -120,6 +120,10 @@ class Excel(View):
         ini = request.GET.get('ini', '2015-01-01')
         fin = request.GET.get('fin', '%s-%s-%s' %
                               (date.today().year, date.today().month, date.today().day))
+        f1= ini.split('-')
+        f2= fin.split('-')
+        d1 ='%s-%s-%s'%(f1[2],f1[0],f1[1])
+        d2 ='%s-%s-%s'%(f2[2],f2[0],f2[1])
         estado = request.GET.get('estado', False)
         # CURSOR DE LA INFO EMPLEADO
         sql = """select ts.nombre from public.cliente_tipovehiculo as tv
@@ -136,14 +140,64 @@ class Excel(View):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="Reporte Empleados.csv"'
         writer = csv.writer(response)
+        lista.append("Identificacion")
+        lista.append("Nombre")
+        lista.append("Apellidos")
         while  r < len(row):
             lista.append(row[r][0])
             r=r+1
         # end for
+        writer.writerow(["Fecha de inicio para el reporte",ini,"","","Fecha de fin para el reporte"])
         writer.writerow(lista)
+        lista.append('TOTAL')
+        sql = """
+        select u.id,p.identificacion,u.first_name as nombre, u.last_name from public.empleados_empleado as o
+                 inner join public.auth_user as u on (o.persona_ptr_id=u.id)
+                 inner join public.empleados_persona as p on (p.user_ptr_id=u.id)"""
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        cursor2 = connection.cursor()
+        r=0
+        while  r < len(row):
+            li = list()
+            li.append(row[r][1])
+            li.append(row[r][2])
+            li.append(row[r][3])
+            sql2="""select* from(select ts.id,ts.nombre,ts_tv.tipovehiculo_id as tipo,
+                       sum(
+                          case when s.id is null then 0
+                                when s.status=false then 0
+                                when s.estado=false then 0
+                                when ts.comision <=0 then 0
+                                else (ts.costo*ts.comision/100) end ) as total from (select * from public.empleados_empleado as r where r.persona_ptr_id="""+str(row[r][0])+""") as o
+                   cross join public.cliente_tipovehiculo  as tv
+                   inner join public.operacion_tiposervicio_vehiculos as ts_tv
+                   on(tv.id=ts_tv.tipovehiculo_id)
+                   inner join public.operacion_tiposervicio as ts
+                   on (ts.id=ts_tv.tiposervicio_id)
+                   left join public.operacion_servicio as s on (s.tipo_id=ts.id and s.status=true and o.persona_ptr_id=s.operario_id and s.inicio::timestamp::date >= '"""+d1+"""'::date and s.inicio::timestamp::date <= '"""+d2+""""'::date)
+                   group by ts.id,ts.nombre,ts_tv.tipovehiculo_id) as tabla
+                   order by tabla.tipo asc,tabla.id asc"""
+            cursor2.execute(sql2)
+            row2= cursor2.fetchall()
+            i=0
+            print 'tamano de la fila',len(row2)
+            suma=0
+            while i < len(row2):
+                li.append(row2[i][3])
+                suma=suma+ row2[i][3]
+                i=i+1
+            # end while
+            li.append(suma)
+            writer.writerow(li)
+            r=r+1
+        # end for
+
         # Create the HttpResponse object with the appropriate CSV header.
 
         #
+
+        print 'PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'
         return response
 
     # end def
