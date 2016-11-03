@@ -48,10 +48,12 @@ class OrdenForm(forms.ModelForm):
         exclude = ('valor',)
         fields = {
             'observacion',
+	    'recepcionista',
             'vehiculo'
         }
         widgets = {
             'vehiculo': Select2Widget,
+	    'recepcionista': Select2Widget,
             'observacion': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
         }
     # end class

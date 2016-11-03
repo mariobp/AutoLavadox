@@ -112,9 +112,9 @@
         <ul>
           <li><img src="http://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
           <li>NIT: 45560342-1</li>
-          <li>LUXURY SERVICE ZONE CAR</li>
+          <li>LUXURY SERVICE CAR ZONE</li>
           <li>Direccion : Manga 4a. Av. Calle 29 No. 23A-18</li>
-          <li>Telefono : 6430080</li>
+          <li>Telefono : 6430080 - 3163431592</li>
         </ul>
         =======================================================
         <ul id="cliente">
@@ -124,6 +124,8 @@
             <li>Telefono: {{ o.vehiculo.cliente.celular }}</li>
             <li>Direccion: {{ o.vehiculo.cliente.dirreccion }}</li>
             <li>Placa : {{ o.vehiculo.placa }}</li>
+	    <li>Recepcion : {% if o.recepcionista %}{{ o.recepcionista.first_name }} {{ o.recepcionista.last_name }}{% else %}-----{% endif %}</li>
+	    <li>Cajero : {{ usuario }}</li>
         </ul>
         =======================================================
 <div class="tabla">

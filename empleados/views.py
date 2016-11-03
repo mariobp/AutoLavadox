@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 import models
@@ -140,16 +141,17 @@ class Excel(View):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="Reporte Empleados.csv"'
         writer = csv.writer(response)
-        lista.append("Identificacion")
-        lista.append("Nombre")
-        lista.append("Apellidos")
+        writer.writerow(['Luxury Service Car Zone'.encode('utf-8')])
+        writer.writerow(['Fecha de inicio para el reporte'.encode('utf-8'),d1.encode('utf-8'),''.encode('utf-8'),''.encode('utf-8'),'Fecha de fin para el reporte'.encode('utf-8'),d2.encode('utf-8')])
+        lista.append(u'Identificacion'.encode('utf-8'))
+        lista.append(u'Nombre'.encode('utf-8'))
+        lista.append(u'Apellidos'.encode('utf-8'))
         while  r < len(row):
-            lista.append(row[r][0])
+            lista.append((row[r][0]).encode('utf-8'))
             r=r+1
         # end for
-        writer.writerow(["Fecha de inicio para el reporte",ini,"","","Fecha de fin para el reporte"])
+        lista.append('TOTAL'.encode('utf-8'))
         writer.writerow(lista)
-        lista.append('TOTAL')
         sql = """
         select u.id,p.identificacion,u.first_name as nombre, u.last_name from public.empleados_empleado as o
                  inner join public.auth_user as u on (o.persona_ptr_id=u.id)
