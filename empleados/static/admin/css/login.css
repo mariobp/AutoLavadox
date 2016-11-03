@@ -1,0 +1,142 @@
+@import "fonts.css";
+@import "material-inputs/input-text.css";
+html, body {
+    font-family: "PtSans", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+input {
+    font-family: "PtSans", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    font-size: 16px;
+}
+body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+#sheet {
+    width: 300px;
+    padding: 7px;
+}
+.errornote {
+    padding: 7px 14px;
+    background: #E57373;
+    color: #B71C1C;
+    text-align: justify;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.submit-row {
+    width: 100%;
+}
+.submit-row input[type="submit"] {
+    width: 100%;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    padding: 7px;
+    background: #00B0FF;
+    color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+a {
+    text-decoration: none;
+    color: #00B0FF;
+}
+.submit-row input[type="submit"]:focus {
+    outline: none;
+    background: #039BE5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.form-row {
+    padding-top: 30px;
+}
+.errorlist {
+    padding: 0;
+    margin: 0;
+}
+.errorlist> li {
+    list-style: none;
+    color: #B71C1C;
+}
+#logo {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 244px
+}
+#logo.err {
+    -webkit-animation: reject .7s ease-in;
+    animation: reject .7s ease-in;
+}
+#logo.ok{
+    -webkit-animation: submit .6s ease-in;
+    animation: submit .6s ease-in;
+}
+#logo.open{
+    -webkit-transform: translate3d(0, -250%, 0);
+    transform: translate3d(0, -250%, 0);
+}
+@-webkit-keyframes reject {
+    from, to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        -webkit-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+    }
+    20%, 40%, 60%, 80% {
+        -webkit-transform: translate3d(10px, 0, 0);
+        transform: translate3d(10px, 0, 0);
+    }
+}
+@keyframes reject {
+    from, to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        -webkit-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+    }
+    20%, 40%, 60%, 80% {
+        -webkit-transform: translate3d(10px, 0, 0);
+        transform: translate3d(10px, 0, 0);
+    }
+}
+@-webkit-keyframes submit {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(0, -250%, 0);
+        transform: translate3d(0, -250%, 0);
+    }
+}
+@keyframes submit {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(0, -250%, 0);
+        transform: translate3d(0, -250%, 0);
+    }
+}

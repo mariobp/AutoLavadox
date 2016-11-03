@@ -30,12 +30,13 @@ class TipoVehiculo(models.Model):
 
 class Cliente(models.Model):
     identificacion = models.CharField(max_length=20, unique=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Identificacion no valida'), 'invalid')])
-    nombre = models.CharField(max_length=100)
-    apellidos = models.CharField(max_length=300)
-    dirreccion = models.CharField(max_length=300)
-    correo = models.EmailField(max_length=200, verbose_name="Correo electrònico")
-    celular = models.CharField(max_length=10,validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Celular no valida'), 'invalid')])
-
+    nombre = models.CharField(max_length=100, null=True, blank=True)
+    apellidos = models.CharField(max_length=300, null=True, blank=True)
+    dirreccion = models.CharField(max_length=300, null=True, blank=True)
+    correo = models.EmailField(max_length=200, verbose_name="Correo electrònico", null=True, blank=True)
+    celular = models.CharField(max_length=10,validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Celular no valida'), 'invalid')], null=True, blank=True)
+    nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True,blank=True)
+    
     def __unicode__(self):
         return '%s %s' % (self.nombre, self.apellidos)
     # end def
