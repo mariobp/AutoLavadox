@@ -91,3 +91,17 @@ md-tab-content{
   max-height: 535px;
   overflow: auto !important;
 }
+
+.full-height{
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 1;
+  z-index: 100;
+}
+
+.no-height{
+  height: 0;
+}

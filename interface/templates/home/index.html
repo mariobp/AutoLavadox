@@ -11,14 +11,15 @@
         <!--
     Your HTML content here
   -->
+        <div layout="row" layout-align="center center" ng-if="!serv1 && !serv2 && !serv3 && !serv4" class="full-height">
+            <md-progress-circular ng-disabled="!serv1 && !serv2 && !serv3 && !serv4" md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+        </div>
+        <div class="" ng-show="serv1 && serv2 && serv3 && serv4">
             <md-toolbar>
-
                 <div class="md-toolbar-tools">
                     <span>Luxury Service</span>
-
                     <!-- fill up the space between left and right area -->
                     <span flex></span>
-
                     <div class=""></div>
                     <md-button>
                       <md-icon md-svg-src="media/iconos/ic_exit.svg" aria-label="Exit" ng-click="cerrarSesion()">
@@ -78,7 +79,10 @@
                    <md-card-content>
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
-                           <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0">
+                          <div layout="row" layout-align="center center" ng-if="serv5" >
+                              <md-progress-circular ng-disabled="!serv5" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+                          </div>
+                           <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0 && !serv5">
                              <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
                              <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
                               <md-menu class="md-secondary" >
@@ -94,7 +98,7 @@
                                 </md-menu-content>
                               </md-menu>
                            </md-list-item>
-                           <div layout="row" layout-align="center center" ng-if="servicios.length==0">
+                           <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
                              <div flex="100">
                                 <h2 class="text-center">Seleccione una placa</h2>
                              </div>
@@ -130,14 +134,15 @@
                   </md-card>
               </div>
             </md-content>
+        </div>
         <!-- Angular Material requires Angular.js Libraries -->
-        <script src="{% static 'bower_components/angular/angular.min.js' %}"></script>
-        <script src="{% static 'bower_components/angular-animate/angular-animate.min.js' %}"></script>
-        <script src="{% static 'bower_components/angular-aria/angular-aria.min.js' %}"></script>
-        <script src="{% static 'bower_components/angular-messages/angular-messages.min.js' %}"></script>
+        <script src="{% static 'interface/bower_components/angular/angular.min.js' %}"></script>
+        <script src="{% static 'interface/bower_components/angular-animate/angular-animate.min.js' %}"></script>
+        <script src="{% static 'interface/bower_components/angular-aria/angular-aria.min.js' %}"></script>
+        <script src="{% static 'interface/bower_components/angular-messages/angular-messages.min.js' %}"></script>
         <!-- Angular Material Library -->
-        <script src="{% static 'bower_components/angular-material/angular-material.min.js' %}"></script>
-        <script src="{% static 'js/app.js' %}" type="text/javascript"></script>
+        <script src="{% static 'interface/bower_components/angular-material/angular-material.min.js' %}"></script>
+        <script src="{% static 'interface/js/app.js' %}" type="text/javascript"></script>
         <!-- Your application bootstrap  -->
     </body>
 </html>
