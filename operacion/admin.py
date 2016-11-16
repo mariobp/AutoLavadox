@@ -18,7 +18,7 @@ class ServicioInline(admin.StackedInline):
 class ServicioAdmin(admin.ModelAdmin):
     form = forms.ServicioForm
     list_display = ['orden', 'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
-    list_filter = [ 'tipo', 'estado', ('inicio', DateRangeEX)]
+    list_filter = [('inicio', DateRangeEX)]
     search_fields = ['orden__id', ]
     list_editable = ['estado']
 
@@ -36,6 +36,10 @@ class ServicioAdmin(admin.ModelAdmin):
         # end if
         return queryset
     # end def
+
+    class Media:
+        js = ('/static/operacion/js/servicio.js',)
+    # end class
 # end class
 
 

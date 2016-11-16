@@ -76,6 +76,11 @@ class WsOperariosServicio(supra.SupraListView):
     search_fields = ['id']
     paginate_y = 1000
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(WsOperariosServicio, self).dispatch(*args, **kwargs)
+    # end def
+
     def get_queryset(self):
         queryset = super(WsOperariosServicio, self).get_queryset()
         r = self.request.GET.get('q', False)
