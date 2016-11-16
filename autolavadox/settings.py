@@ -203,10 +203,10 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lavado',
-        'USER': 'postgres',
+        'NAME': 'autolavadox',
+        'USER': 'luxury',
         'PASSWORD': 'Exile*74522547',
-        'HOST': '104.236.33.228',
+        'HOST': 'localhost',
         'POST': '5432'
     }
 }
@@ -246,18 +246,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-"""
+
 STATIC_ROOT = '/home/luxuryadmin/webapps/static/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://luxuryservice.com.co/media/'
 MEDIA_ROOT = '/home/luxuryadmin/webapps/media/'
-"""
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-MEDIA_URL = '/media/'
-HOST_MEDIA = 'http://luxuryservice.com.co/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -150,35 +150,36 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					}).then(function doneCallbacks(response){
 							var data = response.data.object_list;
 							$scope.serviciosPorHacer = data;
+							$scope.servicios = [];
 							data.forEach(function(item){
 								$scope.servicios.push(item);
 							});
 							valor(data);
 							habilitar();
 							$scope.serv5 = false;
-							$scope.serv6 = false;
+							porasignar();
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
-							$scope.serv6 = false;
 							$scope.dialogError();
 					});
-					$http({
-						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
-						'method': 'GET'
-					}).then(function doneCallbacks(response){
-								var data = response.data.object_list;
-								data.forEach(function(item){
-									$scope.servicios.push(item);
-								});
-								$scope.serv5 = false;
+
+					function porasignar() {
+						$http({
+							'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
+							'method': 'GET'
+						}).then(function doneCallbacks(response){
+									var data = response.data.object_list;
+									data.forEach(function(item){
+										$scope.servicios.push(item);
+									});
+									$scope.serv6 = false;
+						}, function failCallbacks(response){
 								$scope.serv6 = false;
-					}, function failCallbacks(response){
-							$scope.serv5 = false;
-							$scope.serv6 = false;
-							if (response.status == 500) {
-								$scope.dialogError();
-							}
-					});
+								if (response.status == 500) {
+									$scope.dialogError();
+								}
+						});
+					}
 				}
 		};
 
@@ -316,7 +317,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			            '</div>' +
 			          '</md-toolbar>' +
 			          '<md-dialog-content>' +
-			            '<div class="md-dialog-content">' +
+									'<div layout="row" layout-align="center center" ng-if="cargando" style="height:200px">' +
+											'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
+									'</div>' +
+			            '<div class="md-dialog-content"  ng-if="!cargando">' +
 			              '<md-list >' +
 			                 '<md-list-item ng-click="null" ng-repeat="operario in operarios">' +
 			                    '<p>[[operario.nombre]]</p>' +
@@ -325,7 +329,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			              '</md-list >' +
 			            '</div>'+
 			          '</md-dialog-content>'+
-			          '<md-dialog-actions layout="row">'+
+			          '<md-dialog-actions  ng-if="!cargando" layout="row">'+
 			            '<md-button class="md-raised red" ng-click="closeDialog()" flex>'+
 			              'Cancelar'+
 			            '</md-button>'+
@@ -428,8 +432,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					'method': 'GET'
 				}).then(function doneCallbacks(response){
 						var num = $scope.servicios.find(findService);
-						console.log(num);
-						console.log(service);
 						service.estado = !service.estado;
 						num.estado = service.estado;
 						habilitar();
@@ -484,7 +486,53 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
         $mdDialog.show({
-          templateUrl: '/template/add/',
+          template:
+						'<md-dialog aria-label="Registrar Vehículo">' +
+						  '<form ng-cloak name="form" ng-submit="form.$valid && enviar()" novalidate>' +
+						    '<md-toolbar>' +
+						      '<div class="md-toolbar-tools">' +
+						        '<h2>Registrar Vehículo</h2>' +
+						        '<span flex></span>' +
+						        '<md-button class="md-icon-button" ng-click="closeDialog()">' +
+						          '<md-icon md-svg-src="media/iconos/ic_close_white.svg" aria-label="Close dialog"></md-icon>' +
+						        '</md-button>' +
+						      '</div>' +
+						    '</md-toolbar>' +
+						    '<md-dialog-content>' +
+						  		'<div layout="row" layout-align="center center" ng-if="cargando" style="height:200px">' +
+						  				'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
+						  		'</div>' +
+						      '<div class="md-dialog-content" ng-if="!cargando">' +
+						        '<md-input-container class="md-block">' +
+						          '<label>Placa</label>' +
+						          '<input ng-model="data.placa" name="placa" required>' +
+						          '<div ng-messages="form.placa.$error">' +
+						            '<div ng-message="required">Este campo es requerido.</div>' +
+						          '</div>' +
+						        '</md-input-container>' +
+						        '<md-input-container class="md-block" >' +
+						           '<label>Tipo</label>' +
+						            '<md-select ng-model="data.tipo" name="tipo" required>' +
+						              '<md-option ng-repeat="tipo in tipos"  value="[[tipo.id]]">' +
+						                '[[tipo.nombre]]' +
+						              '</md-option>' +
+						            '</md-select>' +
+						            '<div ng-messages="form.tipo.$error">' +
+						              '<div ng-message="required">Este campo es requerido.</div>' +
+						            '</div>' +
+						        '</md-input-container>' +
+						      '</div>' +
+						    '</md-dialog-content>' +
+						    '<md-dialog-actions layout="row" ng-if="!cargando">'+
+						      '<md-button class=" md-raised red" ng-click="closeDialog()" flex>'+
+						        'Cancelar'+
+						      '</md-button>'+
+						      '<md-button class="md-primary md-raised" type="submit" flex>'+
+						        'Guardar'+
+						      '</md-button>'+
+						    '</md-dialog-actions>'+
+						  '</form>'+
+						'</md-dialog>',
 					controller: 'DialogController',
           clickOutsideToClose:true,
 					locals: {
@@ -507,20 +555,60 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 })
-.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, data, servicio, orden, tipo, dialogError){
+.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, tipo, dialogError){
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
+		$scope.cargando = false;
 		$scope.operarios = data;
 		var dataSend = {};
 		dataSend.operario = [];
+
+		function selecionarOperario(array) {
+			cleanSelect();
+			array.forEach(function(item){
+				$scope.operarios.forEach(function(operario){
+					if (item.id === operario.id) {
+						operario.elegido = true;
+					}
+				});
+			});
+		}
+
+		$scope.operariosSeleccionados = function(){
+			$scope.cargando = true;
+			$http({
+				'url': '/empleados/operarios/servicio/?q='+ servicio.id,
+				'method': 'GET',
+			}).then(function doneCallbacks(response){
+					selecionarOperario(response.data.object_list);
+					$scope.cargando = false;
+			},function failCallbacks(response){
+				if (response.status == 500) {
+						$scope.cargando = false;
+						dialogError();
+				}else {
+					$timeout(function () {
+						$scope.operariosSeleccionados();
+					}, 2000);
+				}
+			});
+		};
+
+		$scope.operariosSeleccionados();
 
 		function selectCheck(){
 			$scope.operarios.forEach(function(item){
 				if (item.elegido) {
 					dataSend.operario.push(item.id);
 				}
+			});
+		}
+
+		function cleanSelect(){
+			$scope.operarios.forEach(function(item){
+				item.elegido = false;
 			});
 		}
 
@@ -545,6 +633,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			 				},
 					}).then(function doneCallbacks(response){
 							$mdDialog.hide();
+							cleanSelect();
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Guardado Exitoso')
@@ -562,12 +651,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 .controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, tipo, nombre, identificacion){
 		$scope.tipos = tipos;
 		$scope.data = {};
+		$scope.cargando = false;
 		$scope.data.placa = placa;
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
 		$scope.enviar = function(){
+			$scope.cargando = true;
 			$http({
 				url:'/cliente/add/vehiculo/',
 				method: 'POST',
@@ -596,8 +687,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			        .hideDelay(3000)
 						  .position('bottom start')
 					);
+					$scope.cargando = false;
 			}, function failCallbacks(response){
-					console.log(response);
+					$scope.cargando = false;
 					if (response.status == 400) {
 						if (response.data.placa) {
 							$mdToast.show(
