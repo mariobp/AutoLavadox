@@ -33,7 +33,7 @@
             </md-toolbar>
             <section>
                 <md-subheader class="color-fondo">
-                      <md-autocomplete md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(searchText)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
+                      <md-autocomplete md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(search)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"

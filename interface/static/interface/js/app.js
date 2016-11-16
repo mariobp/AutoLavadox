@@ -59,15 +59,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de vehiculos
     $scope.listVehiculos = function(searchText){
-				$scope.serv1 = true;
-				deferred = $q.defer();
+				var deferred = $q.defer();
         $http({
           'url': '/cliente/vehiculo/?q='+ $scope.search,
           'method': 'GET'
         }).then(function doneCallbacks(response){
-            $scope.vehiculos = response.data.object_list;
-						deferred.resolve($scope.vehiculos);
-						console.log(deferred.promise);
+            //$scope.vehiculos = response.data.object_list;
+						deferred.resolve(response.data.object_list);
         },function failCallbacks(response){
 					  deferred.reject(response);
             $scope.dialogError();
@@ -389,7 +387,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		//Invocar servicios
-		console.log($scope.listVehiculos());
 		$scope.tipoVehiculo();
 		$scope.operariosList();
 		$scope.ordenesPendientes();
@@ -539,7 +536,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					selectCheck();
 					dataSend.orden = orden;
 					dataSend.tipo = tipo;
-					console.log(dataSend);
 					$http({
 						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
 						 'method': 'POST',
