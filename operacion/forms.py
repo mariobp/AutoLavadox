@@ -36,7 +36,7 @@ class ServicioForm(forms.ModelForm):
         }
         widgets = {
             'tipo': Select2Widget,
-            'operario': Select2Widget
+            'operario': Select2MultipleWidget
         }
     # end class
 # end class
