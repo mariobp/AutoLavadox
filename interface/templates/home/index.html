@@ -11,10 +11,11 @@
         <!--
     Your HTML content here
   -->
-        <div layout="row" layout-align="center center" ng-if="!serv1 && !serv2 && !serv3 && !serv4" class="full-height">
-            <md-progress-circular ng-disabled="!serv1 && !serv2 && !serv3 && !serv4" md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+        <div layout="row" layout-align="center center" ng-if="!serv2 && !serv3 && !serv4" class="full-height">
+            <md-progress-circular ng-disabled="!serv2 && !serv3 && !serv4" md-mode="indeterminate" md-diameter="70"></md-progress-circular>
         </div>
-        <div class="" ng-show="serv1 && serv2 && serv3 && serv4">
+        <div class="#popupContainer"></div>
+        <div class="" ng-show="serv2 && serv3 && serv4">
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <span>Luxury Service</span>
@@ -32,7 +33,7 @@
             </md-toolbar>
             <section>
                 <md-subheader class="color-fondo">
-                      <md-autocomplete md-no-float md-selected-item="selectedItem" md-min-length="0" md-search-text-change="listVehiculos()" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in vehiculos" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
+                      <md-autocomplete md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(searchText)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
@@ -79,13 +80,14 @@
                    <md-card-content>
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
-                          <div layout="row" layout-align="center center" ng-if="serv5" >
-                              <md-progress-circular ng-disabled="!serv5" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-                          </div>
-                           <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0 && !serv5">
+                            <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
+                                <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+                            </div>
+                           <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0 && !serv5 && !serv6">
                              <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
-                             <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
-                              <md-menu class="md-secondary" >
+                             <p>[[servicio.nombre]]</p>
+                              <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
+                              <!--md-menu class="md-secondary" >
                                   <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                                       <md-icon aria-label="Person"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
                                   </md-button>
@@ -96,7 +98,7 @@
                                       </md-button>
                                     </md-menu-item>
                                 </md-menu-content>
-                              </md-menu>
+                              </md-menu-->
                            </md-list-item>
                            <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
                              <div flex="100">
