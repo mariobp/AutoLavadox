@@ -87,18 +87,6 @@
                              <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
                              <p>[[servicio.nombre]]</p>
                               <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
-                              <!--md-menu class="md-secondary" >
-                                  <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                                      <md-icon aria-label="Person"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
-                                  </md-button>
-                                  <md-menu-content width="4">
-                                    <md-menu-item ng-repeat="operario in operarios">
-                                      <md-button ng-click="asignarOperario(operario, servicio)">
-                                        [[operario.nombre]]
-                                      </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                              </md-menu-->
                            </md-list-item>
                            <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
                              <div flex="100">

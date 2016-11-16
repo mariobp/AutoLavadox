@@ -150,35 +150,36 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					}).then(function doneCallbacks(response){
 							var data = response.data.object_list;
 							$scope.serviciosPorHacer = data;
+							$scope.servicios = [];
 							data.forEach(function(item){
 								$scope.servicios.push(item);
 							});
 							valor(data);
 							habilitar();
 							$scope.serv5 = false;
-							$scope.serv6 = false;
+							porasignar();
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
-							$scope.serv6 = false;
 							$scope.dialogError();
 					});
-					$http({
-						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
-						'method': 'GET'
-					}).then(function doneCallbacks(response){
-								var data = response.data.object_list;
-								data.forEach(function(item){
-									$scope.servicios.push(item);
-								});
-								$scope.serv5 = false;
+
+					function porasignar() {
+						$http({
+							'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
+							'method': 'GET'
+						}).then(function doneCallbacks(response){
+									var data = response.data.object_list;
+									data.forEach(function(item){
+										$scope.servicios.push(item);
+									});
+									$scope.serv6 = false;
+						}, function failCallbacks(response){
 								$scope.serv6 = false;
-					}, function failCallbacks(response){
-							$scope.serv5 = false;
-							$scope.serv6 = false;
-							if (response.status == 500) {
-								$scope.dialogError();
-							}
-					});
+								if (response.status == 500) {
+									$scope.dialogError();
+								}
+						});
+					}
 				}
 		};
 
@@ -431,8 +432,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					'method': 'GET'
 				}).then(function doneCallbacks(response){
 						var num = $scope.servicios.find(findService);
-						console.log(num);
-						console.log(service);
 						service.estado = !service.estado;
 						num.estado = service.estado;
 						habilitar();
