@@ -203,10 +203,10 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox',
-        'USER': 'luxury',
+        'NAME': 'lavado',
+        'USER': 'postgres',
         'PASSWORD': 'Exile*74522547',
-        'HOST': 'localhost',
+        'HOST': '104.236.33.228',
         'POST': '5432'
     }
 }
@@ -253,8 +253,17 @@ MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://luxuryservice.com.co/media/'
 MEDIA_ROOT = '/home/luxuryadmin/webapps/media/'
 """
+<<<<<<< HEAD
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
 MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://192.168.0.109:8000/media/'
+=======
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+HOST_MEDIA = 'http://luxuryservice.com.co/media/'
+>>>>>>> 162c6c98be9dacccfa3a533509f7c650857be979
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

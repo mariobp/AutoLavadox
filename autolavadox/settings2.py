@@ -261,4 +261,3 @@ STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
 MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://192.168.0.109:8000/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print MEDIA_ROOT

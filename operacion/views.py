@@ -130,6 +130,7 @@ class AddServicio(supra.SupraFormView):
     model = models.Servicio
     form_class = forms.AddServicioForm
     template_name = 'operacion/addservicio.html'
+    body = True
 
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
