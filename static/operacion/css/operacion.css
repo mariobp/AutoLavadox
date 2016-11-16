@@ -1,0 +1,25 @@
+@media print {
+  table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  @page { size: auto;
+    margin: 0;
+  }
+
+
+    body {
+        width: 200px;
+        color: red;
+        margin: 10px;
+        height: auto;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+}

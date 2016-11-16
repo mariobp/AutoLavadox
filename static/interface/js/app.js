@@ -12,7 +12,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		});
 })
 
-.controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast) {
+.controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast, $q) {
     $scope.search = "";
     $scope.vehiculos = [];
     $scope.nombre = "";
@@ -31,6 +31,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serv3 = false;
 		$scope.serv4 = false;
 		$scope.serv5 = false;
+		$scope.serv6 = false;
 		var data = {};
     $scope.dialogError = function(){
       $mdDialog.show(
@@ -58,15 +59,18 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de vehiculos
     $scope.listVehiculos = function(searchText){
+				var deferred = $q.defer();
         $http({
           'url': '/cliente/vehiculo/?q='+ $scope.search,
           'method': 'GET'
         }).then(function doneCallbacks(response){
-            $scope.vehiculos = response.data.object_list;
-						$scope.serv1 = true;
+            //$scope.vehiculos = response.data.object_list;
+						deferred.resolve(response.data.object_list);
         },function failCallbacks(response){
+					  deferred.reject(response);
             $scope.dialogError();
         });
+				return deferred.promise;
     };
 
 		//Vehiculo seleccionado
@@ -120,6 +124,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serviciosList = function(){
 				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serv5 = true;
+					$scope.serv6 = true;
 					console.log("entrooo a serv5");
 					$scope.serviciosPorHacer = [];
 					$http({
@@ -128,13 +133,17 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					}).then(function doneCallbacks(response){
 							$scope.servicios = response.data.object_list;
 							$scope.serv5 = false;
+							$scope.serv6 = false;
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
+							$scope.serv6 = false;
 							$scope.dialogError();
 					});
 				}else {
 					$scope.servicios = [];
 					$scope.totalService = 0;
+					$scope.serv5 = true;
+					$scope.serv6 = true;
 					$http({
 						'url': '/operacion/ws/servicios/orden/?q='+ $scope.selectedPlaca.ordenv,
 						'method': 'GET',
@@ -146,7 +155,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							});
 							valor(data);
 							habilitar();
+							$scope.serv5 = false;
+							$scope.serv6 = false;
 					}, function failCallbacks(response){
+							$scope.serv5 = false;
+							$scope.serv6 = false;
 							$scope.dialogError();
 					});
 					$http({
@@ -157,7 +170,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								data.forEach(function(item){
 									$scope.servicios.push(item);
 								});
+								$scope.serv5 = false;
+								$scope.serv6 = false;
 					}, function failCallbacks(response){
+							$scope.serv5 = false;
+							$scope.serv6 = false;
 							if (response.status == 500) {
 								$scope.dialogError();
 							}
@@ -180,7 +197,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				$http({
 					'url': '/operacion/add/servicio/',
 					'method': 'POST',
-					'data': $httpParamSerializer(data),
+					'data': data,
 					 headers: {
 							 'Content-Type': 'application/x-www-form-urlencoded'
 					 }
@@ -190,6 +207,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						servicio.status = !servicio.status;
 						$scope.serviciosPorHacer.push(servicio);
 						valor($scope.serviciosPorHacer);
+						$scope.serv5 = false;
+						$scope.serv6 = false;
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -212,10 +231,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .ok('Si')
 	      .cancel('No');
 				$mdDialog.show(confirm).then(function() {
+					$scope.serv5 = true;
+					$scope.serv6 = true;
 					$http({
 						'url':'/operacion/cancel/servicio/'+servicio.id+'/',
 						'method': 'GET'
 					}).then(function doneCallbacks(response){
+							$scope.serv5 = false;
+							$scope.serv6 = false;
 							servicio.status = !servicio.status;
 							removeFromArray($scope.serviciosPorHacer, servicio);
 							valor($scope.serviciosPorHacer);
@@ -226,6 +249,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									.position('bottom start')
 							);
 					}, function failCallbacks(response){
+							$scope.serv5 = false;
+							$scope.serv6 = false;
 							if (response.status == 500) {
 								$scope.dialogError();
 							}
@@ -234,9 +259,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 				});
 			}else {
+					$scope.serv5 = true;
+					$scope.serv6 = true;
 					if ($scope.selectedPlaca.ordenv) {
-						console.log("ya existe una orden");
-						console.log(servicio);
 							data.orden = $scope.selectedPlaca.ordenv;
 							if (servicio.tipo) {
 									data.tipo = servicio.tipo;
@@ -268,6 +293,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 												.position('bottom start')
 										);
 							}, function failCallbacks(response){
+									$scope.serv5 = false;
+									$scope.serv6 = false;
 									if (response.status == 500) {
 											$scope.dialogError();
 									}
@@ -277,37 +304,53 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		//Servicio para asignar un operario a un servicio
-		$scope.asignarOperario = function(operario, servicio){
-				if($scope.selectedPlaca.ordenv){
-					data.orden = $scope.selectedPlaca.ordenv;
-					data.tipo = $scope.selectedPlaca.tipo;
-					data.operario = operario.id;
-					$http({
-						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
-						 'method': 'POST',
-						 'data': $httpParamSerializer(data),
-			 			  headers: {
-			 						'Content-Type': 'application/x-www-form-urlencoded'
-			 				},
-					}).then(function doneCallbacks(response){
-							servicio.operario =  operario.id;
-							servicio.operario_nombre = operario.nombre;
-							$mdDialog.hide();
-							$mdToast.show(
-								$mdToast.simple()
-									.textContent('Guardado Exitoso')
-					        .hideDelay(3000)
-									.position('bottom start')
-							);
-					}, function failCallbacks(response){
-							if (response.status == 500) {
-									$scope.dialogError();
-							}
-					});
-				}else {
-						servicio.operario =  operario.id;
-						servicio.operario_nombre = operario.nombre;
-				}
+		$scope.asignarOperarioDialog = function(servicio, ev){
+				  var dialog = $mdDialog.show({
+			      template:
+			      '<md-dialog aria-label="operarios">' +
+			        '<form ng-cloak name="form">' +
+			          '<md-toolbar>' +
+			            '<div class="md-toolbar-tools">' +
+			              '<h2>Operarios</h2>' +
+			              '<span flex></span>' +
+			            '</div>' +
+			          '</md-toolbar>' +
+			          '<md-dialog-content>' +
+			            '<div class="md-dialog-content">' +
+			              '<md-list >' +
+			                 '<md-list-item ng-click="null" ng-repeat="operario in operarios">' +
+			                    '<p>[[operario.nombre]]</p>' +
+			                    '<md-checkbox class="md-secondary" ng-model="operario.elegido"></md-checkbox>' +
+			                '</md-list-item>' +
+			              '</md-list >' +
+			            '</div>'+
+			          '</md-dialog-content>'+
+			          '<md-dialog-actions layout="row">'+
+			            '<md-button class="md-raised red" ng-click="closeDialog()" flex>'+
+			              'Cancelar'+
+			            '</md-button>'+
+			            '<md-button class="md-primary md-raised" ng-click="asignarOperario()" flex>'+
+			              'Agregar'+
+			            '</md-button>'+
+			          '</md-dialog-actions>'+
+			        '</form>'+
+			      '</md-dialog>',
+			      controller: 'Dialog2Controller',
+			      locals: {
+			        data: $scope.operarios,
+			        servicio: servicio,
+							orden: $scope.selectedPlaca.ordenv,
+							tipo: $scope.selectedPlaca.tipo,
+							dialogError: $scope.dialogError,
+			      },
+			      clickOutsideToClose:true,
+			      parent: angular.element(document.querySelector('#popupContainer')),
+						targetEvent: ev,
+			    }).then(function(){
+
+			    },function(){
+
+			    });
 		};
 
 		//Lista de operarios
@@ -344,7 +387,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		//Invocar servicios
-		$scope.listVehiculos();
 		$scope.tipoVehiculo();
 		$scope.operariosList();
 		$scope.ordenesPendientes();
@@ -451,7 +493,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						placas: $scope.placas,
 						tipo: $scope.tipo,
 						nombre: $scope.nombre,
-						identificacion: $scope.identificacion
+						identificacion: $scope.identificacion,
 					}
            // Only for -xs, -sm breakpoints.
         })
@@ -465,7 +507,58 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 })
+.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, data, servicio, orden, tipo, dialogError){
+		$scope.closeDialog = function() {
+			  $mdDialog.hide();
+		};
 
+		$scope.operarios = data;
+		var dataSend = {};
+		dataSend.operario = [];
+
+		function selectCheck(){
+			$scope.operarios.forEach(function(item){
+				if (item.elegido) {
+					dataSend.operario.push(item.id);
+				}
+			});
+		}
+
+		$scope.asignarOperario = function(){
+				if(orden){
+					$mdDialog.hide();
+					$mdToast.show(
+						$mdToast.simple()
+							.textContent('Guardando...')
+							.hideDelay(3000)
+							.position('bottom start')
+					);
+					selectCheck();
+					dataSend.orden = orden;
+					dataSend.tipo = tipo;
+					$http({
+						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
+						 'method': 'POST',
+						 'data': dataSend,
+			 			  headers: {
+			 						'Content-Type': 'application/x-www-form-urlencoded'
+			 				},
+					}).then(function doneCallbacks(response){
+							$mdDialog.hide();
+							$mdToast.show(
+								$mdToast.simple()
+									.textContent('Guardado Exitoso')
+					        .hideDelay(3000)
+									.position('bottom start')
+							);
+					}, function failCallbacks(response){
+							if (response.status == 500) {
+									dialogError();
+							}
+					});
+				}
+		};
+})
 .controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, tipo, nombre, identificacion){
 		$scope.tipos = tipos;
 		$scope.data = {};

@@ -316,7 +316,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			            '</div>' +
 			          '</md-toolbar>' +
 			          '<md-dialog-content>' +
-			            '<div class="md-dialog-content">' +
+									'<div layout="row" layout-align="center center" ng-if="cargando" style="height:200px">' +
+											'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
+									'</div>' +
+			            '<div class="md-dialog-content"  ng-if="!cargando">' +
 			              '<md-list >' +
 			                 '<md-list-item ng-click="null" ng-repeat="operario in operarios">' +
 			                    '<p>[[operario.nombre]]</p>' +
@@ -325,7 +328,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			              '</md-list >' +
 			            '</div>'+
 			          '</md-dialog-content>'+
-			          '<md-dialog-actions layout="row">'+
+			          '<md-dialog-actions  ng-if="!cargando" layout="row">'+
 			            '<md-button class="md-raised red" ng-click="closeDialog()" flex>'+
 			              'Cancelar'+
 			            '</md-button>'+
@@ -507,14 +510,53 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 })
-.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, data, servicio, orden, tipo, dialogError){
+.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, tipo, dialogError){
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
+		$scope.cargando = false;
 		$scope.operarios = data;
 		var dataSend = {};
 		dataSend.operario = [];
+
+		function selecionarOperario(array) {
+			array.forEach(function(item){
+				$scope.operarios.forEach(function(operario){
+					if (item.id === operario.id) {
+						operario.elegido = true;
+					}
+				});
+			});
+		}
+
+		$scope.operariosSeleccionados = function(){
+			$scope.cargando = true;
+			$http({
+				'url': '/empleados/operarios/servicio/',
+					'method': 'POST',
+					'data': {
+						q: servicio.id
+					},
+					 headers: {
+							 'Content-Type': 'application/x-www-form-urlencoded'
+					 },
+			}).then(function doneCallbacks(response){
+					selecionarOperario(response.data.object_list);
+					$scope.cargando = false;
+			},function failCallbacks(response){
+				if (response.status == 500) {
+						$scope.cargando = false;
+						dialogError();
+				}else {
+					$timeout(function () {
+						$scope.operariosSeleccionados();
+					}, 2000);
+				}
+			});
+		};
+
+		$scope.operariosSeleccionados();
 
 		function selectCheck(){
 			$scope.operarios.forEach(function(item){
