@@ -41,3 +41,8 @@ urlpatterns += [
     url(r'^imprimir/orden/(?P<pk>\d+)/$', views.ImprimirOrden.as_view(), name='get_orden_pendien'),
     url(r'^ws/imprimir/orden/$', views.ServiciosOrden.as_view(), name='ws_imp_orden'),
 ]
+
+# url generar el excel
+urlpatterns += [
+    url(r'^generar/excel/mservicio/$', views.ReporteMServicio.as_view(), name='get_orden_pendien'),
+]

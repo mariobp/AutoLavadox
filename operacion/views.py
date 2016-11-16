@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from supra import views as supra
 from cliente import models as cliente
@@ -10,6 +12,11 @@ from django.views.generic import TemplateView
 from datetime import date, timedelta, datetime
 import re
 from django.utils import timezone
+import csv
+from django.views.generic import View
+from datetime import date
+import json
+from django.db import connection
 
 
 class TiposServicios(supra.SupraListView):
@@ -279,5 +286,55 @@ class ServiciosOrden(supra.SupraListView):
         apellidos = 'orden__vehiculo__cliente__apellidos'
         costo = 'tipo__costo'
         orden_id = 'orden__id'
+    # end class
+# end class
+
+class ReporteMServicio(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        # do something
+        return super(ReporteMServicio, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request):
+        id_emp=request.GET.get('id', '0')
+        ini=request.GET.get('ini', '2015-01-01')
+        fin=request.GET.get('fin', '%s-%s-%s' %
+                              (date.today().year, date.today().month, date.today().day))
+        """
+        f1=ini.split('-')
+        f2=fin.split('-')
+        d1='%s-%s-%s' % (f1[2], f1[0], f1[1])
+        d2='%s-%s-%s' % (f2[2], f2[0], f2[1])
+        """
+        estado=request.GET.get('estado', False)
+        r=0
+        lista=list()
+        response=HttpResponse(content_type='text/csv')
+        response[
+            'Content-Disposition']='attachment; filename="Reporte Servicio mas demorados .csv"'
+        writer=csv.writer(response)
+        writer.writerow(['Luxury'.encode('utf-8')])
+        writer.writerow(['Fecha de inicio para el reporte'.encode('utf-8'), ''.encode(
+            'utf-8'), ''.encode('utf-8'), 'Fecha de fin para el reporte'.encode('utf-8')])
+        lista.append(u'Servicio'.encode('utf-8'))
+        lista.append(u'Minutos'.encode('utf-8'))
+        writer.writerow(lista)
+        sql='''select get_tiempo_servicio('2016-11-15','2016-12-01')'''
+        cursor=connection.cursor()
+        cursor.execute(sql)
+        row=cursor.fetchone()
+        print row[0]
+        rt = row[0]
+        r=0
+        while r <len( rt):
+            li=list()
+            li.append((rt[r]['nombre']).encode('utf-8'))
+            li.append((rt[r]['total']).encode('utf-8'))
+            writer.writerow(li)
+            r=r + 1
+        # end for
+        return response
     # end class
 # end class
