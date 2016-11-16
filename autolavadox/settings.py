@@ -246,9 +246,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
+"""
 STATIC_ROOT = '/home/luxuryadmin/webapps/static/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 HOST_MEDIA = 'http://luxuryservice.com.co/media/'
 MEDIA_ROOT = '/home/luxuryadmin/webapps/media/'
+"""
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
+MEDIA_URL = '/media/'
+HOST_MEDIA = 'http://192.168.0.109:8000/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $(".date").Zebra_DatePicker({
-    format:'d/m/Y',
+    format:'m/d/Y',
     lang_clear_date: 'Borrar Fecha',
     show_select_today: 'Hoy',
     default_position: 'below',

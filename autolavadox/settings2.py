@@ -28,7 +28,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost','http://luxuryservice.com.co'
+    'localhost','http://192.168.0.109:8000'
 ]
 
 EXILE_UI = {
@@ -256,9 +256,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
 
 MEDIA_URL = '/media/'
-HOST_MEDIA = 'http://luxuryservice.com.co/media/'
+HOST_MEDIA = 'http://192.168.0.109:8000/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 print MEDIA_ROOT

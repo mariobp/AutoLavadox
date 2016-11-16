@@ -156,9 +156,9 @@ class OkService(supra.SupraFormView):
                     # end if
                     order = models.Orden.objects.filter(id=tem_o[0]).first()
                     if not servicio.estado:
-                        servicios = models.Servicio.objects.filter(orden=order).latest('fin')
-                        servicio.inicio = servicios.fin if servicios else tem_o[1]
-                        servicio.comision = servicio.tipo.costo*(servicio.tipo.comision/100)
+                        servicios = models.Servicio.objects.filter(orden=order,status=True).latest('fin')
+                        servicio.inicio = servicios.fin if servicios.fin is not None else tem_o[1]
+                        servicio.comision = servicio.tipo.costo-servicio.tipo.comision
                         servicio.valor = servicio.tipo.costo
                         servicio.fin = timezone.now()
                         servicio.estado = True

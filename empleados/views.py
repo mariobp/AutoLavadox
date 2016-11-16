@@ -12,6 +12,7 @@ from supra import views as supra
 from django.contrib.auth import login, logout, authenticate
 from django.views.generic import View
 import csv
+import re
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
@@ -68,10 +69,25 @@ class Logout(TemplateView):
 # end class
 
 
+class WsOperariosServicio(supra.SupraListView):
+    model = models.Empleado
+    search_key = 'q'
+    list_display = ['id']
+    search_fields = ['id']
+    paginate_y = 1000
+
+    def get_queryset(self):
+        queryset = super(WsOperariosServicio, self).get_queryset()
+        r = self.request.GET.get('q', False)
+        return models.Empleado.objects.filter(servicio__id=r if re.search('^\d+$',r) else 0)
+    # end def
+# end class
+
 class WsOperarios(supra.SupraListView):
     model = models.Empleado
     list_display = ['nombre', 'id']
     paginate_by = 1000
+
 
     class Renderer:
         apellidos = 'last_name'
@@ -198,8 +214,6 @@ class Excel(View):
         # Create the HttpResponse object with the appropriate CSV header.
 
         #
-
-        print 'PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'
         return response
 
     # end def
