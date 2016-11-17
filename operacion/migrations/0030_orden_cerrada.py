@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='orden',
             name='cerrada',
-            field=models.FloatField(),
+            field=models.FloatField(null=True),
         ),
     ]
