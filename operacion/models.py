@@ -40,6 +40,7 @@ class Orden(models.Model):
     observacion = models.CharField(max_length=1000, null=True, blank=True)
     valor = models.FloatField(default=0)
     comision = models.FloatField(default=0, verbose_name="Comisión")
+    cerrada = models.BooleanField(default=False)
     pago = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
 
@@ -64,7 +65,7 @@ class Orden(models.Model):
 
 class Servicio(models.Model):
     orden = models.ForeignKey(Orden, null=True, blank=True)
-    operario = models.ManyToManyField(empleado.Empleado, null=True, blank=True)
+    operario = models.ManyToManyField(empleado.Empleado, blank=True)
     tipo = models.ForeignKey(TipoServicio)
     valor = models.FloatField(default=0)
     comision = models.FloatField(verbose_name="comisión", default=0)
