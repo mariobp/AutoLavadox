@@ -15,10 +15,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 .controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast, $q) {
     $scope.search = "";
     $scope.vehiculos = [];
-    $scope.nombre = "";
-    $scope.identificacion = "";
     $scope.placas = [];
-    $scope.tipo = "";
+		$scope.info = {};
+		$scope.info.tipo = "";
+		$scope.info.nombre = "";
+		$scope.info.identificacion = "";
     $scope.servicios = [];
 		$scope.serviciosPorHacer = [];
     $scope.tipos = [];
@@ -32,6 +33,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serv4 = false;
 		$scope.serv5 = false;
 		$scope.serv6 = false;
+		$scope.serv7 = false;
 		var data = {};
     $scope.dialogError = function(){
       $mdDialog.show(
@@ -80,10 +82,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}
       if ($scope.selectedItem) {
 					if ($scope.selectedItem.nombre && $scope.selectedItem.apellidos ) {
-						$scope.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
+						$scope.info.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
 					}
-          $scope.identificacion = $scope.selectedItem.cedula;
-          $scope.tipo = $scope.selectedItem.tipov;
+          $scope.info.identificacion = $scope.selectedItem.cedula;
+          $scope.info.tipo = $scope.selectedItem.tipov;
           if (!$scope.placas.includes($scope.selectedItem)) {
 							var result = $scope.placas.find(placaRepetida);
 						if (result === undefined) {
@@ -100,9 +102,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						}
           }
       }else {
-          $scope.nombre = "";
-          $scope.identificacion = "";
-          $scope.tipo = "";
+          $scope.info.nombre = "";
+          $scope.info.identificacion = "";
+          $scope.info.tipo = "";
       }
     };
 
@@ -425,7 +427,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			function findService(item){
 					return item === service;
 			}
-
+			$scope.serv7 = true;
 			function enviar(){
 				$http({
 					'url': '/operacion/ok/servicio/'+ service.id+'/',
@@ -441,7 +443,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				        .hideDelay(3000)
 								.position('bottom start')
 						);
+						$scope.serv7 = false;
 				},function failCallbacks(response){
+						$scope.serv7 = false;
 						if (response.status == 500) {
 								$scope.dialogError();
 						}
@@ -458,6 +462,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .ok('Si')
 	      .cancel('Cancelar');
 				$mdDialog.show(confirm).then(function() {
+						$scope.serv6 = true;
+						$scope.serv7 = true;
 						$http({
 							'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
 							'method': 'GET'
@@ -472,6 +478,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						        .hideDelay(3000)
 										.position('bottom start')
 								);
+								$scope.serv6 = false;
+								$scope.serv7 = false;
 						},function failCallbacks(response){
 								if (response.status == 500) {
 										$scope.dialogError();
@@ -503,6 +511,42 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  				'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-if="!cargando">' +
+									'<div layout="row">' +
+		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" md-autofocus flex required>' +
+											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
+											 '<md-not-found>' +
+												'No hay hay resultados para "[[search2]]"' +
+											'</md-not-found>' +
+											'<div ng-messages="form.identificacion.$error" ng-if="form.autocompleteField.$touched">' +
+												'<div ng-message="required">Este campo es requerido.</div>' +
+											'</div>' +
+										'</md-autocomplete >' +
+		              '</div>' +
+		              '<div layout="row" layout-xs="column" >' +
+		                '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100" >' +
+		                   '<label>Nombre</label>' +
+		                    '<input type="text" ng-model="data.nombre" name="nombre" value="" required>' +
+		                    '<div ng-messages="form.nombre.$error">' +
+		                      '<div ng-message="required">Este campo es requerido.</div>' +
+		                    '</div>' +
+		                '</md-input-container>' +
+		                '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100" >' +
+		                   '<label>Apellidos</label>' +
+		                    '<input type="text" ng-model="data.apellidos" name="apellidos" value="" required>' +
+		                    '<div ng-messages="form.apellidos.$error">' +
+		                      '<div ng-message="required">Este campo es requerido.</div>' +
+		                    '</div>' +
+		                '</md-input-container>' +
+		              '</div>' +
+										'<div layout="row">' +
+			                  '<md-input-container class="md-block" flex="100">' +
+			                    '<label>Celular</label>' +
+			                    '<input ng-model="data.celular" name="celular" required>' +
+			                    '<div ng-messages="form.celular.$error">' +
+			                      '<div ng-message="required">Este campo es requerido.</div>' +
+			                    '</div>' +
+			                  '</md-input-container>' +
+			              '</div>' +
 						        '<md-input-container class="md-block">' +
 						          '<label>Placa</label>' +
 						          '<input ng-model="data.placa" name="placa" required>' +
@@ -539,18 +583,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						tipos:$scope.tipos,
 						placa: $scope.search,
 						placas: $scope.placas,
-						tipo: $scope.tipo,
-						nombre: $scope.nombre,
-						identificacion: $scope.identificacion,
+						info: $scope.info,
+						dialogError: $scope.dialogError,
 					}
            // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
-					console.log("entro");
           $scope.status = 'You said the information was "' + answer + '".';
         }, function(a) {
-					console.log(a);
-					console.log("entro");
           $scope.status = 'You cancelled the dialog.';
         });
     };
@@ -648,75 +688,219 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}
 		};
 })
-.controller('DialogController', function($scope, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, tipo, nombre, identificacion){
+.controller('DialogController', function($scope, $q, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, info, dialogError){
 		$scope.tipos = tipos;
 		$scope.data = {};
+		$scope.identificacion = "";
 		$scope.cargando = false;
 		$scope.data.placa = placa;
+
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
 
+		$scope.textChange2 = function(ev) {
+				$scope.identificacion = this.search2;
+		};
+
+		$scope.clienteActual = function(ev) {
+			$scope.data.nombre = this.selectedCliente.nombre;
+			$scope.data.apellidos = this.selectedCliente.apellidos;
+			$scope.data.celular = this.selectedCliente.celular;
+			$scope.data.cliente = this.selectedCliente.id;
+			$scope.data.identificacion = this.selectedCliente.identificacion;
+		};
+
+    $scope.listClientes = function(searchText){
+				var deferred = $q.defer();
+				if (this.search2===undefined) {
+					this.search2 = "";
+				}
+        $http({
+          'url': '/cliente/list/cliente/?q='+ this.search2,
+          'method': 'GET'
+        }).then(function doneCallbacks(response){
+						deferred.resolve(response.data.object_list);
+        },function failCallbacks(response){
+					  deferred.reject(response);
+            dialogError();
+        });
+				return deferred.promise;
+    };
+
+		console.log(info);
 		$scope.enviar = function(){
 			$scope.cargando = true;
-			$http({
-				url:'/cliente/add/vehiculo/',
-				method: 'POST',
-				data: $httpParamSerializer($scope.data),
-			  headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-				},
-			}).then(function doneCallbacks(response){
-					var item = {};
-					item.placa = response.data.placa;
-					item.tipo = response.data.tipo_id;
-					item.id = response.data.id;
-					placas.push(item);
-
-					function searchTipo(tipo){
-						return tipo.id == response.data.tipo_id;
-					}
-					var result = tipos.find(searchTipo);
-					tipo = result.nombre;
-					identificacion = "Sin registrar";
-					nombre = "Sin registrar";
-					$mdDialog.hide();
-					$mdToast.show(
-						$mdToast.simple()
-							.textContent('Guardado Exitoso')
-			        .hideDelay(3000)
-						  .position('bottom start')
-					);
-					$scope.cargando = false;
-			}, function failCallbacks(response){
-					$scope.cargando = false;
-					if (response.status == 400) {
-						if (response.data.placa) {
-							$mdToast.show(
-								$mdToast.simple()
-									.textContent("Placa: " + response.data.placa[0])
-									.position('bottom start')
-					        .hideDelay(3000)
-							);
-						}else if(response.data.tipo){
-							$mdToast.show(
-								$mdToast.simple()
-									.textContent("Tipo: " + response.data.tipo[0])
-									.position('bottom start')
-					        .hideDelay(3000)
-							);
+			if ($scope.data.cliente) {
+				$http({
+					url:'/cliente/add/vehiculo/',
+					method: 'POST',
+					data: $httpParamSerializer($scope.data),
+				  headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+					},
+				}).then(function doneCallbacks(response){
+						var item = {};
+						item.placa = response.data.placa;
+						item.tipo = response.data.tipo_id;
+						item.id = response.data.id;
+						placas.push(item);
+						function searchTipo(tipo){
+							return tipo.id == response.data.tipo_id;
 						}
-					}else if (response.status == 500) {
-						$mdDialog.show(
-							$mdDialog.alert()
-								.parent(angular.element(document.querySelector('#popupContainer')))
-								.clickOutsideToClose(true)
-								.title('Error del servidor')
-								.textContent('Hay un error, contacte a el administrador.')
-								.ariaLabel('Alert Dialog Error')
-								.ok('OK')
+						var result = tipos.find(searchTipo);
+						info.tipo = result.nombre;
+						info.identificacion = $scope.data.identificacion;
+						info.nombre = $scope.data.nombre + " " + $scope.data.apellidos;
+						$mdDialog.hide();
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Guardado Exitoso')
+				        .hideDelay(3000)
+							  .position('bottom start')
 						);
-					}
-			});
+						$scope.cargando = false;
+						$scope.data = {};
+				}, function failCallbacks(response){
+						$scope.cargando = false;
+						if (response.status == 400) {
+							if (response.data.cliente) {
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Cliente: " + response.data.cliente[0])
+										.position('bottom start')
+						        .hideDelay(3000)
+								);
+							}
+							if (response.data.placa) {
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Placa: " + response.data.placa[0])
+										.position('bottom start')
+						        .hideDelay(3000)
+								);
+							}else if(response.data.tipo){
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Tipo: " + response.data.tipo[0])
+										.position('bottom start')
+						        .hideDelay(3000)
+								);
+							}
+						}else if (response.status == 500) {
+							dialogError();
+						}
+				});
+			} else {
+					var dataSend = {};
+					dataSend.nombre = $scope.data.nombre;
+					dataSend.apellidos = $scope.data.apellidos;
+					dataSend.identificacion = $scope.identificacion;
+					dataSend.celular = $scope.data.celular;
+					dataSend['vehiculo_set-TOTAL_FORMS'] = 3;
+					dataSend['vehiculo_set-INITIAL_FORMS'] = 0;
+					dataSend['vehiculo_set-MIN_NUM_FORMS'] = 0;
+					dataSend['vehiculo_set-MAX_NUM_FORMS'] = 1000;
+					dataSend['vehiculo_set-0-placa'] = $scope.data.placa;
+					dataSend['vehiculo_set-0-tipo'] = $scope.data.tipo;
+					$http({
+						url:'/cliente/add/cliente/inline/',
+						method: 'POST',
+						data: $httpParamSerializer(dataSend),
+					  headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+						},
+					}).then(function doneCallbacks(response){
+							console.log(response);
+							var cliente = response.data;
+							var item = {};
+							item.placa = $scope.data.placa;
+							item.tipo = $scope.data.tipo;
+							//hacer busqueda del vehiculo
+							function getVehiculo(){
+								console.log(item.placa);
+								$http({
+				          'url': '/cliente/vehiculo/?q='+ item.placa,
+				          'method': 'GET'
+				        }).then(function doneCallbacks(response){
+				            var vehiculo = response.data.object_list;
+										item.id = vehiculo[0].id;
+										placas.push(item);
+										info.tipo = vehiculo[0].tipov;
+										info.identificacion = cliente.identificacion;
+										info.nombre = cliente.nombre + " " + cliente.apellidos;
+										$mdDialog.hide();
+										$mdToast.show(
+											$mdToast.simple()
+												.textContent('Guardado Exitoso')
+								        .hideDelay(3000)
+											  .position('bottom start')
+										);
+										$scope.cargando = false;
+										$scope.data = {};
+				        },function failCallbacks(response){
+				            if(response.status == 500) {
+												$scope.cargando = false;
+												dialogError();
+										}else {
+											getVehiculo();
+										}
+				        });
+							}
+							getVehiculo();
+					}, function failCallbacks(response){
+							$scope.cargando = false;
+							if (response.status == 400) {
+								if (response.data.nombre) {
+									$mdToast.show(
+										$mdToast.simple()
+											.textContent("Nombre: " + response.data.nombre[0])
+											.position('bottom start')
+							        .hideDelay(3000)
+									);
+								}
+								if (response.data.apellidos) {
+									$mdToast.show(
+										$mdToast.simple()
+											.textContent("Apellidos: " + response.data.apellidos[0])
+											.position('bottom start')
+							        .hideDelay(3000)
+									);
+								}else if(response.data.identificacion){
+									$mdToast.show(
+										$mdToast.simple()
+											.textContent("Identificación: " + response.data.identificacion[0])
+											.position('bottom start')
+							        .hideDelay(3000)
+									);
+								}
+								else if(response.data.celular){
+									$mdToast.show(
+										$mdToast.simple()
+											.textContent("Celular: " + response.data.celular[0])
+											.position('bottom start')
+							        .hideDelay(3000)
+									);
+								}else if (response.data.inlines) {
+										var inlines = response.data.inlines;
+										inlines.forEach(function(item){
+											if (item.placa) {
+											$mdToast.simple()
+												.textContent("Placa: " + item.placa[0])
+												.position('bottom start')
+								        .hideDelay(3000)
+											} else if (item.tipo) {
+												$mdToast.simple()
+													.textContent("Tipo: " + item.tipo[0])
+													.position('bottom start')
+									        .hideDelay(3000)
+											}
+										});
+								}
+							}else if (response.status == 500) {
+									dialogError();
+							}
+					});
+			}
 		};
 });
