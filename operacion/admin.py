@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 import models
@@ -45,10 +46,12 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['pk', 'fecha_orden', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'pago', 'fin', 'imprimir_orden']
-    list_filter = ['entrada', 'vehiculo', 'valor', 'comision', 'pago', ('fin', DateRangeEX)]
-    list_editable = ['pago','vehiculo']
+    list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision','cerrada', 'pago', 'imprimir_orden']
+    list_filter = [('fin', DateRangeEX)]
+    search_fields = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
+    list_editable = ['cerrada', 'pago','vehiculo']
     form = forms.OrdenForm
+    list_display_links = ['id_reporte']
 
     def save_model(self, request, obj, form, change):
         obj.save()
@@ -57,7 +60,7 @@ class OrdenAdmin(admin.ModelAdmin):
         for s in models.Servicio.objects.filter(orden=obj):
             if s.status and s.estado :
                 s.valor = s.tipo.costo
-                s.comision = s.tipo.costo * (s.tipo.comision/100)
+                s.comision = s.tipo.comision
                 comi += s.comision
                 total += s.valor
                 s.save()
@@ -67,6 +70,16 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.comision = comi
         obj.save()
     # end if
+
+    def id_reporte(self, obj):
+        i = 0
+        men = ''
+        while i < 10 - len(str(obj.pk)):
+            men = men + '0'
+            i = i+1
+        # end ford
+        return '%s%d' % (men, obj.pk)
+    # end def
 
     def imprimir_orden(self, obj):
         return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
@@ -85,6 +98,13 @@ class OrdenAdmin(admin.ModelAdmin):
         m = '0%d'%obj.entrada.minute if obj.entrada.minute <10 else '%d'%obj.entrada.minute
         s = '0%d'%obj.entrada.second if obj.entrada.second <10 else '%d'%obj.entrada.second
         return '%d-%d-%d %s:%s:%s'%(obj.entrada.day,obj.entrada.month,obj.entrada.year,h,m,s)
+    # end def
+
+    def fecha_orden_fin(self, obj):
+        h = '0%d'%obj.fin.hour if obj.fin.hour <10 else '%d'%obj.fin.hour
+        m = '0%d'%obj.fin.minute if obj.fin.minute <10 else '%d'%obj.fin.minute
+        s = '0%d'%obj.fin.second if obj.fin.second <10 else '%d'%obj.fin.second
+        return '%d-%d-%d %s:%s:%s'%(obj.fin.day,obj.fin.month,obj.fin.year,h,m,s)
     # end def
 
     def get_queryset(self, request):
@@ -116,7 +136,11 @@ class OrdenAdmin(admin.ModelAdmin):
     identificacion_cliente.allow_tags = True
     identificacion_cliente.short_description = 'Identificacion'
     fecha_orden.allow_tags = True
-    fecha_orden.short_description = 'Realizacion'
+    fecha_orden.short_description = 'Realización'
+    fecha_orden_fin.allow_tags = True
+    fecha_orden_fin.short_description = 'Finalización'
+    id_reporte.allow_tags = True
+    id_reporte.short_description = 'Factura'
 # end class
 
 

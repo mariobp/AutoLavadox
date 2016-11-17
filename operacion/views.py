@@ -79,7 +79,7 @@ class CloseOrden(supra.SupraFormView):
             orden = models.Orden.objects.filter(id=int(id)).first()
             if orden:
                 orden.fin = timezone.now()
-                orden.pago = True
+                orden.cerrada = True
                 orden.save()
                 return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
             # end if
@@ -166,7 +166,7 @@ class OkService(supra.SupraFormView):
                     if not servicio.estado:
                         servicios = models.Servicio.objects.filter(orden=order,status=True).latest('fin')
                         servicio.inicio = servicios.fin if servicios.fin is not None else tem_o[1]
-                        servicio.comision = servicio.tipo.costo-servicio.tipo.comision
+                        servicio.comision = servicio.tipo.comision
                         servicio.valor = servicio.tipo.costo
                         servicio.fin = timezone.now()
                         servicio.estado = True

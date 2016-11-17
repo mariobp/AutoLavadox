@@ -40,6 +40,7 @@ class Orden(models.Model):
     observacion = models.CharField(max_length=1000, null=True, blank=True)
     valor = models.FloatField(default=0)
     comision = models.FloatField(default=0, verbose_name="Comisión")
+    cerrada = models.BooleanField(default=False)
     pago = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
 
@@ -56,8 +57,8 @@ class Orden(models.Model):
     # end def
 
     class Meta:
-        verbose_name = "Orden"
-        verbose_name_plural = "Ordenes"
+        verbose_name = "Factura"
+        verbose_name_plural = "Facturas"
     # end class
 # end class
 
