@@ -12,8 +12,15 @@ from django_select2.forms import (
 class AddVehivuloForm(forms.ModelForm):
     class Meta:
         model = models.Vehiculo
-        fields = ['placa', 'tipo', ]
-        exclude = ['cliente', ]
+        exclude = ()
+    # end class
+# end class
+
+
+class AddClienteForm(forms.ModelForm):
+    class Meta:
+        model = models.Cliente
+        exclude = ('dirreccion', 'correo', 'nacimiento')
     # end class
 # end class
 

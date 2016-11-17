@@ -11,4 +11,6 @@ urlpatterns = [
 # url de guardar el registro de un vehiculo
 urlpatterns += [
     url(r'^add/vehiculo/$', views.VehiculoAdd.as_view(), name='add_vehiculo'),
+    url(r'^add/cliente/inline/$', views.ClienteSupra.as_view(), name='cliente'),
+    url(r'^list/cliente/$', views.ClienteList.as_view(), name='list_cliente')
 ]

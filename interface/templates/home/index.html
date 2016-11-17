@@ -37,21 +37,21 @@
                         <span md-highlight-text="search">[[vehiculo.placa]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
-                          <a ng-class="" ng-click="nuevo(searchText)" >Click para registrar</a>
+                          <a style="color:red" ng-click="nuevo(searchText)" >Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
                       <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
                           <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
                             <label>Tipo de vehículo</label>
-                            <input ng-model="tipo" ng-disabled="true">
+                            <input ng-model="info.tipo" ng-disabled="true">
                           </md-input-container>
                           <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
                             <label>Nombre del Cliente</label>
-                            <input ng-model="nombre" ng-disabled="true">
+                            <input ng-model="info.nombre" ng-disabled="true">
                           </md-input-container>
                           <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
                             <label>identificación</label>
-                            <input ng-model="identificacion" ng-disabled="true">
+                            <input ng-model="info.identificacion" ng-disabled="true">
                           </md-input-container>
                       </div>
                 </md-subheader>
@@ -84,7 +84,7 @@
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
                            <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0 && !serv5 && !serv6">
-                             <md-checkbox ng-model="servicioSelect" ng-hide="servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
+                             <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
                              <p>[[servicio.nombre]]</p>
                               <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
                            </md-list-item>
@@ -95,11 +95,14 @@
                            </div>
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
-                          <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0">
+                          <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
+                              <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+                          </div>
+                          <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0 && !serv7">
                             <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
-                            <p>[[servicio.nombre]] <span ng-if="servicio.operario">- [[servicio.operario_nombre]]</span></p>
+                            <p>[[servicio.nombre]]</p>
                           </md-list-item>
-                          <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0">
+                          <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0 && !serv7">
                             <div flex="100">
                                <h2 class="text-center">No hay ningún servicio por hacer</h12>
                             </div>

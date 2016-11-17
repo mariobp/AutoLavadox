@@ -92,6 +92,17 @@ md-tab-content{
   overflow: auto !important;
 }
 
+@media screen and (max-height: 500px) {
+    md-card-content{
+      max-height: 550px;
+    }
+
+    md-tab-content{
+      max-height: 420px;
+      overflow: auto !important;
+    }
+}
+
 .full-height{
   position: fixed;
   display: flex;

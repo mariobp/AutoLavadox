@@ -50,3 +50,34 @@ class VehiculoAdd(supra.SupraFormView):
 
 def validNum(cad):
     return re.match('^\d+$', cad)
+
+
+class VehiculoInline(supra.SupraInlineFormView):
+    base_model = models.Cliente
+    model = models.Vehiculo
+# end class
+
+
+class ClienteSupra(supra.SupraFormView):
+    model = models.Cliente
+    form_class = forms.AddClienteForm
+    inlines = [VehiculoInline]
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ClienteSupra, self).dispatch(request, *args, **kwargs)
+    # end def
+# end class
+
+
+class ClienteList(supra.SupraListView):
+    model = models.Cliente
+    search_key = 'q'
+    list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
+    search_fields = ['identificacion', ]
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ClienteList, self).dispatch(request, *args, **kwargs)
+    # end def
+# end class
