@@ -30,6 +30,12 @@ class TiposServicios(supra.SupraListView):
     class Renderer:
         valor = 'costo'
     # end class
+
+    def get_queryset(self):
+        queryset = super(TiposServicios, self).get_queryset()
+        obj = queryset.order_by('nombre')
+        return obj
+    # end def
 # end class
 
 

@@ -20,9 +20,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.vehiculos = [];
     $scope.placas = [];
 		$scope.info = {};
-		$scope.info.tipo = "";
-		$scope.info.nombre = "";
-		$scope.info.identificacion = "";
     $scope.servicios = [];
 		$scope.serviciosPorHacer = [];
     $scope.tipos = [];
@@ -87,6 +84,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					if ($scope.selectedItem.nombre && $scope.selectedItem.apellidos ) {
 						$scope.info.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
 					}
+					if ($scope.selectedItem.color) {
+						$scope.info.color = $scope.selectedItem.color;
+					}if ($scope.selectedItem.marca) {
+						$scope.info.marca = $scope.selectedItem.marca;
+					}if ($scope.selectedItem.kilometraje) {
+						$scope.info.kilometraje = $scope.selectedItem.kilometraje;
+					}
+					$scope.info.celular = $scope.selectedItem.celular;
           $scope.info.identificacion = $scope.selectedItem.cedula;
           $scope.info.tipo = $scope.selectedItem.tipov;
           if (!$scope.placas.includes($scope.selectedItem)) {
@@ -108,6 +113,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           $scope.info.nombre = "";
           $scope.info.identificacion = "";
           $scope.info.tipo = "";
+					$scope.info.celular = "";
+					$scope.info.marca = "";
+					$scope.info.color = "";
+					$scope.info.kilometraje = "";
       }
     };
 
@@ -219,7 +228,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 								.hideDelay(3000)
-								.position('bottom start')
+								.position('top right')
 						);
 				}, function failCallbacks(response){
 						if (response.status == 500) {
@@ -252,7 +261,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
 					        .hideDelay(3000)
-									.position('bottom start')
+									.position('top right')
 							);
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
@@ -296,7 +305,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											$mdToast.simple()
 												.textContent('Servicio asignado')
 								        .hideDelay(3000)
-												.position('bottom start')
+												.position('top right')
 										);
 							}, function failCallbacks(response){
 									$scope.serv5 = false;
@@ -444,7 +453,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 				        .hideDelay(3000)
-								.position('bottom start')
+								.position('top right')
 						);
 						$scope.serv7 = false;
 				},function failCallbacks(response){
@@ -479,7 +488,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$mdToast.simple()
 										.textContent('Orden finalizada')
 						        .hideDelay(3000)
-										.position('bottom start')
+										.position('top right')
 								);
 								$scope.serv6 = false;
 								$scope.serv7 = false;
@@ -515,7 +524,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-if="!cargando">' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex required>' +
+		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
 											 '<md-not-found>' +
 												'No hay hay resultados para "[[search2]]"' +
@@ -689,7 +698,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						$mdToast.simple()
 							.textContent('Guardando...')
 							.hideDelay(3000)
-							.position('bottom start')
+							.position('top right')
 					);
 					selectCheck();
 					dataSend.orden = orden;
@@ -708,7 +717,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Guardado Exitoso')
 					        .hideDelay(3000)
-									.position('bottom start')
+									.position('top right')
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
@@ -790,12 +799,16 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						info.tipo = result.nombre;
 						info.identificacion = $scope.data.identificacion;
 						info.nombre = $scope.data.nombre + " " + $scope.data.apellidos;
+						info.celular = $scope.data.celular;
+						info.marca = $scope.data.marca;
+						info.kilometraje = $scope.data.kilometraje;
+						info.color = $scope.data.color;
 						$mdDialog.hide();
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 				        .hideDelay(3000)
-							  .position('bottom start')
+							  .position('top right')
 						);
 						$scope.cargando = false;
 						$scope.data = {};
@@ -806,7 +819,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.show(
 									$mdToast.simple()
 										.textContent("Cliente: " + response.data.cliente[0])
-										.position('bottom start')
+										.position('top right')
 						        .hideDelay(3000)
 								);
 							}
@@ -814,14 +827,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.show(
 									$mdToast.simple()
 										.textContent("Placa: " + response.data.placa[0])
-										.position('bottom start')
+										.position('top right')
 						        .hideDelay(3000)
 								);
 							}else if(response.data.tipo){
 								$mdToast.show(
 									$mdToast.simple()
 										.textContent("Tipo: " + response.data.tipo[0])
-										.position('bottom start')
+										.position('top right')
 						        .hideDelay(3000)
 								);
 							}
@@ -870,14 +883,18 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 										item.id = vehiculo[0].id;
 										placas.push(item);
 										info.tipo = vehiculo[0].tipov;
+										info.marca = vehiculo[0].marca;
+										info.color = vehiculo[0].color;
+										info.kilometraje = vehiculo[0].kilometraje;
 										info.identificacion = cliente.identificacion;
 										info.nombre = cliente.nombre + " " + cliente.apellidos;
+										info.celular = cliente.celular;
 										$mdDialog.hide();
 										$mdToast.show(
 											$mdToast.simple()
 												.textContent('Guardado Exitoso')
 								        .hideDelay(3000)
-											  .position('bottom start')
+											  .position('top right')
 										);
 										$scope.cargando = false;
 										$scope.data = {};
@@ -898,7 +915,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent("Nombre: " + response.data.nombre[0])
-											.position('bottom start')
+											.position('top right')
 							        .hideDelay(3000)
 									);
 								}
@@ -906,14 +923,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent("Apellidos: " + response.data.apellidos[0])
-											.position('bottom start')
+											.position('top right')
 							        .hideDelay(3000)
 									);
 								}else if(response.data.identificacion){
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent("Identificación: " + response.data.identificacion[0])
-											.position('bottom start')
+											.position('top right')
 							        .hideDelay(3000)
 									);
 								}
@@ -921,7 +938,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent("Celular: " + response.data.celular[0])
-											.position('bottom start')
+											.position('top right')
 							        .hideDelay(3000)
 									);
 								}else if (response.data.inlines) {
@@ -930,12 +947,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											if (item.placa) {
 											$mdToast.simple()
 												.textContent("Placa: " + item.placa[0])
-												.position('bottom start')
+												.position('top right')
 								        .hideDelay(3000)
 											} else if (item.tipo) {
 												$mdToast.simple()
 													.textContent("Tipo: " + item.tipo[0])
-													.position('bottom start')
+													.position('top right')
 									        .hideDelay(3000)
 											}
 										});
