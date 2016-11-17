@@ -46,11 +46,12 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class OrdenAdmin(admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['pk', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision','cerrada', 'pago', 'imprimir_orden']
+    list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision','cerrada', 'pago', 'imprimir_orden']
     list_filter = [('fin', DateRangeEX)]
     search_fields = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
     list_editable = ['cerrada', 'pago','vehiculo']
     form = forms.OrdenForm
+    list_display_links = ['id_reporte']
 
     def save_model(self, request, obj, form, change):
         obj.save()
@@ -69,6 +70,16 @@ class OrdenAdmin(admin.ModelAdmin):
         obj.comision = comi
         obj.save()
     # end if
+
+    def id_reporte(self, obj):
+        i = 0
+        men = ''
+        while i < 10 - len(str(obj.pk)):
+            men = men + '0'
+            i = i+1
+        # end ford
+        return '%s%d' % (men, obj.pk)
+    # end def
 
     def imprimir_orden(self, obj):
         return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
@@ -128,6 +139,8 @@ class OrdenAdmin(admin.ModelAdmin):
     fecha_orden.short_description = 'Realización'
     fecha_orden_fin.allow_tags = True
     fecha_orden_fin.short_description = 'Finalización'
+    id_reporte.allow_tags = True
+    id_reporte.short_description = 'Factura'
 # end class
 
 

@@ -57,8 +57,8 @@ class Orden(models.Model):
     # end def
 
     class Meta:
-        verbose_name = "Orden"
-        verbose_name_plural = "Ordenes"
+        verbose_name = "Factura"
+        verbose_name_plural = "Facturas"
     # end class
 # end class
 
