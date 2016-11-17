@@ -74,7 +74,7 @@ class ClienteList(supra.SupraListView):
     model = models.Cliente
     search_key = 'q'
     list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
-    search_fields = ['identificacion', ]
+    search_fields = ['identificacion', 'celular']
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

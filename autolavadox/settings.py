@@ -203,10 +203,10 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox',
-        'USER': 'luxury',
+        'NAME': 'lavado',
+        'USER': 'postgres',
         'PASSWORD': 'Exile*74522547',
-        'HOST': 'localhost',
+        'HOST': '104.236.33.228',
         'POST': '5432'
     }
 }
@@ -233,7 +233,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'es-co'
+LANGUAGE_CODE = 'es-la'
 
 TIME_ZONE = 'America/Bogota'
 
@@ -241,7 +241,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

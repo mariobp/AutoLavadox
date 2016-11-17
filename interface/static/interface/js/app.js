@@ -12,7 +12,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		});
 })
 
-.controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast, $q) {
+.controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast, $q, $window) {
+	  $window.onbeforeunload = function(){
+	    return confirm("Are you sure you want to navigate away from this page");
+	  };
     $scope.search = "";
     $scope.vehiculos = [];
     $scope.placas = [];
@@ -512,12 +515,23 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-if="!cargando">' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" md-autofocus flex required>' +
+		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex required>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
 											 '<md-not-found>' +
 												'No hay hay resultados para "[[search2]]"' +
 											'</md-not-found>' +
 											'<div ng-messages="form.identificacion.$error" ng-if="form.autocompleteField.$touched">' +
+												'<div ng-message="required">Este campo es requerido.</div>' +
+											'</div>' +
+										'</md-autocomplete >' +
+		              '</div>' +
+									'<div layout="row">' +
+		                '<md-autocomplete md-input-name="celular" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
+											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.celular]]</span>' +
+											 '<md-not-found>' +
+												'No hay hay resultados para "[[search3]]"' +
+											'</md-not-found>' +
+											'<div ng-messages="form.celular.$error" ng-if="form.autocompleteField.$touched">' +
 												'<div ng-message="required">Este campo es requerido.</div>' +
 											'</div>' +
 										'</md-autocomplete >' +
@@ -538,22 +552,38 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		                    '</div>' +
 		                '</md-input-container>' +
 		              '</div>' +
-										'<div layout="row">' +
-			                  '<md-input-container class="md-block" flex="100">' +
-			                    '<label>Celular</label>' +
-			                    '<input ng-model="data.celular" name="celular" required>' +
-			                    '<div ng-messages="form.celular.$error">' +
+										'<div layout="row" layout-xs="column">' +
+			                  '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
+			                    '<label>Placa</label>' +
+			                    '<input ng-model="data.placa" name="placa" required>' +
+			                    '<div ng-messages="form.placa.$error">' +
 			                      '<div ng-message="required">Este campo es requerido.</div>' +
 			                    '</div>' +
 			                  '</md-input-container>' +
+									      '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
+								          '<label>Marca</label>' +
+								          '<input ng-model="data.marca" name="marca" required>' +
+								          '<div ng-messages="form.marca.$error">' +
+								            '<div ng-message="required">Este campo es requerido.</div>' +
+								          '</div>' +
+								        '</md-input-container>' +
 			              '</div>' +
-						        '<md-input-container class="md-block">' +
-						          '<label>Placa</label>' +
-						          '<input ng-model="data.placa" name="placa" required>' +
-						          '<div ng-messages="form.placa.$error">' +
-						            '<div ng-message="required">Este campo es requerido.</div>' +
-						          '</div>' +
-						        '</md-input-container>' +
+										'<div layout="row" layout-xs="column">' +
+											'<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
+												'<label>Color</label>' +
+												'<input ng-model="data.color" name="color" required>' +
+												'<div ng-messages="form.color.$error">' +
+													'<div ng-message="required">Este campo es requerido.</div>' +
+												'</div>' +
+											'</md-input-container>' +
+											'<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
+												'<label>Kilometraje</label>' +
+												'<input ng-model="data.kilometraje" name="kilometraje" required>' +
+												'<div ng-messages="form.kilometraje.$error">' +
+													'<div ng-message="required">Este campo es requerido.</div>' +
+												'</div>' +
+											'</md-input-container>' +
+										'</div>' +
 						        '<md-input-container class="md-block" >' +
 						           '<label>Tipo</label>' +
 						            '<md-select ng-model="data.tipo" name="tipo" required>' +
@@ -692,6 +722,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.tipos = tipos;
 		$scope.data = {};
 		$scope.identificacion = "";
+		$scope.celular = "";
 		$scope.cargando = false;
 		$scope.data.placa = placa;
 
@@ -703,21 +734,27 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				$scope.identificacion = this.search2;
 		};
 
+		$scope.textChange3 = function(ev) {
+				$scope.celular = this.search3;
+		};
+
 		$scope.clienteActual = function(ev) {
 			$scope.data.nombre = this.selectedCliente.nombre;
 			$scope.data.apellidos = this.selectedCliente.apellidos;
 			$scope.data.celular = this.selectedCliente.celular;
 			$scope.data.cliente = this.selectedCliente.id;
 			$scope.data.identificacion = this.selectedCliente.identificacion;
+			console.log($scope.data);
 		};
 
     $scope.listClientes = function(searchText){
+			console.log(searchText);
 				var deferred = $q.defer();
-				if (this.search2===undefined) {
-					this.search2 = "";
+				if (searchText===undefined) {
+					searchText = "";
 				}
         $http({
-          'url': '/cliente/list/cliente/?q='+ this.search2,
+          'url': '/cliente/list/cliente/?q='+ searchText,
           'method': 'GET'
         }).then(function doneCallbacks(response){
 						deferred.resolve(response.data.object_list);
@@ -727,6 +764,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
 				return deferred.promise;
     };
+
 
 		console.log(info);
 		$scope.enviar = function(){
@@ -792,17 +830,22 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						}
 				});
 			} else {
+					console.log($scope.identificacion);
+					console.log($scope.celular);
 					var dataSend = {};
 					dataSend.nombre = $scope.data.nombre;
 					dataSend.apellidos = $scope.data.apellidos;
 					dataSend.identificacion = $scope.identificacion;
-					dataSend.celular = $scope.data.celular;
+					dataSend.celular = $scope.celular;
 					dataSend['vehiculo_set-TOTAL_FORMS'] = 3;
 					dataSend['vehiculo_set-INITIAL_FORMS'] = 0;
 					dataSend['vehiculo_set-MIN_NUM_FORMS'] = 0;
 					dataSend['vehiculo_set-MAX_NUM_FORMS'] = 1000;
 					dataSend['vehiculo_set-0-placa'] = $scope.data.placa;
 					dataSend['vehiculo_set-0-tipo'] = $scope.data.tipo;
+					dataSend['vehiculo_set-0-marca'] = $scope.data.marca;
+					dataSend['vehiculo_set-0-color'] = $scope.data.color;
+					dataSend['vehiculo_set-0-kilometraje'] = $scope.data.kilometraje;
 					$http({
 						url:'/cliente/add/cliente/inline/',
 						method: 'POST',
