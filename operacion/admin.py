@@ -94,17 +94,23 @@ class OrdenAdmin(admin.ModelAdmin):
     #end
 
     def fecha_orden(self, obj):
-        h = '0%d'%obj.entrada.hour if obj.entrada.hour <10 else '%d'%obj.entrada.hour
-        m = '0%d'%obj.entrada.minute if obj.entrada.minute <10 else '%d'%obj.entrada.minute
-        s = '0%d'%obj.entrada.second if obj.entrada.second <10 else '%d'%obj.entrada.second
-        return '%d-%d-%d %s:%s:%s'%(obj.entrada.day,obj.entrada.month,obj.entrada.year,h,m,s)
+        if obj:
+            h = '0%d'%obj.entrada.hour if obj.entrada.hour <10 else '%d'%obj.entrada.hour
+            m = '0%d'%obj.entrada.minute if obj.entrada.minute <10 else '%d'%obj.entrada.minute
+            s = '0%d'%obj.entrada.second if obj.entrada.second <10 else '%d'%obj.entrada.second
+            return '%d-%d-%d %s:%s:%s'%(obj.entrada.day,obj.entrada.month,obj.entrada.year,h,m,s)
+        else:
+            return '--/--/--'
     # end def
 
     def fecha_orden_fin(self, obj):
-        h = '0%d'%obj.fin.hour if obj.fin.hour <10 else '%d'%obj.fin.hour
-        m = '0%d'%obj.fin.minute if obj.fin.minute <10 else '%d'%obj.fin.minute
-        s = '0%d'%obj.fin.second if obj.fin.second <10 else '%d'%obj.fin.second
-        return '%d-%d-%d %s:%s:%s'%(obj.fin.day,obj.fin.month,obj.fin.year,h,m,s)
+        if obj :
+            h = '0%d'%obj.fin.hour if obj.fin.hour <10 else '%d'%obj.fin.hour
+            m = '0%d'%obj.fin.minute if obj.fin.minute <10 else '%d'%obj.fin.minute
+            s = '0%d'%obj.fin.second if obj.fin.second <10 else '%d'%obj.fin.second
+            return '%d-%d-%d %s:%s:%s'%(obj.fin.day,obj.fin.month,obj.fin.year,h,m,s)
+        else:
+            return '--/--/--'
     # end def
 
     def get_queryset(self, request):
