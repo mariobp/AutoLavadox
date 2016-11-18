@@ -20,3 +20,4 @@ supra==1.1.31
 tablib==0.11.2
 webencodings==0.5
 xhtml2pdf==0.0.6
+xlwt==1.1.2

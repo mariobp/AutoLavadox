@@ -46,13 +46,7 @@ class ServiciosSource(resources.ModelResource):
         attribute="nombre"
     )
 
-    def get_nombre(self):
-        nombre = """select  case when length(__u.first_name)==0 or  __u.first_name is null  then 'operario' else __u.first_name end||' '||case when length(__u.last_name)==0 or  __u.last_name is null  then 'operario' else __u.last_name end as nombre  from auth_user as __u where "operacion_servicio"."operario_id"=__u.id"""
-        return nombre
-    # end def
-
     def export(self, queryset=None, *args, **kwargs):
-        queryset = queryset.extra(select={'nombre': self.get_nombre()})
         print args, kwargs
         new = kwargs
         new['modelo'] = 1
@@ -140,23 +134,26 @@ class TiemposOrdenSource(resources.ModelResource):
 
 
 class OperarioSource(resources.ModelResource):
-    pk = fields.Field(
-        column_name="id",
-        attribute="pk",
-    )
-
     Identificacion = fields.Field(
         column_name="Identificacion",
         attribute="identificacion",
     )
 
     Nombre = fields.Field(
-        column_name="nombre",
+        column_name="Nombre",
         attribute="first_name",
     )
     Apellidos = fields.Field(
-        column_name="apellidos",
+        column_name="Apellidos",
         attribute="last_name",
+    )
+    Direccion = fields.Field(
+        column_name="Direccion",
+        attribute="direccion",
+    )
+    Telefono = fields.Field(
+        column_name="Telefono",
+        attribute="telefono",
     )
 
     def export(self, queryset=None, *args, **kwargs):
@@ -166,13 +163,115 @@ class OperarioSource(resources.ModelResource):
 
     class Meta:
         model = empleados.Empleado
-        fields = ['pk','Identificacion', 'Nombre', 'Apellidos']
-        export_order = ['pk','Identificacion', 'Nombre', 'Apellidos']
+        fields = ['Identificacion', 'Nombre', 'Apellidos', 'Direccion', 'Telefono']
+        export_order = ['Identificacion', 'Nombre', 'Apellidos', 'Telefono']
+    # end class
+# end class
+
+
+class CajeroSource(resources.ModelResource):
+    Identificacion = fields.Field(
+        column_name="Identificacion",
+        attribute="identificacion",
+    )
+
+    Nombre = fields.Field(
+        column_name="Nombre",
+        attribute="first_name",
+    )
+    Apellidos = fields.Field(
+        column_name="Apellidos",
+        attribute="last_name",
+    )
+    Direccion = fields.Field(
+        column_name="Direccion",
+        attribute="direccion",
+    )
+    Telefono = fields.Field(
+        column_name="Telefono",
+        attribute="telefono",
+    )
+
+    def export(self, queryset=None, *args, **kwargs):
+        queryset = queryset
+        return super(CajeroSource, self).export(queryset, *args, **kwargs)
+    # end def
+
+    class Meta:
+        model = empleados.Cajero
+        fields = ['Identificacion', 'Nombre', 'Apellidos', 'Direccion', 'Telefono']
+        export_order = ['Identificacion', 'Nombre', 'Apellidos', 'Telefono']
+    # end class
+# end class
+
+class RecepcionistaSource(resources.ModelResource):
+    Identificacion = fields.Field(
+        column_name="Identificacion",
+        attribute="identificacion",
+    )
+
+    Nombre = fields.Field(
+        column_name="Nombre",
+        attribute="first_name",
+    )
+    Apellidos = fields.Field(
+        column_name="Apellidos",
+        attribute="last_name",
+    )
+    Direccion = fields.Field(
+        column_name="Direccion",
+        attribute="direccion",
+    )
+    Telefono = fields.Field(
+        column_name="Telefono",
+        attribute="telefono",
+    )
+
+    def export(self, queryset=None, *args, **kwargs):
+        queryset = queryset
+        return super(RecepcionistaSource, self).export(queryset, *args, **kwargs)
+    # end def
+
+    class Meta:
+        model = empleados.Recepcionista
+        fields = ['Identificacion', 'Nombre', 'Apellidos', 'Direccion', 'Telefono']
+        export_order = ['Identificacion', 'Nombre', 'Apellidos', 'Telefono']
+    # end class
+# end class
+
+
+class TiposServicioSource(resources.ModelResource):
+    Nombre = fields.Field(
+        column_name="Nombre",
+        attribute="nombre",
+    )
+    Costo = fields.Field(
+        column_name="Costo",
+        attribute="costo",
+    )
+    Comision = fields.Field(
+        column_name="Comisión",
+        attribute="comision",
+    )
+
+    def export(self, queryset=None, *args, **kwargs):
+        queryset = queryset
+        print queryset.query
+        return super(TiposServicioSource, self).export(queryset, *args, **kwargs)
+    # end def
+
+    class Meta:
+        model = operacion.TipoServicio
+        fields = ['Nombre', 'Costo', 'Comision']
+        export_order = ['Nombre', 'Costo', 'Comision']
     # end class
 # end class
 
 
 reports.register_export(operacion.Servicio, ServiciosSource, "informes/informe.html")
+reports.register_export(operacion.TipoServicio, TiposServicioSource, "informes/informe.html")
 reports.register_export(operacion.Orden, OrdenSource, "informes/ordenes.html")
 reports.register_export(empleados.Empleado, OperarioSource, "informes/empledosproducido.html")
+reports.register_export(empleados.Cajero, CajeroSource, "informes/empledosproducido.html")
+reports.register_export(empleados.Recepcionista, RecepcionistaSource, "informes/empledosproducido.html")
 reports.register_export(estadistica.TiemposOrden, TiemposOrdenSource, "informes/estadisticatiemposorden.html")

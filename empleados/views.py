@@ -12,6 +12,7 @@ from supra import views as supra
 from django.contrib.auth import login, logout, authenticate
 from django.views.generic import View
 import csv
+import xlwt
 import re
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
@@ -204,7 +205,6 @@ class Excel(View):
             cursor2.execute(sql2)
             row2= cursor2.fetchall()
             i=0
-            print 'tamano de la fila',len(row2)
             suma=0
             while i < len(row2):
                 li.append(row2[i][3])
@@ -222,4 +222,91 @@ class Excel(View):
         return response
 
     # end def
+# end class
+
+
+class ExcelEmpleados(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(ExcelEmpleados, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request):
+        id_emp=request.GET.get('id', '0')
+        ini=request.GET.get('ini', '2015-01-01')
+        fin=request.GET.get('fin', '%s-%s-%s' %
+                              (date.today().year, date.today().month, date.today().day))
+        """
+        f1=ini.split('-')
+        f2=fin.split('-')
+        d1='%s-%s-%s' % (f1[2], f1[0], f1[1])
+        d2='%s-%s-%s' % (f2[2], f2[0], f2[1])
+        """
+        estado=request.GET.get('estado', False)
+        r=0
+        lista=list()
+        """
+        response=HttpResponse(content_type='text/csv')
+        response[
+            'Content-Disposition']='attachment; filename="Reporte Servicio mas demorados .csv"'
+        writer=csv.writer(response)
+        writer.writerow(['Luxury'.encode('utf-8')])
+        writer.writerow(['Fecha de inicio para el reporte'.encode('utf-8'), ''.encode(
+            'utf-8'), ''.encode('utf-8'), 'Fecha de fin para el reporte'.encode('utf-8')])
+        lista.append(u'Servicio'.encode('utf-8'))
+        lista.append(u'Minutos'.encode('utf-8'))
+        writer.writerow(lista)
+        """
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Reporte tiempo empleados.xls'
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet("Empleados")
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        sql='select informe_time_operarios(\'%s\', \'%s\')'%(ini,fin)
+        cursor=connection.cursor()
+        cursor.execute(sql)
+        row=cursor.fetchone()
+        rt = row[0][0]
+        r=0
+        servicios = rt['servicios']
+        operarios = rt['empleados']
+        li=list()
+        ws.write(0,1,'Luxury'.encode('utf-8'),font_style)
+        ws.write(1,0,'Fecha de inicio para el reporte'.encode('utf-8'), font_style)
+        ws.write(1,1,ini.encode('utf-8'), font_style)
+        ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
+        ws.write(1,3,fin.encode('utf-8'), font_style)
+        exc_row=2
+        while r <len(servicios):
+            ws.write(exc_row, r, (servicios[r]['nombre']).encode('utf-8'), font_style)
+            r=r + 1
+        # end for
+        exc_row = exc_row + 1
+        # writer.writerow(li)
+        font_style = xlwt.XFStyle()
+        font_style.alignment.wrap = 1
+        i=0
+        while i < len(operarios):
+            j = 0
+            ws.write(exc_row, j, (operarios[i]['identificacion']).encode('utf-8'), font_style)
+            j = j + 1
+            ws.write(exc_row, j, (operarios[i]['first_name']).encode('utf-8'), font_style)
+            j = j + 1
+            ws.write(exc_row, j, (operarios[i]['last_name']).encode('utf-8'), font_style)
+            j = j + 1
+            ws.write(exc_row, j, (operarios[i]['telefono']).encode('utf-8'), font_style)
+            j = j + 1
+            servi = operarios[i]['servicios']
+            print servi
+            while j < len(servi):
+                ws.write(exc_row, j, (servi[j-4]['total']), font_style)
+                j = j + 1
+            # end while
+            i = i + 1
+            exc_row = exc_row + 1
+        # end for
+        wb.save(response)
+        return response
+    # end class
 # end class

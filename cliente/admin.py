@@ -22,8 +22,7 @@ class VehiculoAdmin(admin.ModelAdmin):
 class ClienteAdmin(admin.ModelAdmin):
     inlines = [VehiculoInline]
     list_display = ['identificacion','nombre', 'apellidos','dirreccion','correo','celular','nacimiento']
-    list_filter = ['nombre', 'apellidos', 'identificacion']
-    search_fields = ['nombre', 'apellidos', 'identificacion']
+    search_fields = ['identificacion', 'nombre', 'apellidos', 'identificacion','correo','celular']
     form = forms.AddCliente
 # end class
 

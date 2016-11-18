@@ -18,13 +18,21 @@ class ServicioInline(admin.StackedInline):
 
 class ServicioAdmin(admin.ModelAdmin):
     form = forms.ServicioForm
-    list_display = ['orden', 'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
+    list_display = ['orden','placa_nombre',  'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
     list_filter = [('inicio', DateRangeEX)]
     search_fields = ['orden__id', ]
     list_editable = ['estado']
 
+    def placa_nombre(self, obj):
+        if obj.orden.vehiculo.placa :
+            return obj.orden.vehiculo.placa
+        # end if
+        return '-----'
+    #
+
     def get_queryset(self, request):
         queryset = super(ServicioAdmin, self).get_queryset(request)
+        """
         drf__inicio__gte = request.GET.get('drf__inicio__gte', False)
         drf__inicio__lte = request.GET.get('drf__inicio__lte', False)
         now = datetime.now()
@@ -35,12 +43,16 @@ class ServicioAdmin(admin.ModelAdmin):
                 inicio__day = now.day,
             )
         # end if
-        return queryset
+        """
+        return queryset.filter(status=True).order_by('-id')
     # end def
 
     class Media:
         js = ('/static/operacion/js/servicio.js',)
     # end class
+
+    placa_nombre.allow_tags = True
+    placa_nombre.short_description = 'Placa'
 # end class
 
 
@@ -115,6 +127,7 @@ class OrdenAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = super(OrdenAdmin, self).get_queryset(request)
+        """
         drf__inicio__gte = request.GET.get('drf__entrada__gte', False)
         drf__inicio__lte = request.GET.get('drf__entrada__lte', False)
         now = datetime.now()
@@ -125,7 +138,9 @@ class OrdenAdmin(admin.ModelAdmin):
                 entrada__day = now.day,
             )
         # end if
-        return queryset
+        """
+
+        return queryset.order_by('-id')
     # end def
 
     class Media:
