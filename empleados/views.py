@@ -89,11 +89,11 @@ class WsOperariosServicio(supra.SupraListView):
     # end def
 # end class
 
+
 class WsOperarios(supra.SupraListView):
     model = models.Empleado
     list_display = ['nombre', 'id']
     paginate_by = 1000
-
 
     class Renderer:
         apellidos = 'last_name'
@@ -105,7 +105,7 @@ class WsOperarios(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(WsOperarios, self).get_queryset()
-        return queryset
+        return queryset.order_by('-last_name')
 # end class
 
 

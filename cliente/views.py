@@ -22,7 +22,7 @@ class TiposVehiculos(supra.SupraListView):
 class VehiculoInfo(supra.SupraListView):
     model = models.Vehiculo
     search_key = 'q'
-    list_display = ['placa', 'nombre', 'apellidos', 'cedula', 'tipov', 'tipo', 'id']
+    list_display = ['placa', 'marca', 'kilometraje', 'color', 'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
     search_fields = ['placa']
     list_filter = ['placa']
     paginate_by = 5
@@ -32,6 +32,7 @@ class VehiculoInfo(supra.SupraListView):
         nombre = 'cliente__nombre'
         apellidos = 'cliente__apellidos'
         tipov = 'tipo__nombre'
+        celular = 'cliente__celular'
     # end class
 # end class# end if
 
@@ -74,7 +75,7 @@ class ClienteList(supra.SupraListView):
     model = models.Cliente
     search_key = 'q'
     list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
-    search_fields = ['identificacion', ]
+    search_fields = ['identificacion', 'celular']
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
