@@ -268,8 +268,6 @@ class TiposServicioSource(resources.ModelResource):
 # end class
 
 
-reports.register_export(operacion.TipoServicio, TiposServicioSource, "informes/informe.html")
-reports.register_export(operacion.Orden, OrdenSource, "informes/ordenes.html")
 reports.register_export(empleados.Empleado, OperarioSource, "informes/empledosproducido.html")
 reports.register_export(empleados.Cajero, CajeroSource, "informes/empledosproducido.html")
 reports.register_export(empleados.Recepcionista, RecepcionistaSource, "informes/empledosproducido.html")
