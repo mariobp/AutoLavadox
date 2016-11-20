@@ -245,11 +245,16 @@ class CancelService(supra.SupraFormView):
 
 class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
-    list_display = ['id', 'placa', 'ordenv', 'tipo']
+    list_display = ['ordenv', 'placa', 'marca', 'kilometraje', 'color', 'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
     paginate_by = 5
 
     class Renderer:
         ordenv = 'orden__id'
+        cedula = 'cliente__identificacion'
+        nombre = 'cliente__nombre'
+        apellidos = 'cliente__apellidos'
+        tipov = 'tipo__nombre'
+        celular = 'cliente__celular'
     # end class
 
     def get_queryset(self):

@@ -1,5 +1,18 @@
 angular.module('App', ['ngMaterial', 'ngMessages'])
+.run(function($window, $rootScope) {
+      $rootScope.online = navigator.onLine;
+      $window.addEventListener("offline", function() {
+        $rootScope.$apply(function() {
+          $rootScope.online = false;
+        });
+      }, false);
 
+      $window.addEventListener("online", function() {
+        $rootScope.$apply(function() {
+          $rootScope.online = true;
+        });
+      }, false);
+})
 .config(function($interpolateProvider, $mdThemingProvider) {
 	$interpolateProvider.startSymbol('[[');
 	$interpolateProvider.endSymbol(']]');
@@ -27,6 +40,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.operarios = [];
 		$scope.totalService= 0;
 		$scope.habilitarOrden = true;
+		$scope.bandera = false;
 		$scope.serv1 = false;
 		$scope.serv2 = false;
 		$scope.serv3 = false;
@@ -34,7 +48,31 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serv5 = false;
 		$scope.serv6 = false;
 		$scope.serv7 = false;
+		$scope.dialogOpen = false;
 		var data = {};
+
+
+		$scope.$watch('online', function(newStatus) {
+				if (newStatus) {
+	        if ($scope.bandera) {
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Internet Ok....')
+								.hideDelay(3000)
+								.position('top right')
+						);
+	        }
+				}else {
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Sin internet....')
+								.hideDelay(3000)
+								.position('top right')
+						);
+	          $scope.bandera = true;
+				}
+		});
+
     $scope.dialogError = function(){
       $mdDialog.show(
         $mdDialog.alert()
@@ -75,29 +113,36 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				return deferred.promise;
     };
 
+		function informacion(selectedItem){
+			console.log(selectedItem);
+			if (selectedItem.nombre && selectedItem.apellidos ) {
+				$scope.info.nombre = selectedItem.nombre + " " + selectedItem.apellidos;
+			}
+			if (selectedItem.color) {
+				$scope.info.color = selectedItem.color;
+			}if (selectedItem.marca) {
+				$scope.info.marca = selectedItem.marca;
+			}if (selectedItem.kilometraje) {
+				$scope.info.kilometraje = selectedItem.kilometraje;
+			}
+			$scope.info.celular = selectedItem.celular;
+			$scope.info.identificacion = selectedItem.cedula;
+			$scope.info.tipo = selectedItem.tipov;
+		}
+
 		//Vehiculo seleccionado
     $scope.vehiculoActual = function($event){
 			function placaRepetida(vehiculo) {
 					return vehiculo.placa === $scope.selectedItem.placa;
 			}
       if ($scope.selectedItem) {
-					if ($scope.selectedItem.nombre && $scope.selectedItem.apellidos ) {
-						$scope.info.nombre = $scope.selectedItem.nombre + " " + $scope.selectedItem.apellidos;
-					}
-					if ($scope.selectedItem.color) {
-						$scope.info.color = $scope.selectedItem.color;
-					}if ($scope.selectedItem.marca) {
-						$scope.info.marca = $scope.selectedItem.marca;
-					}if ($scope.selectedItem.kilometraje) {
-						$scope.info.kilometraje = $scope.selectedItem.kilometraje;
-					}
-					$scope.info.celular = $scope.selectedItem.celular;
-          $scope.info.identificacion = $scope.selectedItem.cedula;
-          $scope.info.tipo = $scope.selectedItem.tipov;
+					informacion($scope.selectedItem);
           if (!$scope.placas.includes($scope.selectedItem)) {
 							var result = $scope.placas.find(placaRepetida);
 						if (result === undefined) {
 						   $scope.placas.push($scope.selectedItem);
+			 				 $scope.selectedPlaca = $scope.selectedItem;
+ 							 $scope.serviciosList();
 						}else {
 							if (result.ordenv) {
 									$mdToast.show(
@@ -136,6 +181,24 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
+				informacion($scope.selectedPlaca);
+				function porasignar() {
+					$http({
+						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
+						'method': 'GET'
+					}).then(function doneCallbacks(response){
+								var data = response.data.object_list;
+								data.forEach(function(item){
+									$scope.servicios.push(item);
+								});
+								$scope.serv6 = false;
+					}, function failCallbacks(response){
+							$scope.serv6 = false;
+							if (response.status == 500) {
+								$scope.dialogError();
+							}
+					});
+				}
 				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serv5 = true;
 					$scope.serv6 = true;
@@ -176,24 +239,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serv5 = false;
 							$scope.dialogError();
 					});
-
-					function porasignar() {
-						$http({
-							'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
-							'method': 'GET'
-						}).then(function doneCallbacks(response){
-									var data = response.data.object_list;
-									data.forEach(function(item){
-										$scope.servicios.push(item);
-									});
-									$scope.serv6 = false;
-						}, function failCallbacks(response){
-								$scope.serv6 = false;
-								if (response.status == 500) {
-									$scope.dialogError();
-								}
-						});
-					}
 				}
 		};
 
@@ -524,17 +569,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-if="!cargando">' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
-											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
-											 '<md-not-found>' +
-												'No hay hay resultados para "[[search2]]"' +
-											'</md-not-found>' +
-											'<div ng-messages="form.identificacion.$error" ng-if="form.autocompleteField.$touched">' +
-												'<div ng-message="required">Este campo es requerido.</div>' +
-											'</div>' +
-										'</md-autocomplete >' +
-		              '</div>' +
-									'<div layout="row">' +
 		                '<md-autocomplete md-input-name="celular" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.celular]]</span>' +
 											 '<md-not-found>' +
@@ -545,7 +579,18 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											'</div>' +
 										'</md-autocomplete >' +
 		              '</div>' +
-		              '<div layout="row" layout-xs="column" >' +
+									'<div layout="row">' +
+		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
+											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
+											 '<md-not-found>' +
+												'No hay hay resultados para "[[search2]]"' +
+											'</md-not-found>' +
+											'<div ng-messages="form.identificacion.$error" ng-if="form.autocompleteField.$touched">' +
+												'<div ng-message="required">Este campo es requerido.</div>' +
+											'</div>' +
+										'</md-autocomplete >' +
+		              '</div>' +
+		              '<div layout="row">' +
 		                '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100" >' +
 		                   '<label>Nombre</label>' +
 		                    '<input type="text" ng-model="data.nombre" name="nombre" value="" required>' +
@@ -561,7 +606,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		                    '</div>' +
 		                '</md-input-container>' +
 		              '</div>' +
-										'<div layout="row" layout-xs="column">' +
+										'<div layout="row">' +
 			                  '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
 			                    '<label>Placa</label>' +
 			                    '<input ng-model="data.placa" name="placa" required>' +
@@ -577,7 +622,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								          '</div>' +
 								        '</md-input-container>' +
 			              '</div>' +
-										'<div layout="row" layout-xs="column">' +
+										'<div layout="row">' +
 											'<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
 												'<label>Color</label>' +
 												'<input ng-model="data.color" name="color" required>' +
@@ -618,6 +663,11 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						'</md-dialog>',
 					controller: 'DialogController',
           clickOutsideToClose:true,
+					fullscreen: true,
+					onComplete: function(scope, element){
+							angular.element(document.querySelector(".md-dialog-container").style.zIndex=80);
+					},
+					parent: angular.element(document.querySelector('#popupContainer')),
 					locals: {
 						tipos:$scope.tipos,
 						placa: $scope.search,
@@ -628,8 +678,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
            // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
+					angular.element(document.querySelector(".md-dialog-container").style.zIndex=101);
           $scope.status = 'You said the information was "' + answer + '".';
         }, function(a) {
+					angular.element(document.querySelector(".md-dialog-container").style.zIndex=101);
           $scope.status = 'You cancelled the dialog.';
         });
     };
@@ -948,12 +1000,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											$mdToast.simple()
 												.textContent("Placa: " + item.placa[0])
 												.position('top right')
-								        .hideDelay(3000)
+								        .hideDelay(3000);
 											} else if (item.tipo) {
 												$mdToast.simple()
 													.textContent("Tipo: " + item.tipo[0])
 													.position('top right')
-									        .hideDelay(3000)
+									        .hideDelay(3000);
 											}
 										});
 								}
