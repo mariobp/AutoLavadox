@@ -116,3 +116,7 @@ md-tab-content{
 .no-height{
   height: 0;
 }
+
+.md-dialog-container {
+  z-index: 101;
+}
