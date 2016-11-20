@@ -6,6 +6,11 @@ import forms
 from datetime import datetime
 from daterange_filter.filter import DateRangeFilter
 from django.utils.html import format_html
+from import_export.admin import ImportExportMixin, ExportMixin
+from import_export.resources import ModelResource
+from import_export.formats import base_formats
+import report
+from import_export import fields
 # Register your models here.
 
 
@@ -15,13 +20,43 @@ class ServicioInline(admin.StackedInline):
     extra = 1
 # end class
 
+class Serviciossource(ModelResource):
+    Nombre = fields.Field()
+    Operario = fields.Field()
+    Valor = fields.Field()
+    comision = fields.Field()
 
-class ServicioAdmin(admin.ModelAdmin):
+    class Meta:
+        model = models.Servicio
+        fields = ('inicio','fin')
+
+    def dehydrate_Nombre(self, obj):
+        return '%s ' % (obj.tipo.nombre)
+
+    def dehydrate_Operario(self, obj):
+        if obj.operario :
+            re = ''
+            for o in obj.operario.all():
+                re = re + ('%s %s, '%(o.first_name,o.last_name))
+            # end for
+            return re
+        # end if
+        return '--- ----'
+
+    def dehydrate_Valor(self, obj):
+        return '%s ' % (obj.valor)
+
+    def dehydrate_Comision(self, obj):
+        return '%s ' % (obj.comision)
+
+class ServicioAdmin(ExportMixin, admin.ModelAdmin):
     form = forms.ServicioForm
     list_display = ['orden','placa_nombre',  'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
     list_filter = [('inicio', DateRangeEX)]
     search_fields = ['orden__id', ]
     list_editable = ['estado']
+    resource_class = Serviciossource
+    formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 
     def placa_nombre(self, obj):
         if obj.orden.vehiculo.placa :

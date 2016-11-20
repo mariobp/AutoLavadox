@@ -15,7 +15,6 @@ def render_to_pdf(template_src, context_dict):
     context = Context(context_dict)
     html = template.render(context)
     result = StringIO.StringIO()
-
     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("utf-8")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
@@ -35,7 +34,6 @@ class PDF(base_formats.Format):
     # end def
 
     def export_data(self, dataset, **kwargs):
-        print "desde el pdf ", kwargs, kwargs
         return render_to_pdf(
             self.template,
             {
