@@ -41,6 +41,7 @@ class Orden(models.Model):
     valor = models.FloatField(default=0)
     comision = models.FloatField(default=0, verbose_name="Comisión")
     cerrada = models.BooleanField(default=False)
+    cancelada = models.BooleanField(default=False)
     pago = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
 

@@ -51,12 +51,10 @@ class TiposServiciosPorAplicar(supra.SupraListView):
     def get_queryset(self):
         tipo = self.request.GET.get('tipo', False)
         orden = self.request.GET.get('orden', False)
-        print "lo q llega a este ",tipo, orden
         queryset = super(TiposServiciosPorAplicar, self).get_queryset()
         obj = queryset
         oper_ser = models.Servicio.objects.filter(orden__id=int(orden) if orden and re.match('^\d+$', orden) else 0, status=True).values_list('tipo__id', flat=True)
-        print list(oper_ser)
-        return queryset.filter(vehiculos__id=int(tipo) if tipo and re.match('^\d+$', tipo) else 0).exclude(id__in=list(oper_ser))
+        return queryset.filter(vehiculos__id=int(tipo) if tipo and re.match('^\d+$', tipo) else 0).exclude(id__in=list(oper_ser)).order_by('nombre')
     # end def
 # end class
 
@@ -73,10 +71,10 @@ class AddOrdenForm(supra.SupraFormView):
 # end class
 
 
-class CloseOrden(supra.SupraFormView):
+class CancelarOrden(supra.SupraFormView):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
-        return super(CloseOrden, self).dispatch(*args, **kwargs)
+        return super(CancelarOrden, self).dispatch(*args, **kwargs)
     # end def
 
     def get(self, request, *args, **kwargs):
@@ -86,6 +84,34 @@ class CloseOrden(supra.SupraFormView):
             if orden:
                 orden.fin = timezone.now()
                 orden.cerrada = True
+                orden.cancelada = True
+                # end if
+                orden.save()
+                return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
+            # end if
+        # end if
+        return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
+    # end def
+#end class
+
+
+class CloseOrden(supra.SupraFormView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(CloseOrden, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        if re.match('^\d+$', id):
+            observacion = self.request.GET.get('observacion', False)
+            orden = models.Orden.objects.filter(id=int(id)).first()
+            if orden:
+                orden.fin = timezone.now()
+                orden.cerrada = True
+                if observacion:
+                    orden.observacion = observacion
+                # end if
                 orden.save()
                 return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
             # end if
@@ -134,7 +160,7 @@ class WsServiciosOrden(supra.SupraListView):
     def get_queryset(self):
         queryset = super(WsServiciosOrden, self).get_queryset()
         obj = queryset.filter(status=True)
-        return obj
+        return obj.order_by('tipo__nombre')
     # end def
 # end class
 
@@ -259,7 +285,7 @@ class GetOrdenesPendientes(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(GetOrdenesPendientes, self).get_queryset()
-        return queryset.filter(orden__pago=False)
+        return queryset.filter(orden__cerrada=False)
     # end def
 # end class
 

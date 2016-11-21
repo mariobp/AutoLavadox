@@ -34,30 +34,32 @@
             <section>
                 <md-subheader class="color-fondo">
                       <md-autocomplete  md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(search)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
-                        <span md-highlight-text="search">[[vehiculo.placa]]</span>
+                        <span md-highlight-text="search">[[vehiculo.placa]] - [[vehiculo.nombre]] [[vehiculo.apellidos]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
                           <a style="color:red" ng-click="nuevo(searchText)" >Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
-                      <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Tipo de vehículo</label>
-                            <input ng-model="info.tipo" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Marca</label>
-                            <input ng-model="info.marca" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Color</label>
-                            <input ng-model="info.color" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Kilometraje</label>
-                            <input ng-model="info.kilometraje" ng-disabled="true">
-                          </md-input-container>
-                      </div>
+                      <form class="" action="" novalidate>
+                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
+                            <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Tipo de vehículo</label>
+                              <input ng-model="info.tipo" ng-disabled="true">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Marca</label>
+                              <input ng-model="info.marca" ng-disabled="true">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Color</label>
+                              <input ng-model="info.color" ng-disabled="true">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Kilometraje</label>
+                              <input ng-model="info.kilometraje" ng-disabled="true">
+                            </md-input-container>
+                        </div>
+                      </form>
                       <md-divider></md-divider>
                       <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
                           <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
@@ -140,6 +142,7 @@
                            </p>
                         </div>
                         <div flex="50">
+                          <md-button ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
                           <md-button ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
                         </div>
                        </div>

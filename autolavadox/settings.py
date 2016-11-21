@@ -201,12 +201,20 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default2': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
         'USER': 'luxury',
         'PASSWORD': 'Exile*74522547',
         'HOST': 'localhost',
+        'POST': '5432'
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lavado',
+        'USER': 'postgres',
+        'PASSWORD': 'Exile*74522547',
+        'HOST': '104.236.33.228',
         'POST': '5432'
     }
 }

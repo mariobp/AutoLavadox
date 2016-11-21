@@ -40,6 +40,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.operarios = [];
 		$scope.totalService= 0;
 		$scope.habilitarOrden = true;
+    $scope.cancelarOrden = true;
 		$scope.bandera = false;
 		$scope.serv1 = false;
 		$scope.serv2 = false;
@@ -114,7 +115,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     };
 
 		function informacion(selectedItem){
-			console.log(selectedItem);
 			if (selectedItem.nombre && selectedItem.apellidos ) {
 				$scope.info.nombre = selectedItem.nombre + " " + selectedItem.apellidos;
 			}
@@ -191,6 +191,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								data.forEach(function(item){
 									$scope.servicios.push(item);
 								});
+                $scope.serv5 = false;
 								$scope.serv6 = false;
 					}, function failCallbacks(response){
 							$scope.serv6 = false;
@@ -202,7 +203,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serv5 = true;
 					$scope.serv6 = true;
-					console.log("entrooo a serv5");
 					$scope.serviciosPorHacer = [];
 					$http({
 						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipo,
@@ -211,6 +211,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.servicios = response.data.object_list;
 							$scope.serv5 = false;
 							$scope.serv6 = false;
+              habilitar2();
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
 							$scope.serv6 = false;
@@ -232,11 +233,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$scope.servicios.push(item);
 							});
 							valor(data);
+              porasignar();
 							habilitar();
-							$scope.serv5 = false;
-							porasignar();
+              habilitar2();
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
+            	$scope.serv6 = false;
 							$scope.dialogError();
 					});
 				}
@@ -245,7 +247,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		function valor(array){
 			$scope.totalService = 0;
 			array.forEach(function(item){
-
 				if (item.status) {
 					$scope.totalService+= item.valor;
 				}
@@ -301,6 +302,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serv6 = false;
 							servicio.status = !servicio.status;
 							removeFromArray($scope.serviciosPorHacer, servicio);
+              habilitar2();
 							valor($scope.serviciosPorHacer);
 							$mdToast.show(
 								$mdToast.simple()
@@ -345,6 +347,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.orden = response.data.id;
 									data.tipo = servicio.id;
 									data.operario = servicio.operario;
+                  habilitar2();
 									registrarServicio(data, servicio);
 										$mdToast.show(
 											$mdToast.simple()
@@ -473,6 +476,71 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		}
 
+		function habilitar2(){
+				var n = $scope.servicios.length;
+				if (n > 0) {
+					$scope.servicios.forEach(function(item){
+							if(!item.status){
+								n = n - 1;
+							}
+					});
+					if(n===0){
+						$scope.cancelarOrden = false;
+					}else {
+						$scope.cancelarOrden = true;
+					}
+				}else {
+					$scope.cancelarOrden = true;
+				}
+		}
+
+    $scope.cancelado = function() {
+        if (!$scope.selectedPlaca.ordenv) {
+          	$scope.servicios = [];
+            removeFromArray($scope.placas, $scope.selectedPlaca);
+        		$mdToast.show(
+							$mdToast.simple()
+								.textContent('Cancelado Exitoso')
+				        .hideDelay(3000)
+							  .position('top right')
+						);
+        }else {
+            var confirm = $mdDialog.confirm()
+    	      .title('Estas seguro que quieres cancelar la Orden?')
+    				.textContent('No se podra modificar una vez se cancele.')
+    	      .ariaLabel('DD')
+    	      .ok('Si')
+    	      .cancel('Cancelar');
+    				$mdDialog.show(confirm).then(function() {
+              $scope.serv6 = true;
+    					$scope.serv7 = true;
+    					$http({
+    						'url': '/operacion/cancelar/orden/'+$scope.selectedPlaca.ordenv,
+    						'method': 'GET'
+    					}).then(function doneCallbacks(response){
+    							$scope.servicios = [];
+    							$scope.serviciosPorHacer = [];
+                  removeFromArray($scope.placas, $scope.selectedPlaca);
+    							valor($scope.serviciosPorHacer);
+    							$mdToast.show(
+    								$mdToast.simple()
+    									.textContent('Cancelado Exitoso')
+    					        .hideDelay(3000)
+    									.position('top right')
+    							);
+    							$scope.serv6 = false;
+    							$scope.serv7 = false;
+    					},function failCallbacks(response){
+    							if (response.status == 500) {
+    									$scope.dialogError();
+    							}
+    					});
+    				}, function() {
+
+    				});
+        }
+    };
+
 		function removeFromArray(array, element){
 			var index = array.indexOf(element);
 			if (index > -1) {
@@ -512,6 +580,33 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		$scope.cerrarOrden = function(){
+
+        function enviar(){
+        	$scope.serv6 = true;
+					$scope.serv7 = true;
+					$http({
+						'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
+						'method': 'GET'
+					}).then(function doneCallbacks(response){
+							$scope.servicios = [];
+							$scope.serviciosPorHacer = [];
+							removeFromArray($scope.placas, $scope.selectedPlaca);
+							valor($scope.serviciosPorHacer);
+							$mdToast.show(
+								$mdToast.simple()
+									.textContent('Orden finalizada')
+					        .hideDelay(3000)
+									.position('top right')
+							);
+							$scope.serv6 = false;
+							$scope.serv7 = false;
+					},function failCallbacks(response){
+							if (response.status == 500) {
+									$scope.dialogError();
+							}
+					});
+        }
+
 			  var confirm = $mdDialog.confirm()
 	      .title('Estas seguro que quieres cerrar la Orden?')
 				.textContent('No se podra modificar una vez se cierre.')
@@ -519,29 +614,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .ok('Si')
 	      .cancel('Cancelar');
 				$mdDialog.show(confirm).then(function() {
-						$scope.serv6 = true;
-						$scope.serv7 = true;
-						$http({
-							'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
-							'method': 'GET'
-						}).then(function doneCallbacks(response){
-								$scope.servicios = [];
-								$scope.serviciosPorHacer = [];
-								removeFromArray($scope.placas, $scope.selectedPlaca);
-								valor($scope.serviciosPorHacer);
-								$mdToast.show(
-									$mdToast.simple()
-										.textContent('Orden finalizada')
-						        .hideDelay(3000)
-										.position('top right')
-								);
-								$scope.serv6 = false;
-								$scope.serv7 = false;
-						},function failCallbacks(response){
-								if (response.status == 500) {
-										$scope.dialogError();
-								}
-						});
+          enviar();
 				}, function() {
 
 				});
