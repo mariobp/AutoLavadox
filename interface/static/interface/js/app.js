@@ -42,6 +42,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.habilitarOrden = true;
     $scope.cancelarOrden = true;
 		$scope.bandera = false;
+    $scope.editarVehiculo = true;
 		$scope.serv1 = false;
 		$scope.serv2 = false;
 		$scope.serv3 = false;
@@ -49,6 +50,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serv5 = false;
 		$scope.serv6 = false;
 		$scope.serv7 = false;
+    $scope.serv8 = false;
 		$scope.dialogOpen = false;
 		var data = {};
 
@@ -127,7 +129,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}
 			$scope.info.celular = selectedItem.celular;
 			$scope.info.identificacion = selectedItem.cedula;
-			$scope.info.tipo = selectedItem.tipov;
+			$scope.info.tipo = selectedItem.tipo;
+      $scope.info.placa = selectedItem.placa;
+      $scope.info.id = selectedItem.id;
+      $scope.editarVehiculo = false;
 		}
 
 		//Vehiculo seleccionado
@@ -162,6 +167,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					$scope.info.marca = "";
 					$scope.info.color = "";
 					$scope.info.kilometraje = "";
+          $scope.info.id = "";
+          $scope.info.placa = "";
       }
     };
 
@@ -621,6 +628,54 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		};
 
+    //Actualizar vehiculos
+    $scope.actualizarVehiculo = function() {
+        var data = {};
+        data.placa = $scope.info.placa;
+        data.color = $scope.info.color;
+        data.marca = $scope.info.marca;
+        data.kilometraje = $scope.info.kilometraje;
+        data.tipo = $scope.info.tipo;
+        $scope.serv8 = true;
+        $http({
+					url:'/cliente/edit/vehiculo/'+$scope.info.id+'/',
+					method: 'POST',
+					data: $httpParamSerializer(data),
+				  headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+					},
+				}).then(function doneCallbacks(response){
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Actualizado Exitoso')
+				        .hideDelay(3000)
+							  .position('top right')
+						);
+						$scope.serv8 = false;
+				}, function failCallbacks(response){
+						$scope.serv8 = false;
+						if (response.status == 400) {
+							if (response.data.placa) {
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Placa: " + response.data.placa[0])
+										.position('top right')
+						        .hideDelay(3000)
+								);
+							}else if(response.data.tipo){
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Tipo: " + response.data.tipo[0])
+										.position('top right')
+						        .hideDelay(3000)
+								);
+							}
+						}else if (response.status == 500) {
+							dialogError();
+						}
+				});
+    };
+
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
         $mdDialog.show({
@@ -921,7 +976,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							return tipo.id == response.data.tipo_id;
 						}
 						var result = tipos.find(searchTipo);
-						info.tipo = result.nombre;
+            info.id = response.data.id;
+            info.placa = response.data.placa;
+						info.tipo = result.id;
 						info.identificacion = $scope.data.identificacion;
 						info.nombre = $scope.data.nombre + " " + $scope.data.apellidos;
 						info.celular = $scope.data.celular;
@@ -1007,7 +1064,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				            var vehiculo = response.data.object_list;
 										item.id = vehiculo[0].id;
 										placas.push(item);
-										info.tipo = vehiculo[0].tipov;
+                    info.id = vehiculo[0].id;
+                    info.placa = vehiculo[0].placa;
+										info.tipo = vehiculo[0].tipo;
 										info.marca = vehiculo[0].marca;
 										info.color = vehiculo[0].color;
 										info.kilometraje = vehiculo[0].kilometraje;

@@ -49,6 +49,18 @@ class VehiculoAdd(supra.SupraFormView):
 # end class
 
 
+class VehiculoEdit(supra.SupraFormView):
+    model = models.Vehiculo
+    form_class = forms.EditVehivuloForm
+    template_name = 'cliente/addvehiculo.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(VehiculoEdit, self).dispatch(request, *args, **kwargs)
+    # end def
+# end class
+
+
 def validNum(cad):
     return re.match('^\d+$', cad)
 
