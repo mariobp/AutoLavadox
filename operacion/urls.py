@@ -12,7 +12,9 @@ urlpatterns = [
 urlpatterns += [
     url(r'^add/orden/$', views.AddOrdenForm.as_view(), name='addorden'),
     url(r'^edit/orden/(?P<pk>\d+)/$', views.AddOrdenForm.as_view(), name='editorden'),
+    url(r'^edit/observacion/(?P<pk>\d+)/$', views.ObservacionOrdenForm.as_view(), name='observacion'),
     url(r'^close/orden/(?P<pk>\d+)/$', views.CloseOrden.as_view(), name='closeorden'),
+    url(r'^list/orden/$', views.OrdenList.as_view(), name='listorden'),
     url(r'^cancelar/orden/(?P<pk>\d+)/$', views.CancelarOrden.as_view(), name='cancelarorden'),
 ]
 

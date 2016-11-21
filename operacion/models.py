@@ -37,7 +37,7 @@ class Orden(models.Model):
     recepcionista = models.ForeignKey(empleado.Recepcionista, related_name='recepcionista', null=True, blank=True)
     cajero = models.ForeignKey(empleado.Cajero, related_name='cajero', null=True, blank=True)
     vehiculo = models.ForeignKey(cliente.Vehiculo, null=True, blank=True)
-    observacion = models.CharField(max_length=1000, null=True, blank=True)
+    observacion = models.TextField(max_length=1000, null=True, blank=True)
     valor = models.FloatField(default=0)
     comision = models.FloatField(default=0, verbose_name="Comisión")
     cerrada = models.BooleanField(default=False)
