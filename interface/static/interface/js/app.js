@@ -290,7 +290,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 								.hideDelay(3000)
-								.position('top right')
+								.position('bottom right')
 						);
 				}, function failCallbacks(response){
 						if (response.status == 500) {
@@ -326,7 +326,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
 					        .hideDelay(3000)
-									.position('top right')
+									.position('bottom right')
 							);
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
@@ -372,7 +372,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											$mdToast.simple()
 												.textContent('Servicio asignado')
 								        .hideDelay(3000)
-												.position('top right')
+												.position('bottom right')
 										);
 							}, function failCallbacks(response){
 									$scope.serv5 = false;
@@ -532,7 +532,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Cancelado Exitoso')
 				        .hideDelay(3000)
-							  .position('top right')
+							  .position('bottom right')
 						);
         }else {
             var confirm = $mdDialog.confirm()
@@ -556,7 +556,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     								$mdToast.simple()
     									.textContent('Cancelado Exitoso')
     					        .hideDelay(3000)
-    									.position('top right')
+    									.position('bottom right')
     							);
     							$scope.serv6 = false;
     							$scope.serv7 = false;
@@ -596,7 +596,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 				        .hideDelay(3000)
-								.position('top right')
+								.position('bottom right')
 						);
 						$scope.serv7 = false;
 				},function failCallbacks(response){
@@ -626,7 +626,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Orden finalizada')
 					        .hideDelay(3000)
-									.position('top right')
+									.position('bottom right')
 							);
 							$scope.serv6 = false;
 							$scope.serv7 = false;
@@ -960,7 +960,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						$mdToast.simple()
 							.textContent('Guardando...')
 							.hideDelay(3000)
-							.position('top right')
+							.position('bottom right')
 					);
 					selectCheck();
 					dataSend.orden = orden;
@@ -979,7 +979,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Guardado Exitoso')
 					        .hideDelay(3000)
-									.position('top right')
+									.position('bottom right')
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
@@ -1031,7 +1031,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
                $mdToast.simple()
                  .textContent('Observación guardada')
                  .hideDelay(3000)
-                 .position('top right')
+                 .position('bottom right')
              );
          }, function failCallbacks(response){
              $scope.cargando2 = false;
