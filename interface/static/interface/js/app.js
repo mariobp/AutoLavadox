@@ -185,10 +185,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 
+    //Funcion que se llama cuando se selecciona otra placa en la lista de servicios
+    $scope.placaChange = function(){
+      $scope.cancelarOrden = true;
+    	informacion($scope.selectedPlaca);
+      $scope.serviciosList();
+    };
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
-				informacion($scope.selectedPlaca);
 				function porasignar() {
 					$http({
 						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
@@ -219,6 +224,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serv5 = false;
 							$scope.serv6 = false;
               habilitar2();
+              valor($scope.serviciosPorHacer);
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
 							$scope.serv6 = false;
@@ -255,7 +261,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			$scope.totalService = 0;
 			array.forEach(function(item){
 				if (item.status) {
-					$scope.totalService+= item.valor;
+					$scope.totalService+= item.costo;
 				}
 			});
 		}
@@ -277,6 +283,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						valor($scope.serviciosPorHacer);
 						$scope.serv5 = false;
 						$scope.serv6 = false;
+            habilitar2();
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
@@ -301,6 +308,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				$mdDialog.show(confirm).then(function() {
 					$scope.serv5 = true;
 					$scope.serv6 = true;
+        	valor($scope.serviciosPorHacer);
 					$http({
 						'url':'/operacion/cancel/servicio/'+servicio.id+'/',
 						'method': 'GET'
@@ -354,6 +362,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.orden = response.data.id;
 									data.tipo = servicio.id;
 									data.operario = servicio.operario;
+                	valor($scope.serviciosPorHacer);
                   habilitar2();
 									registrarServicio(data, servicio);
 										$mdToast.show(
@@ -497,7 +506,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						$scope.cancelarOrden = true;
 					}
 				}else {
-					$scope.cancelarOrden = true;
+					$scope.cancelarOrden = false;
 				}
 		}
 
@@ -645,6 +654,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							'Content-Type': 'application/x-www-form-urlencoded'
 					},
 				}).then(function doneCallbacks(response){
+            $scope.tipochange();
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Actualizado Exitoso')
@@ -674,6 +684,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							dialogError();
 						}
 				});
+    };
+
+    //Cambio de tipo
+
+    $scope.tipochange = function(){
+      $scope.selectedPlaca.tipo = $scope.info.tipo;
+      $scope.serviciosList();
     };
 
 		//Agrega nuevo vechiculo

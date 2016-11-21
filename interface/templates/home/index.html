@@ -44,10 +44,10 @@
                         <div layout="row" layout-align="center center" ng-if="serv8" style="height:94px">
                             <md-progress-circular ng-disabled="!serv8" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                         </div>
-                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row"  layout-align="center center" ng-hide="serv8">
+                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row"  layout-align="center none" ng-hide="serv8">
                             <md-input-container  flex-gt-sm flex-gt-xs flex-gt-dm>
                               <label>Tipo de vehículo</label>
-                              <md-select name="tipo"  ng-model="info.tipo" ng-disabled="editarVehiculo">
+                              <md-select name="tipo" ng-model="info.tipo" ng-disabled="editarVehiculo || cancelarOrden">
                                   <md-option ng-repeat="tipo in tipos"  value="[[tipo.id]]">
         						                [[tipo.nombre]]
         						              </md-option>
@@ -96,7 +96,7 @@
                        <md-card-content>
                           <h3>En servicio</h3>
                           <md-divider></md-divider>
-                          <md-radio-group ng-model="selectedPlaca" ng-change="serviciosList()">
+                          <md-radio-group ng-model="selectedPlaca" ng-change="placaChange()">
                             <div ng-repeat='placa in placas' class="row">
                               <div flex layout='row' layout-padding layout-align="start center" >
                                 <md-radio-button flex

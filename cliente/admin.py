@@ -12,10 +12,17 @@ class VehiculoInline(admin.StackedInline):
 # end class
 
 
+class HistorialInline(admin.StackedInline):
+    model = models.HistorialKilometraje
+    readonly_fields = ('kilometraje', 'fecha')
+# end class
+
+
 class VehiculoAdmin(admin.ModelAdmin):
     list_display = ['placa', 'tipo', 'cliente']
     list_filter = ['placa', 'tipo', 'cliente']
     form = forms.AddVehivuloFormAdmin
+    inlines = [HistorialInline,]
 # end class
 
 
