@@ -34,30 +34,44 @@
             <section>
                 <md-subheader class="color-fondo">
                       <md-autocomplete  md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(search)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
-                        <span md-highlight-text="search">[[vehiculo.placa]]</span>
+                        <span md-highlight-text="search">[[vehiculo.placa]] - [[vehiculo.nombre]] [[vehiculo.apellidos]]</span>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
                           <a style="color:red" ng-click="nuevo(searchText)" >Click para registrar</a>
                         </md-not-found>
                       </md-autocomplete >
-                      <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Tipo de vehículo</label>
-                            <input ng-model="info.tipo" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Marca</label>
-                            <input ng-model="info.marca" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Color</label>
-                            <input ng-model="info.color" ng-disabled="true">
-                          </md-input-container>
-                          <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
-                            <label>Kilometraje</label>
-                            <input ng-model="info.kilometraje" ng-disabled="true">
-                          </md-input-container>
-                      </div>
+                      <form ng-cloak name="form" ng-submit="form.$valid && actualizarVehiculo()" novalidate>
+                        <div layout="row" layout-align="center center" ng-if="serv8" style="height:94px">
+                            <md-progress-circular ng-disabled="!serv8" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+                        </div>
+                        <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row"  layout-align="center none" ng-hide="serv8">
+                            <md-input-container  flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Tipo de vehículo</label>
+                              <md-select name="tipo" ng-model="info.tipo" ng-disabled="editarVehiculo || cancelarOrden">
+                                  <md-option ng-repeat="tipo in tipos"  value="[[tipo.id]]">
+        						                [[tipo.nombre]]
+        						              </md-option>
+                              </md-select>
+                            </md-input-container>
+                            <md-input-container  flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Marca</label>
+                              <input ng-model="info.marca" ng-disabled="editarVehiculo">
+                            </md-input-container>
+                            <md-input-container flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Color</label>
+                              <input ng-model="info.color" ng-disabled="editarVehiculo">
+                            </md-input-container>
+                            <md-input-container  flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <label>Kilometraje</label>
+                              <input ng-model="info.kilometraje" ng-disabled="editarVehiculo">
+                            </md-input-container>
+                            <md-input-container ng-hide="editarVehiculo"  flex-gt-sm flex-gt-xs flex-gt-dm>
+                              <md-button class="md-primary md-raised" type="submit">
+                  						    Actualizar vehículo
+                  						</md-button>
+                            </md-input-container>
+                        </div>
+                      </form>
                       <md-divider></md-divider>
                       <div layout-gt-sm="row" layout-gt-xs="row" layout-gt-dm="row">
                           <md-input-container class="md-block" flex-gt-sm flex-gt-xs flex-gt-dm>
@@ -82,7 +96,7 @@
                        <md-card-content>
                           <h3>En servicio</h3>
                           <md-divider></md-divider>
-                          <md-radio-group ng-model="selectedPlaca" ng-change="serviciosList()">
+                          <md-radio-group ng-model="selectedPlaca" ng-change="placaChange()">
                             <div ng-repeat='placa in placas' class="row">
                               <div flex layout='row' layout-padding layout-align="start center" >
                                 <md-radio-button flex
@@ -140,6 +154,8 @@
                            </p>
                         </div>
                         <div flex="50">
+                          <md-button ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
+                          <md-button ng-disabled="habilitarObservacion" ng-click="agregarObservacion($event)" class="md-raised md-primary">Observación</md-button>
                           <md-button ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
                         </div>
                        </div>

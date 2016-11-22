@@ -40,7 +40,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.operarios = [];
 		$scope.totalService= 0;
 		$scope.habilitarOrden = true;
+    $scope.habilitarObservacion = true;
+    $scope.cancelarOrden = true;
 		$scope.bandera = false;
+    $scope.editarVehiculo = true;
 		$scope.serv1 = false;
 		$scope.serv2 = false;
 		$scope.serv3 = false;
@@ -48,6 +51,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.serv5 = false;
 		$scope.serv6 = false;
 		$scope.serv7 = false;
+    $scope.serv8 = false;
 		$scope.dialogOpen = false;
 		var data = {};
 
@@ -114,7 +118,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     };
 
 		function informacion(selectedItem){
-			console.log(selectedItem);
 			if (selectedItem.nombre && selectedItem.apellidos ) {
 				$scope.info.nombre = selectedItem.nombre + " " + selectedItem.apellidos;
 			}
@@ -127,7 +130,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			}
 			$scope.info.celular = selectedItem.celular;
 			$scope.info.identificacion = selectedItem.cedula;
-			$scope.info.tipo = selectedItem.tipov;
+			$scope.info.tipo = selectedItem.tipo;
+      $scope.info.placa = selectedItem.placa;
+      $scope.info.id = selectedItem.id;
+      $scope.editarVehiculo = false;
 		}
 
 		//Vehiculo seleccionado
@@ -162,6 +168,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					$scope.info.marca = "";
 					$scope.info.color = "";
 					$scope.info.kilometraje = "";
+          $scope.info.id = "";
+          $scope.info.placa = "";
       }
     };
 
@@ -178,10 +186,16 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 
+    //Funcion que se llama cuando se selecciona otra placa en la lista de servicios
+    $scope.placaChange = function(){
+      $scope.cancelarOrden = true;
+    	informacion($scope.selectedPlaca);
+      $scope.serviciosList();
+    };
 
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
-				informacion($scope.selectedPlaca);
+        habilitar3();
 				function porasignar() {
 					$http({
 						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
@@ -191,6 +205,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								data.forEach(function(item){
 									$scope.servicios.push(item);
 								});
+                $scope.serv5 = false;
 								$scope.serv6 = false;
 					}, function failCallbacks(response){
 							$scope.serv6 = false;
@@ -202,7 +217,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				if (!$scope.selectedPlaca.ordenv) {
 					$scope.serv5 = true;
 					$scope.serv6 = true;
-					console.log("entrooo a serv5");
 					$scope.serviciosPorHacer = [];
 					$http({
 						'url': '/operacion/ws/tipo/servicio/?q='+ $scope.selectedPlaca.tipo,
@@ -211,6 +225,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.servicios = response.data.object_list;
 							$scope.serv5 = false;
 							$scope.serv6 = false;
+              habilitar2();
+              valor($scope.serviciosPorHacer);
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
 							$scope.serv6 = false;
@@ -232,11 +248,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$scope.servicios.push(item);
 							});
 							valor(data);
+              porasignar();
 							habilitar();
-							$scope.serv5 = false;
-							porasignar();
+              habilitar2();
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
+            	$scope.serv6 = false;
 							$scope.dialogError();
 					});
 				}
@@ -245,9 +262,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		function valor(array){
 			$scope.totalService = 0;
 			array.forEach(function(item){
-
 				if (item.status) {
-					$scope.totalService+= item.valor;
+					$scope.totalService+= item.costo;
 				}
 			});
 		}
@@ -269,11 +285,12 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						valor($scope.serviciosPorHacer);
 						$scope.serv5 = false;
 						$scope.serv6 = false;
+            habilitar2();
 						$mdToast.show(
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 								.hideDelay(3000)
-								.position('top right')
+								.position('bottom right')
 						);
 				}, function failCallbacks(response){
 						if (response.status == 500) {
@@ -284,6 +301,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 
 		$scope.changeCheck = function (servicio) {
+      habilitar3();
 			if(servicio.status){
 			  var confirm = $mdDialog.confirm()
 	      .title('Estas seguro que quieres cancelar?')
@@ -293,6 +311,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				$mdDialog.show(confirm).then(function() {
 					$scope.serv5 = true;
 					$scope.serv6 = true;
+        	valor($scope.serviciosPorHacer);
 					$http({
 						'url':'/operacion/cancel/servicio/'+servicio.id+'/',
 						'method': 'GET'
@@ -301,12 +320,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serv6 = false;
 							servicio.status = !servicio.status;
 							removeFromArray($scope.serviciosPorHacer, servicio);
+              habilitar2();
 							valor($scope.serviciosPorHacer);
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Servicio cancelado')
 					        .hideDelay(3000)
-									.position('top right')
+									.position('bottom right')
 							);
 					}, function failCallbacks(response){
 							$scope.serv5 = false;
@@ -345,12 +365,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									data.orden = response.data.id;
 									data.tipo = servicio.id;
 									data.operario = servicio.operario;
+                	valor($scope.serviciosPorHacer);
+                  habilitar2();
 									registrarServicio(data, servicio);
 										$mdToast.show(
 											$mdToast.simple()
 												.textContent('Servicio asignado')
 								        .hideDelay(3000)
-												.position('top right')
+												.position('bottom right')
 										);
 							}, function failCallbacks(response){
 									$scope.serv5 = false;
@@ -454,6 +476,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		$scope.operariosList();
 		$scope.ordenesPendientes();
 
+    //Habilita o desabilita el boton de cerrar orden, siempre y cuando todos los servicios por hacer esten listos
 		function habilitar(){
 				var n = $scope.serviciosPorHacer.length;
 				if (n > 0) {
@@ -472,6 +495,81 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}
 
 		}
+
+    //Habilita o desabilita el boton de cancelar orden, siempre y cuando no tenga ningun servicio asignano
+		function habilitar2(){
+				var n = $scope.servicios.length;
+				if (n > 0) {
+					$scope.servicios.forEach(function(item){
+							if(!item.status){
+								n = n - 1;
+							}
+					});
+					if(n===0){
+						$scope.cancelarOrden = false;
+					}else {
+						$scope.cancelarOrden = true;
+					}
+				}else {
+					$scope.cancelarOrden = false;
+				}
+		}
+
+    //Habilita o desabilita el boton de agregar observacion, siempre y cuando se cree una orden
+    function habilitar3(){
+      if ($scope.selectedPlaca.ordenv) {
+        $scope.habilitarObservacion = false;
+      }else {
+        $scope.habilitarObservacion = true;
+      }
+    }
+
+    $scope.cancelado = function() {
+        if (!$scope.selectedPlaca.ordenv) {
+          	$scope.servicios = [];
+            removeFromArray($scope.placas, $scope.selectedPlaca);
+        		$mdToast.show(
+							$mdToast.simple()
+								.textContent('Cancelado Exitoso')
+				        .hideDelay(3000)
+							  .position('bottom right')
+						);
+        }else {
+            var confirm = $mdDialog.confirm()
+    	      .title('Estas seguro que quieres cancelar la Orden?')
+    				.textContent('No se podra modificar una vez se cancele.')
+    	      .ariaLabel('DD')
+    	      .ok('Si')
+    	      .cancel('Cancelar');
+    				$mdDialog.show(confirm).then(function() {
+              $scope.serv6 = true;
+    					$scope.serv7 = true;
+    					$http({
+    						'url': '/operacion/cancelar/orden/'+$scope.selectedPlaca.ordenv,
+    						'method': 'GET'
+    					}).then(function doneCallbacks(response){
+    							$scope.servicios = [];
+    							$scope.serviciosPorHacer = [];
+                  removeFromArray($scope.placas, $scope.selectedPlaca);
+    							valor($scope.serviciosPorHacer);
+    							$mdToast.show(
+    								$mdToast.simple()
+    									.textContent('Cancelado Exitoso')
+    					        .hideDelay(3000)
+    									.position('bottom right')
+    							);
+    							$scope.serv6 = false;
+    							$scope.serv7 = false;
+    					},function failCallbacks(response){
+    							if (response.status == 500) {
+    									$scope.dialogError();
+    							}
+    					});
+    				}, function() {
+
+    				});
+        }
+    };
 
 		function removeFromArray(array, element){
 			var index = array.indexOf(element);
@@ -498,7 +596,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$mdToast.simple()
 								.textContent('Guardado Exitoso')
 				        .hideDelay(3000)
-								.position('top right')
+								.position('bottom right')
 						);
 						$scope.serv7 = false;
 				},function failCallbacks(response){
@@ -512,6 +610,33 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		$scope.cerrarOrden = function(){
+
+        function enviar(){
+        	$scope.serv6 = true;
+					$scope.serv7 = true;
+					$http({
+						'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
+						'method': 'GET'
+					}).then(function doneCallbacks(response){
+							$scope.servicios = [];
+							$scope.serviciosPorHacer = [];
+							removeFromArray($scope.placas, $scope.selectedPlaca);
+							valor($scope.serviciosPorHacer);
+							$mdToast.show(
+								$mdToast.simple()
+									.textContent('Orden finalizada')
+					        .hideDelay(3000)
+									.position('bottom right')
+							);
+							$scope.serv6 = false;
+							$scope.serv7 = false;
+					},function failCallbacks(response){
+							if (response.status == 500) {
+									$scope.dialogError();
+							}
+					});
+        }
+
 			  var confirm = $mdDialog.confirm()
 	      .title('Estas seguro que quieres cerrar la Orden?')
 				.textContent('No se podra modificar una vez se cierre.')
@@ -519,34 +644,68 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 	      .ok('Si')
 	      .cancel('Cancelar');
 				$mdDialog.show(confirm).then(function() {
-						$scope.serv6 = true;
-						$scope.serv7 = true;
-						$http({
-							'url': '/operacion/close/orden/'+$scope.selectedPlaca.ordenv,
-							'method': 'GET'
-						}).then(function doneCallbacks(response){
-								$scope.servicios = [];
-								$scope.serviciosPorHacer = [];
-								removeFromArray($scope.placas, $scope.selectedPlaca);
-								valor($scope.serviciosPorHacer);
-								$mdToast.show(
-									$mdToast.simple()
-										.textContent('Orden finalizada')
-						        .hideDelay(3000)
-										.position('top right')
-								);
-								$scope.serv6 = false;
-								$scope.serv7 = false;
-						},function failCallbacks(response){
-								if (response.status == 500) {
-										$scope.dialogError();
-								}
-						});
+          enviar();
 				}, function() {
 
 				});
 
 		};
+
+    //Actualizar vehiculos
+    $scope.actualizarVehiculo = function() {
+        var data = {};
+        data.placa = $scope.info.placa;
+        data.color = $scope.info.color;
+        data.marca = $scope.info.marca;
+        data.kilometraje = $scope.info.kilometraje;
+        data.tipo = $scope.info.tipo;
+        $scope.serv8 = true;
+        $http({
+					url:'/cliente/edit/vehiculo/'+$scope.info.id+'/',
+					method: 'POST',
+					data: $httpParamSerializer(data),
+				  headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+					},
+				}).then(function doneCallbacks(response){
+            $scope.tipochange();
+						$mdToast.show(
+							$mdToast.simple()
+								.textContent('Actualizado Exitoso')
+				        .hideDelay(3000)
+							  .position('top right')
+						);
+						$scope.serv8 = false;
+				}, function failCallbacks(response){
+						$scope.serv8 = false;
+						if (response.status == 400) {
+							if (response.data.placa) {
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Placa: " + response.data.placa[0])
+										.position('top right')
+						        .hideDelay(3000)
+								);
+							}else if(response.data.tipo){
+								$mdToast.show(
+									$mdToast.simple()
+										.textContent("Tipo: " + response.data.tipo[0])
+										.position('top right')
+						        .hideDelay(3000)
+								);
+							}
+						}else if (response.status == 500) {
+							dialogError();
+						}
+				});
+    };
+
+    //Cambio de tipo
+
+    $scope.tipochange = function(){
+      $scope.selectedPlaca.tipo = $scope.info.tipo;
+      $scope.serviciosList();
+    };
 
 		//Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
@@ -685,6 +844,57 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           $scope.status = 'You cancelled the dialog.';
         });
     };
+
+    $scope.agregarObservacion = function(ev){
+        var dialog = $mdDialog.show({
+          template:
+          '<md-dialog aria-label="observacion">' +
+            '<form ng-cloak name="form" ng-submit="form.$valid && guardar()" novalidate>' +
+              '<md-toolbar>' +
+                '<div class="md-toolbar-tools">' +
+                  '<h2>Observación</h2>' +
+                  '<span flex></span>' +
+                '</div>' +
+              '</md-toolbar>' +
+              '<md-dialog-content>' +
+            		'<div layout="row" layout-align="center center" ng-if="cargando2" style="height:300px">' +
+					  				'<md-progress-circular ng-disabled="!cargando2" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
+					  		'</div>' +
+                '<div class="md-dialog-content" ng-if="!cargando2">' +
+                  '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
+                    '<label>Observación</label>' +
+                    '<textarea ng-model="data.observacion" name="observacion"  md-maxlength="500" rows="5" required>' +
+                    '</textarea>' +
+                    '<div ng-messages="form.observacion.$error">' +
+                      '<div ng-message="required">Este campo es requerido.</div>' +
+                    '</div>' +
+                  '</md-input-container>' +
+                '</div>'+
+              '</md-dialog-content>'+
+              '<md-dialog-actions layout="row" ng-if="!cargando2">'+
+                '<md-button class="md-raised red" ng-click="closeDialog()" flex>'+
+                  'Cancelar'+
+                '</md-button>'+
+                '<md-button class="md-primary md-raised" type="submit" flex>'+
+                  'Guardar'+
+                '</md-button>'+
+              '</md-dialog-actions>'+
+            '</form>'+
+          '</md-dialog>',
+          controller: 'Dialog3Controller',
+          locals: {
+            orden: $scope.selectedPlaca.ordenv,
+            dialogError: $scope.dialogError,
+          },
+          clickOutsideToClose:true,
+          parent: angular.element(document.querySelector('#popupContainer')),
+          targetEvent: ev,
+        }).then(function(){
+
+        },function(){
+
+        });
+    };
 })
 .controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, tipo, dialogError){
 		$scope.closeDialog = function() {
@@ -750,7 +960,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						$mdToast.simple()
 							.textContent('Guardando...')
 							.hideDelay(3000)
-							.position('top right')
+							.position('bottom right')
 					);
 					selectCheck();
 					dataSend.orden = orden;
@@ -769,7 +979,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 								$mdToast.simple()
 									.textContent('Guardado Exitoso')
 					        .hideDelay(3000)
-									.position('top right')
+									.position('bottom right')
 							);
 					}, function failCallbacks(response){
 							if (response.status == 500) {
@@ -779,6 +989,59 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				}
 		};
 })
+
+.controller('Dialog3Controller', function($scope, $mdDialog, $http, $httpParamSerializer, $mdToast, orden, dialogError){
+    $scope.data = {};
+    $scope.closeDialog = function() {
+			  $mdDialog.hide();
+		};
+    $scope.cargando2 = false;
+
+    $scope.single = function() {
+        $scope.cargando2 = true;
+				$http({
+					'url':'/operacion/list/orden/?q='+orden,
+					'method': 'GET'
+				}).then(function doneCallbacks(response){
+						$scope.data.observacion = response.data.object_list[0].observacion;
+            $scope.cargando2 = false;
+				}, function failCallbacks(response){
+            $scope.cargando2 = false;
+						if (response.status == 500) {
+								$scope.dialogError();
+						}
+				});
+    };
+
+    $scope.single();
+
+    $scope.guardar = function() {
+        $scope.cargando2 = true;
+       	$http({
+           'url': '/operacion/edit/observacion/'+ orden +'/',
+            'method': 'POST',
+            'data': $httpParamSerializer($scope.data),
+             headers: {
+                 'Content-Type': 'application/x-www-form-urlencoded'
+             },
+         }).then(function doneCallbacks(response){
+             $mdDialog.hide();
+             $scope.cargando2 = false;
+             $mdToast.show(
+               $mdToast.simple()
+                 .textContent('Observación guardada')
+                 .hideDelay(3000)
+                 .position('bottom right')
+             );
+         }, function failCallbacks(response){
+             $scope.cargando2 = false;
+             if (response.status == 500) {
+                 dialogError();
+             }
+         });
+    };
+})
+
 .controller('DialogController', function($scope, $q, $http, $mdDialog, $mdToast, $httpParamSerializer, placa, placas, tipos, info, dialogError){
 		$scope.tipos = tipos;
 		$scope.data = {};
@@ -848,7 +1111,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							return tipo.id == response.data.tipo_id;
 						}
 						var result = tipos.find(searchTipo);
-						info.tipo = result.nombre;
+            info.id = response.data.id;
+            info.placa = response.data.placa;
+						info.tipo = result.id;
 						info.identificacion = $scope.data.identificacion;
 						info.nombre = $scope.data.nombre + " " + $scope.data.apellidos;
 						info.celular = $scope.data.celular;
@@ -934,7 +1199,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				            var vehiculo = response.data.object_list;
 										item.id = vehiculo[0].id;
 										placas.push(item);
-										info.tipo = vehiculo[0].tipov;
+                    info.id = vehiculo[0].id;
+                    info.placa = vehiculo[0].placa;
+										info.tipo = vehiculo[0].tipo;
 										info.marca = vehiculo[0].marca;
 										info.color = vehiculo[0].color;
 										info.kilometraje = vehiculo[0].kilometraje;

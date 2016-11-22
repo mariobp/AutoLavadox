@@ -85,7 +85,7 @@ class WsOperariosServicio(supra.SupraListView):
     def get_queryset(self):
         queryset = super(WsOperariosServicio, self).get_queryset()
         r = self.request.GET.get('q', False)
-        return models.Empleado.objects.filter(servicio__id=r if re.search('^\d+$',r) else 0)
+        return queryset.filter(servicio__id=r if re.search('^\d+$',r) else 0)
     # end def
 # end class
 
@@ -105,7 +105,7 @@ class WsOperarios(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(WsOperarios, self).get_queryset()
-        return queryset.order_by('-last_name')
+        return queryset.order_by('first_name', 'last_name')
 # end class
 
 

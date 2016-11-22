@@ -14,6 +14,32 @@ class AddVehivuloForm(forms.ModelForm):
         model = models.Vehiculo
         exclude = ()
     # end class
+
+    def save(self, commit=True):
+        vehiculo = super(AddVehivuloForm, self).save(commit)
+        if vehiculo.kilometraje:
+            historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
+            historial.save()
+        # end if
+        return vehiculo
+    # end def
+# end class
+
+
+class EditVehivuloForm(forms.ModelForm):
+    class Meta:
+        model = models.Vehiculo
+        exclude = ('cliente', )
+    # end class
+
+    def save(self, commit=True):
+        vehiculo = super(EditVehivuloForm, self).save(commit)
+        if vehiculo.kilometraje:
+            historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
+            historial.save()
+        # end if
+        return vehiculo
+    # end def
 # end class
 
 
@@ -28,14 +54,23 @@ class AddClienteForm(forms.ModelForm):
 class AddVehivuloFormAdmin(forms.ModelForm):
     class Meta:
         model = models.Vehiculo
-        fields = ['placa', 'tipo', 'cliente']
-        exclude = []
+        exclude = ()
         widgets = {
             'tipo': Select2Widget,
             'cliente': Select2Widget
         }
     # end class
+
+    def save(self, commit=True):
+        vehiculo = super(AddVehivuloFormAdmin, self).save(commit)
+        if vehiculo.kilometraje:
+            historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
+            historial.save()
+        # end if
+        return vehiculo
+    # end def
 # end class
+
 
 class AddCliente(forms.ModelForm):
     def __init__(self, *args, **kwargs):

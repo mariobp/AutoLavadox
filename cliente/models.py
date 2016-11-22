@@ -54,9 +54,9 @@ class Cliente(models.Model):
 
 class Vehiculo(models.Model):
     placa = models.CharField(max_length=100, unique=True)
-    color = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    marca = models.CharField(max_length=100, unique=True, null=True, blank=True)
-    kilometraje = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    color = models.CharField(max_length=100, null=True, blank=True)
+    marca = models.CharField(max_length=100, null=True, blank=True)
+    kilometraje = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.ForeignKey(TipoVehiculo)
     cliente = models.ForeignKey(Cliente, null=True, blank=True)
 
@@ -71,5 +71,17 @@ class Vehiculo(models.Model):
     class Meta:
         verbose_name = "Vehiculo"
         verbose_name_plural = "Vehiculos"
+    # end class
+# end class
+
+
+class HistorialKilometraje(models.Model):
+    vehiculo = models.ForeignKey(Vehiculo)
+    kilometraje = models.CharField(max_length=100)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Historial de Kilometraje"
+        verbose_name_plural = "Historial de Kilometraje"
     # end class
 # end class

@@ -208,6 +208,14 @@ DATABASES = {
         'PASSWORD': 'Exile*74522547',
         'HOST': 'localhost',
         'POST': '5432'
+    },
+    'default2': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lavado',
+        'USER': 'postgres',
+        'PASSWORD': 'Exile*74522547',
+        'HOST': '104.236.33.228',
+        'POST': '5432'
     }
 }
 

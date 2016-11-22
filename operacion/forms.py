@@ -17,6 +17,15 @@ class AddOrdenForm(forms.ModelForm):
 # end class
 
 
+class ObservacionOrdenForm(forms.ModelForm):
+    class Meta:
+        model = models.Orden
+        fields = ['observacion', ]
+        exclude = ['fin', 'cajero', 'recepcionista', 'valor', 'comision', 'vehiculo']
+    # end class
+# end class
+
+
 class AddServicioForm(forms.ModelForm):
     class Meta:
         model = models.Servicio
