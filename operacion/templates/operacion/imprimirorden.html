@@ -1,3 +1,5 @@
+{% load humanize %}
+{% load operacion_extra%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -137,19 +139,17 @@
       {% for ser in s %}
       <tr>
           <td>{{ ser.tipo.nombre }}</td>
-          <td>{{ ser.tipo.costo }}</td>
+          <td>$ {{ ser.tipo.costo|intcomma|split_valor }}</td>
       </tr>
       {% endfor %}
       <tr>
           <td>Total</td>
-          <td>{{ o.valor }}</td>
+          <td>$ {{ o.valor|intcomma|split_valor }}</td>
       </tr>
   </table>
+  <div><span>{% if o.pago %}PAGADA{% else %}NO PAGADA{% endif %} </span></div>
 </div>
-
-
     </div>
-
     <br>
     <br>
     <input class="hiden" type="button" onclick="printDiv('printableArea')" value="Re-imprimir!" />

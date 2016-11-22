@@ -20,7 +20,6 @@ class ServicioInline(admin.StackedInline):
     extra = 1
 # end class
 
-
 class Serviciossource(ModelResource):
     Nombre = fields.Field()
     Operario = fields.Field()
@@ -49,7 +48,6 @@ class Serviciossource(ModelResource):
 
     def dehydrate_Comision(self, obj):
         return '%s ' % (obj.comision)
-
 
 class ServicioAdmin(ExportMixin, admin.ModelAdmin):
     form = forms.ServicioForm
@@ -144,10 +142,10 @@ class OrdenInforme(ModelResource):
 
 class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     inlines = [ServicioInline]
-    list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'cancelada', 'cerrada', 'pago', 'imprimir_orden']
+    list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision','cerrada', 'pago', 'imprimir_orden']
     list_filter = [('fin', DateRangeEX)]
     search_fields = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
-    list_editable = ['cerrada', 'cancelada', 'pago', 'vehiculo']
+    list_editable = ['cerrada', 'pago','vehiculo']
     form = forms.OrdenForm
     list_display_links = ['id_reporte']
     resource_class = OrdenInforme
@@ -186,10 +184,16 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     # end def
 
     def nombre_cliente(self, obj):
+        if obj.vehiculo is None:
+            return '--- ---'
+        # end if
         return '%s %s'%(obj.vehiculo.cliente.nombre,obj.vehiculo.cliente.apellidos) if obj.vehiculo.cliente else '---- -----'
     #end
 
     def identificacion_cliente(self, obj):
+        if obj.vehiculo is None:
+            return '--- ---'
+        # end if
         return '%s'%(obj.vehiculo.cliente.identificacion) if obj.vehiculo.cliente else '-------'
     #end
 
