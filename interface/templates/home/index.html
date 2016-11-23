@@ -22,8 +22,8 @@
                     <!-- fill up the space between left and right area -->
                     <span flex></span>
                     <div class=""></div>
-                    <md-button>
-                      <md-icon md-svg-src="media/iconos/ic_exit.svg" aria-label="Exit" ng-click="cerrarSesion()">
+                    <md-button ng-click="cerrarSesion()">
+                      <md-icon md-svg-src="media/iconos/ic_exit.svg" aria-label="Exit">
                         <md-tooltip md-direction="bottom">
                           Cerrar sesión
                         </md-tooltip>
@@ -89,7 +89,6 @@
                             <input ng-model="info.celular" ng-disabled="true">
                           </md-input-container>
                       </div>
-                      <md-divider></md-divider>
                 </md-subheader>
             </section>
             <md-content>
