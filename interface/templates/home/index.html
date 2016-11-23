@@ -115,6 +115,7 @@
                    <md-card-content>
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
+                          <md-content class="md-padding">
                             <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
@@ -128,20 +129,23 @@
                                 <h2 class="text-center">Seleccione una placa</h2>
                              </div>
                            </div>
+                         </md-content>
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
-                          <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
-                              <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
-                          </div>
-                          <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0 && !serv7">
-                            <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
-                            <p>[[servicio.nombre]]</p>
-                          </md-list-item>
-                          <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0 && !serv7">
-                            <div flex="100">
-                               <h2 class="text-center">No hay ningún servicio por hacer</h12>
+                          <md-content class="md-padding">
+                            <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
+                                <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
-                          </div>
+                            <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0 && !serv7">
+                              <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
+                              <p>[[servicio.nombre]]</p>
+                            </md-list-item>
+                            <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0 && !serv7">
+                              <div flex="100">
+                                 <h2 class="text-center">No hay ningún servicio por hacer</h12>
+                              </div>
+                            </div>
+                          </md-content>
                         </md-tab>
                      </md-tabs>
                    </md-card-content>
