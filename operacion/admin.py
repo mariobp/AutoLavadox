@@ -96,8 +96,56 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
     placa_nombre.short_description = 'Placa'
 # end class
 
+class OrdenInforme(ModelResource):
 
-class OrdenAdmin(admin.ModelAdmin):
+    Identificador = fields.Field()
+    Valor = fields.Field()
+    comision = fields.Field()
+    Terminada = fields.Field()
+    Pago = fields.Field()
+    Vehiculo = fields.Field()
+
+
+    class Meta:
+        model = models.Orden
+        fields = ('entrada','fin')
+    # end class
+
+    def dehydrate_Identificador(self, obj):
+        i = 0
+        men = ''
+        while i < 10 - len(str(obj.pk)):
+            men = men + '0'
+            i = i+1
+        # end ford
+        t = '%s%d' % (str(men), obj.pk)
+        print t
+        return u'%s' % (t)
+    # end def
+
+    def dehydrate_Valor(self, obj):
+        return '%s ' % (obj.valor)
+    # end def
+
+    def dehydrate_Comision(self, obj):
+        return '%s ' % (obj.comision)
+    # end def
+
+    def dehydrate_Terminada(self, obj):
+        return '%s ' % (str('Si') if obj.cerrada else str('No'))
+    # end def
+
+    def dehydrate_Pago(self, obj):
+        return '%s ' % (str('Si') if obj.pago else str('No'))
+    # end def
+
+    def dehydrate_Vehiculo(self, obj):
+        return '%s' % (obj.vehiculo.placa)
+    # end def
+# end class
+
+
+class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     inlines = [ServicioInline]
     list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'cancelada', 'cerrada', 'pago', 'imprimir_orden']
     list_filter = ['cancelada', 'cerrada', 'pago', ('fin', DateRangeEX)]
@@ -105,6 +153,8 @@ class OrdenAdmin(admin.ModelAdmin):
     list_editable = ['cerrada', 'cancelada', 'pago', 'vehiculo']
     form = forms.OrdenForm
     list_display_links = ['id_reporte']
+    resource_class = OrdenInforme
+    formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 
     def save_model(self, request, obj, form, change):
         obj.save()
@@ -206,9 +256,50 @@ class OrdenAdmin(admin.ModelAdmin):
 # end class
 
 
-class TipoAdmin(admin.ModelAdmin):
+class TipoInforme(ModelResource):
+
+    Nombre = fields.Field()
+    Costo = fields.Field()
+    Comision = fields.Field()
+    Tipo = fields.Field()
+
+
+    class Meta:
+        model = models.TipoServicio
+        fields = ()
+    # end class
+
+    def dehydrate_Nombre(self, obj):
+        return '%s ' % (obj.nombre)
+    # end def
+
+    def dehydrate_Costo(self, obj):
+        return '%s ' % (obj.costo)
+    # end def
+
+    def dehydrate_Comision(self, obj):
+        return '%s ' % (obj.comision)
+    # end def
+
+    def dehydrate_Tipo_Vehiculo(self, obj):
+        r = 'No asociado'
+        if obj.vehiculos :
+            r = ''
+            for x in obj.vehiculos.all :
+                r = r + (', %s'%x.nombre)
+            # end for
+        # end if
+        return '%s' % (str(r))
+    # end def
+
+# end class
+
+
+class TipoAdmin(ExportMixin, admin.ModelAdmin):
     list_display = ('nombre', 'costo', 'comision', 'state')
     filter_horizontal = ('vehiculos',)
+    resource_class = TipoInforme
+    formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 # end class
 
 exileui.register(models.TipoServicio, TipoAdmin)
