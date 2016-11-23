@@ -61,9 +61,11 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 
     def placa_nombre(self, obj):
-        if obj.orden.vehiculo :
-            if obj.orden.vehiculo.placa :
-                return obj.orden.vehiculo.placa
+        if obj.orden :
+            if obj.orden.vehiculo :
+                if obj.orden.vehiculo.placa :
+                    return obj.orden.vehiculo.placa
+                # end if
             # end if
         # end if
         return '-----'
