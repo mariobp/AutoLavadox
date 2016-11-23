@@ -151,6 +151,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
  							 $scope.serviciosList();
 						}else {
 							if (result.ordenv) {
+                  $scope.selectedPlaca = result;
+				          $scope.serviciosList();
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent('Ya existe una orden para la placa '+ result.placa)
