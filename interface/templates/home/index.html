@@ -34,7 +34,9 @@
             <section>
                 <md-subheader class="color-fondo">
                       <md-autocomplete  md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(search)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
-                        <span md-highlight-text="search">[[vehiculo.placa]] - [[vehiculo.nombre]] [[vehiculo.apellidos]]</span>
+                        <md-item-template>
+                          <span md-highlight-text="search">[[vehiculo.placa]] - [[vehiculo.nombre]] [[vehiculo.apellidos]]</span>
+                        </md-item-template>
                          <md-not-found>
                           No hay hay resultados para "[[search]]"
                           <a style="color:red" ng-click="nuevo(searchText)" >Click para registrar</a>
