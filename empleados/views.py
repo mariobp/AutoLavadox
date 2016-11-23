@@ -74,18 +74,12 @@ class WsOperariosServicio(supra.SupraListView):
     model = models.Empleado
     search_key = 'q'
     list_display = ['id']
-    search_fields = ['id']
+    search_fields = ['id', 'servicio__id']
     paginate_y = 1000
 
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super(WsOperariosServicio, self).dispatch(*args, **kwargs)
-    # end def
-
-    def get_queryset(self):
-        queryset = super(WsOperariosServicio, self).get_queryset()
-        r = self.request.GET.get('q', False)
-        return queryset.filter(servicio__id=r if re.search('^\d+$',r) else 0)
     # end def
 # end class
 

@@ -456,7 +456,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			        data: $scope.operarios,
 			        servicio: servicio,
 							orden: $scope.selectedPlaca.ordenv,
-							tipo: $scope.selectedPlaca.tipo,
 							dialogError: $scope.dialogError,
 			      },
 			      clickOutsideToClose:true,
@@ -946,7 +945,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 })
-.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, tipo, dialogError){
+.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, dialogError){
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
@@ -1004,6 +1003,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		}
 
 		$scope.asignarOperario = function(){
+      console.log(servicio);
 				if(orden){
 					$mdDialog.hide();
 					$mdToast.show(
@@ -1014,7 +1014,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					);
 					selectCheck();
 					dataSend.orden = orden;
-					dataSend.tipo = tipo;
+					dataSend.tipo = servicio.tipo;
 					$http({
 						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
 						 'method': 'POST',
