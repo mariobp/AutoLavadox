@@ -27,8 +27,21 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 .controller('AppCtrl', function($scope, $http, $location, $mdDialog, $httpParamSerializer, $mdToast, $q, $window) {
 	  $window.onbeforeunload = function(){
-	    return confirm("Are you sure you want to navigate away from this page");
+      if ($scope.cerrar) {
+          $window.opener = null;
+          $window.close();
+         return true;
+      } else {
+         var con = confirm("Are you sure you want to navigate away from this page");
+         if (con) {
+            return con;
+         } else {
+           $scope.cerrar = false;
+           return false;
+         }
+      }
 	  };
+    $scope.cerrar = false;
     $scope.search = "";
     $scope.vehiculos = [];
     $scope.placas = [];
@@ -91,14 +104,25 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Servicio para cerrar sesión
     $scope.cerrarSesion = function(){
-        $http({
-          'url': '/empleados/logout/',
-          'method': 'GET',
-        }).then(function doneCallbacks(response){
-            location.href = "/empleados/login/";
-        }, function failCallbacks(response){
-            $scope.dialogError();
-        });
+      console.log("entro");
+      var confirm = $mdDialog.confirm()
+      .title('Estas seguro que quieres cerrar la sesión?')
+      .ariaLabel('Sesion')
+      .ok('Si')
+      .cancel('No');
+      $mdDialog.show(confirm).then(function() {
+          $scope.cerrar = true;
+          $http({
+            'url': '/empleados/logout/',
+            'method': 'GET',
+          }).then(function doneCallbacks(response){
+              location.href = "/empleados/login/";
+          }, function failCallbacks(response){
+              $scope.dialogError();
+          });
+      }, function() {
+
+      });
     };
 
 		//Lista de vehiculos
