@@ -119,16 +119,18 @@
                             <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
-                           <md-list-item ng-repeat="servicio in servicios" ng-if="servicios.length>0 && !serv5 && !serv6">
-                             <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
-                             <p>[[servicio.nombre]]</p>
-                              <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
-                           </md-list-item>
-                           <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
-                             <div flex="100">
-                                <h2 class="text-center">Seleccione una placa</h2>
+                            <md-list flex ng-if="servicios.length>0 && !serv5 && !serv6">
+                               <md-list-item ng-repeat="servicio in servicios">
+                                 <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
+                                 <p>[[servicio.nombre]]</p>
+                                  <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
+                               </md-list-item>
+                             </md-list>
+                             <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
+                               <div flex="100">
+                                  <h2 class="text-center">Seleccione una placa</h2>
+                               </div>
                              </div>
-                           </div>
                          </md-content>
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
@@ -136,10 +138,12 @@
                             <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
                                 <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
-                            <md-list-item ng-repeat="servicio in serviciosPorHacer" ng-if="serviciosPorHacer.length>0 && !serv7">
-                              <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
-                              <p>[[servicio.nombre]]</p>
-                            </md-list-item>
+                            <md-list flex  ng-if="serviciosPorHacer.length>0 && !serv7">
+                              <md-list-item ng-repeat="servicio in serviciosPorHacer">
+                                <md-checkbox  ng-model="servicioSelect" ng-checked="servicio.estado" ng-click="servicioListo(servicio)"></md-checkbox>
+                                <p>[[servicio.nombre]]</p>
+                              </md-list-item>
+                            </md-list>
                             <div layout="row" layout-align="center center" ng-if="serviciosPorHacer.length==0 && !serv7">
                               <div flex="100">
                                  <h2 class="text-center">No hay ningún servicio por hacer</h12>
