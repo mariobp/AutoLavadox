@@ -153,6 +153,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.humanize',
     'django.contrib.staticfiles',
     'nested_admin',
     'django_select2',
@@ -208,16 +209,9 @@ DATABASES = {
         'PASSWORD': 'Exile*74522547',
         'HOST': 'localhost',
         'POST': '5432'
-    },
-    'default2': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lavado',
-        'USER': 'postgres',
-        'PASSWORD': 'Exile*74522547',
-        'HOST': '104.236.33.228',
-        'POST': '5432'
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
