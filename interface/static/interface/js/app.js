@@ -728,7 +728,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'<div layout="row" layout-align="center center" ng-if="cargando" style="height:200px">' +
 						  				'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
 						  		'</div>' +
-						      '<div class="md-dialog-content" ng-if="!cargando">' +
+						      '<div class="md-dialog-content" ng-hide="cargando">' +
 									'<div layout="row">' +
 		                '<md-autocomplete md-input-name="celular" md-input-maxlength="10" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.celular]]</span>' +
@@ -1056,12 +1056,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			  $mdDialog.hide();
 		};
 
-		$scope.textChange2 = function(ev) {
-				$scope.identificacion = this.search2;
+		$scope.textChange2 = function(search) {
+      console.log(search);
+				$scope.identificacion = search;
 		};
 
-		$scope.textChange3 = function(ev) {
-				$scope.celular = this.search3;
+		$scope.textChange3 = function(search) {
+      console.log(search);
+				$scope.celular = search;
 		};
 
 		$scope.clienteActual = function(ev) {
@@ -1074,7 +1076,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
     $scope.listClientes = function(searchText){
-			console.log(searchText);
 				var deferred = $q.defer();
 				if (searchText===undefined) {
 					searchText = "";
