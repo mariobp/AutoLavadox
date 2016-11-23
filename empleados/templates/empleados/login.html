@@ -10,7 +10,7 @@
 
 <body>
     <div id="sheet">
-        <div id="logo" {% if user.is_authenticated or form.errors or form.non_field_errors %}class="err"{% endif %} style="background-image: url('/media/logo/icono.png');"></div>
+        <div id="logo" {% if user.is_authenticated or form.errors or form.non_field_errors %}class="err"{% endif %} style="background-image: url('/media/logo/carrito_mojado.png');"></div>
         {% if form.errors and not form.non_field_errors %}
         <p class="errornote">
             <i class="micon">error_outline</i> {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
