@@ -13,7 +13,9 @@ $(document).on('ready',function(){
       var f2 = new Date(parseInt(r2[1]), parseInt(r2[0])-1 , parseInt(r2[2]));
       console.log(f2 >f1);
       if(f2 >f1){
-        window.location.href = "/operacion/generar/excel/mservicio/";
+        var d1 = r1[2]+"-"+r1[0]+"-"+r1[1];
+        var d2 = r2[2]+"-"+r2[0]+"-"+r2[1];
+        window.location.href = "/operacion/generar/excel/mservicio/?ini="+d1+"&fin="+d2;
         console.log("llego aca");
         }else{
           alert("La fecha de Fin de periodo debe ser mayor, a la de inicio.")

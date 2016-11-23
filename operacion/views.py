@@ -17,6 +17,7 @@ from django.views.generic import View
 from datetime import date
 import json
 from django.db import connection
+import xlwt
 
 
 class TiposServicios(supra.SupraListView):
@@ -368,33 +369,38 @@ class ReporteMServicio(View):
         d1='%s-%s-%s' % (f1[2], f1[0], f1[1])
         d2='%s-%s-%s' % (f2[2], f2[0], f2[1])
         """
+        print ini,fin,request.GET
         estado = request.GET.get('estado', False)
         r = 0
         lista = list()
-        response = HttpResponse(content_type='text/csv')
-        response[
-            'Content-Disposition'] = 'attachment; filename="Reporte Servicio mas demorados .csv"'
-        writer = csv.writer(response)
-        writer.writerow(['Luxury'.encode('utf-8')])
-        writer.writerow(['Fecha de inicio para el reporte'.encode('utf-8'), ''.encode(
-            'utf-8'), ''.encode('utf-8'), 'Fecha de fin para el reporte'.encode('utf-8')])
-        lista.append(u'Servicio'.encode('utf-8'))
-        lista.append(u'Minutos'.encode('utf-8'))
-        writer.writerow(lista)
-        sql = '''select get_tiempo_servicio('2016-11-15','2016-12-01')'''
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Reporte tiempo empleados.xls'
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet("Servicios")
+        r=0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        ws.write(0,1,'Luxury'.encode('utf-8'),font_style)
+        ws.write(1,0,'Fecha de inicio para el reporte'.encode('utf-8'), font_style)
+        ws.write(1,1,ini.encode('utf-8'), font_style)
+        ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
+        ws.write(1,3,fin.encode('utf-8'), font_style)
+        exc_row=2
+        sql = 'select get_tiempo_servicio(\'%s\',\'%s\')'%(ini,fin)
         cursor = connection.cursor()
         cursor.execute(sql)
         row = cursor.fetchone()
         print row[0]
         rt = row[0]
-        r = 0
+        r = 2
+        font_style = xlwt.XFStyle()
+        font_style.alignment.wrap = 1
         while r < len(rt):
-            li = list()
-            li.append((rt[r]['nombre']).encode('utf-8'))
-            li.append((rt[r]['total']).encode('utf-8'))
-            writer.writerow(li)
+            ws.write(r, 0, (rt[r]['nombre']).encode('utf-8'), font_style)
+            ws.write(r, 1, (rt[r]['total']).encode('utf-8'), font_style)
             r = r + 1
         # end for
+        wb.save(response)
         return response
     # end class
 # end class

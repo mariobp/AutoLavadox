@@ -11,6 +11,9 @@ from import_export.resources import ModelResource
 from import_export.formats import base_formats
 import report
 from import_export import fields
+import time
+from datetime import date, timedelta
+import datetime
 # Register your models here.
 
 
@@ -25,7 +28,7 @@ class Serviciossource(ModelResource):
     Nombre = fields.Field()
     Operario = fields.Field()
     Valor = fields.Field()
-    comision = fields.Field()
+    Comision = fields.Field()
 
     class Meta:
         model = models.Servicio
@@ -71,6 +74,12 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
         return '-----'
     #
 
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        obj.comision = obj.tipo.comision
+        obj.save()
+    # end if
+
     def get_queryset(self, request):
         queryset = super(ServicioAdmin, self).get_queryset(request)
         """
@@ -100,7 +109,7 @@ class OrdenInforme(ModelResource):
 
     Identificador = fields.Field()
     Valor = fields.Field()
-    comision = fields.Field()
+    Comision = fields.Field()
     Terminada = fields.Field()
     Pago = fields.Field()
     Vehiculo = fields.Field()
@@ -218,19 +227,31 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = super(OrdenAdmin, self).get_queryset(request)
-        """
-        drf__inicio__gte = request.GET.get('drf__entrada__gte', False)
-        drf__inicio__lte = request.GET.get('drf__entrada__lte', False)
-        now = datetime.now()
-        if not drf__inicio__gte and not drf__inicio__lte:
+        print request.GET
+        gte = request.GET.get('drf__fin__gte', False)
+        lte = request.GET.get('drf__fin__lte', False)
+        print lte, gte,"menor mayor"
+        if gte and lte:
+            c1 = gte.split('/')
+            c2 = lte.split('/')
+            d1 = datetime.datetime(int(c1[2]),int(c1[0]),int(c1[1]),0,0,0,0)
+            d2 = datetime.datetime(int(c2[2]),int(c2[0]),int(c2[1]),0,0,0,0)
+            if d1 == d2 :
+                print "son iguales"
+                return queryset.filter(
+                    fin=d1
+                )
+            # end if
+            """
             return queryset.filter(
-                entrada__year = now.year,
-                entrada__month = now.month,
-                entrada__day = now.day,
+                fin__range=[d1,d2]
             )
+            """
+            f1 = queryset.filter(
+                fin__range=[d1,d2]
+            )
+            return f1
         # end if
-        """
-
         return queryset.order_by('-id')
     # end def
 
