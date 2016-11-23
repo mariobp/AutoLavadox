@@ -534,6 +534,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 				        .hideDelay(3000)
 							  .position('bottom right')
 						);
+            $scope.cancelarOrden = true;
         }else {
             var confirm = $mdDialog.confirm()
     	      .title('Estas seguro que quieres cancelar la Orden?')
@@ -560,6 +561,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     							);
     							$scope.serv6 = false;
     							$scope.serv7 = false;
+                  $scope.cancelarOrden = true;
     					},function failCallbacks(response){
     							if (response.status == 500) {
     									$scope.dialogError();
@@ -728,7 +730,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-if="!cargando">' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="celular" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
+		                '<md-autocomplete md-input-name="celular" md-input-maxlength="10" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.celular]]</span>' +
 											 '<md-not-found>' +
 												'No hay hay resultados para "[[search3]]"' +
@@ -739,7 +741,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 										'</md-autocomplete >' +
 		              '</div>' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="identificacion" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
+		                '<md-autocomplete md-input-name="identificacion" md-input-maxlength="20" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
 											'<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
 											 '<md-not-found>' +
 												'No hay hay resultados para "[[search2]]"' +
@@ -791,7 +793,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											'</md-input-container>' +
 											'<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
 												'<label>Kilometraje</label>' +
-												'<input ng-model="data.kilometraje" name="kilometraje" required>' +
+												'<input ng-model="data.kilometraje" name="kilometraje">' +
 												'<div ng-messages="form.kilometraje.$error">' +
 													'<div ng-message="required">Este campo es requerido.</div>' +
 												'</div>' +
