@@ -151,8 +151,7 @@ class CloseOrden(supra.SupraFormView):
 class WsServiciosOrden(supra.SupraListView):
     model = models.Servicio
     search_key = 'q'
-    list_display = ['id', 'costo', 'nombre', 'estado',
-                    'operario', 'tipo', 'status', 'operario_nombre']
+    list_display = ['id', 'costo', 'nombre', 'estado', 'tipo', 'status']
     list_filter = ['orden__id']
     search_fields = ['orden__id']
     paginate_by = 1000
@@ -160,8 +159,6 @@ class WsServiciosOrden(supra.SupraListView):
     class Renderer:
         nombre = 'tipo__nombre'
         costo = 'tipo__costo'
-        operario_n = "operario__first_name"
-        operario_a = "operario__last_name"
     # end class
 
     def checked(self, obj, row):
