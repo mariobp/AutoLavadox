@@ -29,7 +29,7 @@ class TipoVehiculo(models.Model):
 
 
 class Cliente(models.Model):
-    identificacion = models.CharField(max_length=20, unique=True,  null=True, blank=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Identificacion no valida'), 'invalid')])
+    identificacion = models.CharField(max_length=20, null=True, blank=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Identificacion no valida'), 'invalid')])
     nombre = models.CharField(max_length=100, null=True, blank=True)
     apellidos = models.CharField(max_length=300, null=True, blank=True)
     dirreccion = models.CharField(max_length=300, null=True, blank=True)
