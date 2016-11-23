@@ -151,6 +151,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
  							 $scope.serviciosList();
 						}else {
 							if (result.ordenv) {
+                  $scope.selectedPlaca = result;
+				          $scope.serviciosList();
 									$mdToast.show(
 										$mdToast.simple()
 											.textContent('Ya existe una orden para la placa '+ result.placa)
@@ -730,7 +732,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						  		'</div>' +
 						      '<div class="md-dialog-content" ng-hide="cargando">' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="celular" md-input-maxlength="10" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
+		                '<md-autocomplete md-input-name="celular" md-input-minlength="7"	md-input-maxlength="20" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular" flex required>' +
                       '<md-item-template>' +
                         '<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.celular]]</span>' +
                       '</md-item-template>' +
@@ -739,12 +741,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											'</md-not-found>' +
 											'<div ng-messages="form.celular.$error">' +
 												'<div ng-message="required">Este campo es requerido.</div>' +
-                        '<div ng-message="maxlength">Este campo no debe superar los 10 digitos.</div>' +
+                        '<div ng-message="minlength">Este campo no debe tener menos de 7 digitos.</div>' +
+                        '<div ng-message="maxlength">Este campo no debe superar los 20 digitos.</div>' +
 											'</div>' +
 										'</md-autocomplete >' +
 		              '</div>' +
 									'<div layout="row">' +
-		                '<md-autocomplete md-input-name="identificacion" md-input-maxlength="20" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
+		                '<md-autocomplete md-input-name="identificacion" md-input-minlength="7" md-input-maxlength="20" md-floating-label="Identificación" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange2(search2)" md-search-text="search2" md-items="cliente in listClientes(search2)" md-item-text="cliente.identificacion" placeholder="Escribir el numero de identificación" flex>' +
                       '<md-item-template>' +
                           '<span md-highlight-text="search">[[cliente.nombre]] [[cliente.apellidos]] - [[cliente.identificacion]]</span>' +
                       '</md-item-template>' +
@@ -753,6 +756,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 											'</md-not-found>' +
 											'<div ng-messages="form.identificacion.$error">' +
 												'<div ng-message="required">Este campo es requerido.</div>' +
+                        '<div ng-message="minlength">Este campo no debe tener menos de 7 digitos.</div>' +
                         '<div ng-message="maxlength">Este campo no debe superar los 20 digitos.</div>' +
 											'</div>' +
 										'</md-autocomplete >' +
@@ -760,14 +764,14 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		              '<div layout="row">' +
 		                '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100" >' +
 		                   '<label>Nombre</label>' +
-		                    '<input type="text" ng-model="data.nombre" name="nombre" value="" required>' +
+		                    '<input type="text" ng-model="data.nombre" name="nombre" value="" >' +
 		                    '<div ng-messages="form.nombre.$error">' +
 		                      '<div ng-message="required">Este campo es requerido.</div>' +
 		                    '</div>' +
 		                '</md-input-container>' +
 		                '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100" >' +
 		                   '<label>Apellidos</label>' +
-		                    '<input type="text" ng-model="data.apellidos" name="apellidos" value="" required>' +
+		                    '<input type="text" ng-model="data.apellidos" name="apellidos" value="" >' +
 		                    '<div ng-messages="form.apellidos.$error">' +
 		                      '<div ng-message="required">Este campo es requerido.</div>' +
 		                    '</div>' +
@@ -783,7 +787,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			                  '</md-input-container>' +
 									      '<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
 								          '<label>Marca</label>' +
-								          '<input ng-model="data.marca" name="marca" required>' +
+								          '<input ng-model="data.marca" name="marca">' +
 								          '<div ng-messages="form.marca.$error">' +
 								            '<div ng-message="required">Este campo es requerido.</div>' +
 								          '</div>' +
@@ -792,7 +796,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 										'<div layout="row">' +
 											'<md-input-container class="md-block" flex="50" flex-xs="100" flex-gt-sm="100">' +
 												'<label>Color</label>' +
-												'<input ng-model="data.color" name="color" required>' +
+												'<input ng-model="data.color" name="color">' +
 												'<div ng-messages="form.color.$error">' +
 													'<div ng-message="required">Este campo es requerido.</div>' +
 												'</div>' +
@@ -832,7 +836,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           clickOutsideToClose:true,
 					fullscreen: true,
 					onComplete: function(scope, element){
-							angular.element(document.querySelector(".md-dialog-container").style.zIndex=80);
+							var elemento = document.querySelector(".md-dialog-container");
+              if (elemento) {
+                elemento.style.zIndex=80;
+              }
 					},
 					parent: angular.element(document.querySelector('#popupContainer')),
 					locals: {
@@ -845,10 +852,16 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
            // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
-					angular.element(document.querySelector(".md-dialog-container").style.zIndex=101);
+						var elemento = document.querySelector(".md-dialog-container");
+            if (elemento) {
+              elemento.style.zIndex=101;
+            }
           $scope.status = 'You said the information was "' + answer + '".';
         }, function(a) {
-					angular.element(document.querySelector(".md-dialog-container").style.zIndex=101);
+					var elemento = document.querySelector(".md-dialog-container");
+          if (elemento) {
+            elemento.style.zIndex=101;
+          }
           $scope.status = 'You cancelled the dialog.';
         });
     };
