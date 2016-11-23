@@ -111,12 +111,12 @@
                           </md-radio-group>
                        </md-card-content>
                       </md-card>
-                  <md-card flex="80" flex-xs="100">
+                  <md-card flex="80" flex-xs="100" >
                    <md-card-content>
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
-                          <md-content class="md-padding">
-                            <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
+                          <md-content flex layout-padding style="height: 50%">
+                            <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:100%">
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
                             <md-list flex ng-if="servicios.length>0 && !serv5 && !serv6">
@@ -134,8 +134,8 @@
                          </md-content>
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
-                          <md-content class="md-padding">
-                            <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
+                          <md-content flex layout-padding style="height: 50%">
+                            <div layout="row" layout-align="center center" ng-if="serv7" style="height:100%">
                                 <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
                             <md-list flex  ng-if="serviciosPorHacer.length>0 && !serv7">
@@ -162,10 +162,10 @@
                              <h2>$[[totalService]]</h2>
                            </p>
                         </div>
-                        <div flex="50">
-                          <md-button ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
-                          <md-button ng-disabled="habilitarObservacion" ng-click="agregarObservacion($event)" class="md-raised md-primary">Observación</md-button>
-                          <md-button ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
+                        <div flex="50"  layout="column">
+                          <md-button  ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
+                          <md-button  ng-disabled="habilitarObservacion" ng-click="agregarObservacion($event)" class="md-raised md-primary">Observación</md-button>
+                          <md-button  ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
                         </div>
                        </div>
                      </md-card-footer>
