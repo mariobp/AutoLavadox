@@ -836,7 +836,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           clickOutsideToClose:true,
 					fullscreen: true,
 					onComplete: function(scope, element){
-							var elemento = angular.element(document.querySelector(".md-dialog-container"));
+							var elemento = document.querySelector(".md-dialog-container");
               if (elemento) {
                 elemento.style.zIndex=80;
               }
@@ -852,13 +852,13 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
            // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
-						var elemento = angular.element(document.querySelector(".md-dialog-container"));
+						var elemento = document.querySelector(".md-dialog-container");
             if (elemento) {
               elemento.style.zIndex=101;
             }
           $scope.status = 'You said the information was "' + answer + '".';
         }, function(a) {
-					var elemento = angular.element(document.querySelector(".md-dialog-container"));
+					var elemento = document.querySelector(".md-dialog-container");
           if (elemento) {
             elemento.style.zIndex=101;
           }
