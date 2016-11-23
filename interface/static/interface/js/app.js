@@ -30,7 +30,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       if ($scope.cerrar) {
           $window.opener = null;
           $window.close();
-         return true;
+         return null;
       } else {
          var con = confirm("Are you sure you want to navigate away from this page");
          if (con) {

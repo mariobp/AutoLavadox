@@ -162,10 +162,10 @@
                              <h2>$[[totalService]]</h2>
                            </p>
                         </div>
-                        <div flex="50">
-                          <md-button ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
-                          <md-button ng-disabled="habilitarObservacion" ng-click="agregarObservacion($event)" class="md-raised md-primary">Observación</md-button>
-                          <md-button ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
+                        <div flex="50"  layout="column">
+                          <md-button  ng-disabled="cancelarOrden" ng-click="cancelado()" class="md-raised md-primary">Cancelar Orden</md-button>
+                          <md-button  ng-disabled="habilitarObservacion" ng-click="agregarObservacion($event)" class="md-raised md-primary">Observación</md-button>
+                          <md-button  ng-disabled="habilitarOrden" ng-click="cerrarOrden()" class="md-raised md-primary">Finalizar Orden</md-button>
                         </div>
                        </div>
                      </md-card-footer>
