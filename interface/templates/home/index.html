@@ -116,7 +116,7 @@
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
                           <md-content flex layout-padding style="height: 50%">
-                            <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
+                            <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:100%">
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
                             <md-list flex ng-if="servicios.length>0 && !serv5 && !serv6">
@@ -135,7 +135,7 @@
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
                           <md-content flex layout-padding style="height: 50%">
-                            <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
+                            <div layout="row" layout-align="center center" ng-if="serv7" style="height:100%">
                                 <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
                             <md-list flex  ng-if="serviciosPorHacer.length>0 && !serv7">
