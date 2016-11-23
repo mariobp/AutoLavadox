@@ -104,13 +104,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Servicio para cerrar sesión
     $scope.cerrarSesion = function(){
-      console.log("entro");
       var confirm = $mdDialog.confirm()
       .title('Estas seguro que quieres cerrar la sesión?')
       .ariaLabel('Sesion')
       .ok('Si')
       .cancel('No');
       $mdDialog.show(confirm).then(function() {
+          $scope.serv2 = false;
+          $scope.serv3 = false;
+          $scope.serv4 = false;
           $scope.cerrar = true;
           $http({
             'url': '/empleados/logout/',
@@ -118,6 +120,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           }).then(function doneCallbacks(response){
               location.href = "/empleados/login/";
           }, function failCallbacks(response){
+              $scope.serv2 = true;
+              $scope.serv3 = true;
+              $scope.serv4 = true;
               $scope.dialogError();
           });
       }, function() {
