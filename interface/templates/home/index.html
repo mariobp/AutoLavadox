@@ -115,7 +115,7 @@
                    <md-card-content>
                      <md-tabs md-dynamic-height md-border-bottom>
                         <md-tab label="Servicos Aplicables">
-                          <md-content class="md-padding">
+                          <md-content flex layout-padding>
                             <div layout="row" layout-align="center center" ng-if="serv5 && serv6" style="height:535px">
                                 <md-progress-circular ng-disabled="!serv5 && !serv6" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
@@ -134,7 +134,7 @@
                          </md-content>
                         </md-tab>
                         <md-tab label="Servicios por Terminar">
-                          <md-content class="md-padding">
+                          <md-content flex layout-padding>
                             <div layout="row" layout-align="center center" ng-if="serv7" style="height:535px">
                                 <md-progress-circular ng-disabled="!serv7" md-mode="indeterminate" md-diameter="50"></md-progress-circular>
                             </div>
