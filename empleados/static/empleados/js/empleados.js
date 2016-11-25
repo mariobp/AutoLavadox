@@ -2,6 +2,7 @@ $(document).on('ready', function(){
   console.log('ready');
   $('.ex-date-filter label:first').text("Rango de analisis");
   $('.ex-date-filter input[type="submit"]:first').val("Servicios");
+  $('.ex-date-filter input[type="submit"]:first').addClass("time");
   $('.ex-date-filter input[type="submit"]:first').parent().prepend("<input type=\"submit\" class=\"comision\" value=\"Comisión\">");
   $('.ex-date-filter input[type="submit"]:first, .comision').on('click', function(event){
     return false;

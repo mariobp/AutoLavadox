@@ -158,7 +158,7 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     inlines = [ServicioInline]
     list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'cancelada', 'cerrada', 'pago', 'imprimir_orden']
     list_filter = ['cancelada', 'cerrada', 'pago', ('fin', DateRangeEX)]
-    search_fields = ['entrada', 'vehiculo', 'valor', 'comision', 'pago']
+    search_fields = ['entrada', 'vehiculo__placa', 'valor', 'comision', 'pago',]
     list_editable = ['cerrada', 'cancelada', 'pago', 'vehiculo']
     form = forms.OrdenForm
     list_display_links = ['id_reporte']
