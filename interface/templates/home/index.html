@@ -16,6 +16,7 @@
         </div>
         <div class="#popupContainer"></div>
         <div class="" ng-show="serv2 && serv3 && serv4">
+          <div class="navbar-fixed">
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <span>Luxury Service | Cerradas: [[cerrada]] | Pagas: [[pagadas]] | En Servicio: [[enservicio]] | Total: [[total]]</span>
@@ -31,6 +32,7 @@
                     </md-button>
                 </div>
             </md-toolbar>
+          </div>
             <section>
                 <md-subheader class="color-fondo">
                       <md-autocomplete  md-no-float md-selected-item="selectedItem" md-no-cache="true" md-min-length="0" md-selected-item-change="vehiculoActual($event)"	md-search-text="search" md-items="vehiculo in listVehiculos(search)" md-item-text="vehiculo.placa" placeholder="Escribir el numero de la placa">
