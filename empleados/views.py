@@ -304,3 +304,61 @@ class ExcelEmpleados(View):
         return response
     # end class
 # end class
+
+
+class ReporteComisionE(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        # do something
+        return super(ReporteComisionE, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request):
+        id_emp = request.GET.get('id', '0')
+        ini = request.GET.get('ini', '2015-01-01')
+        fin = request.GET.get('fin', '%s-%s-%s' %
+                              (date.today().year, date.today().month, date.today().day))
+        """
+        f1=ini.split('-')
+        f2=fin.split('-')
+        d1='%s-%s-%s' % (f1[2], f1[0], f1[1])
+        d2='%s-%s-%s' % (f2[2], f2[0], f2[1])
+        """
+        print ini,fin,request.GET
+        estado = request.GET.get('estado', False)
+        r = 0
+        lista = list()
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Reporte comision empleados.xls'
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet("Comision")
+        r=0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        ws.write(0,1,'Luxury'.encode('utf-8'),font_style)
+        ws.write(1,0,'Fecha de inicio para el reporte'.encode('utf-8'), font_style)
+        ws.write(1,1,ini.encode('utf-8'), font_style)
+        ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
+        ws.write(1,3,fin.encode('utf-8'), font_style)
+        exc_row=2
+        sql = 'select report_empleados_comision(\'%s\',\'%s\')'%(ini,fin)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        print row[0]
+        rt = row[0][0]
+        r = 2
+        font_style = xlwt.XFStyle()
+        font_style.alignment.wrap = 1
+        i = 0
+        while i < len(rt):
+            print rt[i]
+            # ws.write(r, 0, (rt[r]['nombre']).encode('utf-8'), font_style)
+            # ws.write(r, 1, (rt[r]['total']).encode('utf-8'), font_style)
+            r = r + 1
+            i = i + 1
+        # end for
+        wb.save(response)
+        return response
+    # end class

@@ -30,7 +30,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       if ($scope.cerrar) {
           $window.opener = null;
           $window.close();
-         return true;
+         return null;
       } else {
          var con = confirm("Are you sure you want to navigate away from this page");
          if (con) {
@@ -104,13 +104,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Servicio para cerrar sesión
     $scope.cerrarSesion = function(){
-      console.log("entro");
       var confirm = $mdDialog.confirm()
       .title('Estas seguro que quieres cerrar la sesión?')
       .ariaLabel('Sesion')
       .ok('Si')
       .cancel('No');
       $mdDialog.show(confirm).then(function() {
+          $scope.serv2 = false;
+          $scope.serv3 = false;
+          $scope.serv4 = false;
           $scope.cerrar = true;
           $http({
             'url': '/empleados/logout/',
@@ -118,6 +120,9 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           }).then(function doneCallbacks(response){
               location.href = "/empleados/login/";
           }, function failCallbacks(response){
+              $scope.serv2 = true;
+              $scope.serv3 = true;
+              $scope.serv4 = true;
               $scope.dialogError();
           });
       }, function() {
@@ -451,7 +456,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 			        data: $scope.operarios,
 			        servicio: servicio,
 							orden: $scope.selectedPlaca.ordenv,
-							tipo: $scope.selectedPlaca.tipo,
 							dialogError: $scope.dialogError,
 			      },
 			      clickOutsideToClose:true,
@@ -941,7 +945,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         });
     };
 })
-.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, tipo, dialogError){
+.controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, dialogError){
 		$scope.closeDialog = function() {
 			  $mdDialog.hide();
 		};
@@ -999,6 +1003,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		}
 
 		$scope.asignarOperario = function(){
+      console.log(servicio);
 				if(orden){
 					$mdDialog.hide();
 					$mdToast.show(
@@ -1009,7 +1014,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					);
 					selectCheck();
 					dataSend.orden = orden;
-					dataSend.tipo = tipo;
+					dataSend.tipo = servicio.tipo;
 					$http({
 						'url': '/operacion/edit/servicio/'+ servicio.id +'/',
 						 'method': 'POST',

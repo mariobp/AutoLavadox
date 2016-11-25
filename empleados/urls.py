@@ -12,4 +12,5 @@ urlpatterns += [
     url(r'^operarios/servicio/$', views.WsOperariosServicio.as_view(), name='operarios_servi'),
     url(r'^excel/periodo/$', views.Excel.as_view(), name='operarios'),
     url(r'^excel/empleados/$', views.ExcelEmpleados.as_view(), name='excel_empleados'),
+    url(r'^report/comi/$', views.ReporteComisionE.as_view(), name='excel_comision_empleados'),
 ]
