@@ -97,18 +97,20 @@
                        <md-card-content>
                           <h3>En servicio</h3>
                           <md-divider></md-divider>
-                          <md-radio-group ng-model="selectedPlaca" ng-change="placaChange()">
-                            <div ng-repeat='placa in placas' class="row">
-                              <div flex layout='row' layout-padding layout-align="start center" >
-                                <md-radio-button flex
-                                    ng-value="placa"
-                                    class="md-primary">
-                                  [[placa.placa]]
-                                   <md-icon class="" ng-if="placa.ordenv" aria-label="Person" md-svg-icon="/media/iconos/ic_assignment.svg"></md-icon>
-                                </md-radio-button>
+                          <md-content flex layout-padding style="height: 50%">
+                            <md-radio-group ng-model="selectedPlaca" ng-change="placaChange()">
+                              <div ng-repeat='placa in placas' class="row">
+                                <div flex layout='row' layout-padding layout-align="start center" >
+                                  <md-radio-button flex
+                                      ng-value="placa"
+                                      class="md-primary">
+                                    [[placa.placa]]
+                                     <md-icon class="" ng-if="placa.ordenv" aria-label="Person" md-svg-icon="/media/iconos/ic_assignment.svg"></md-icon>
+                                  </md-radio-button>
+                                </div>
                               </div>
-                            </div>
-                          </md-radio-group>
+                            </md-radio-group>
+                        </md-content>
                        </md-card-content>
                       </md-card>
                   <md-card flex="80" flex-xs="100" >
