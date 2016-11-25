@@ -348,12 +348,39 @@ class ReporteComisionE(View):
         row = cursor.fetchone()
         print row[0]
         rt = row[0][0]
-        r = 2
+        print rt
+        servi = rt['servi']
+        traba = rt['traba']
+        r = 3
+        ws.write(2,0,'Identificacion'.encode('utf-8'),font_style)
+        ws.write(2,1,'Nombre'.encode('utf-8'),font_style)
+        ws.write(2,2,'Apellidos'.encode('utf-8'),font_style)
+        ws.write(2,3,'Direccion'.encode('utf-8'),font_style)
+        ws.write(2,4,'Telefono'.encode('utf-8'),font_style)
+        w = 5
+        while (w-5) < len(servi) :
+            ws.write(2,w,servi[w-5]['nombre'].encode('utf-8'),font_style)
+            w = w + 1
+        # end while
+        ws.write(2,w,'Total'.encode('utf-8'),font_style)
         font_style = xlwt.XFStyle()
         font_style.alignment.wrap = 1
         i = 0
-        while i < len(rt):
-            print rt[i]
+        while i < len(traba):
+            ws.write(r, 0, (traba[i]['identificacion']).encode('utf-8'), font_style)
+            ws.write(r, 1, (traba[i]['nombre']).encode('utf-8'), font_style)
+            ws.write(r, 2, (traba[i]['apellido']).encode('utf-8'), font_style)
+            ws.write(r, 3, (traba[i]['direccion']).encode('utf-8'), font_style)
+            ws.write(r, 4, (traba[i]['telefono']).encode('utf-8'), font_style)
+            ser = traba[i]['trabajos']
+            y = 5
+            total_ser = 0
+            while (y - 5) < len(ser) :
+                ws.write(r, y, (ser[(y - 5)]['total']), font_style)
+                total_ser = total_ser + (ser[(y - 5)]['total'])
+                y = y + 1
+            # end while
+            ws.write(r, y, total_ser, font_style)
             # ws.write(r, 0, (rt[r]['nombre']).encode('utf-8'), font_style)
             # ws.write(r, 1, (rt[r]['total']).encode('utf-8'), font_style)
             r = r + 1
