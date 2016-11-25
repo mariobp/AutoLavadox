@@ -5,6 +5,7 @@ from django.db import models
 from django.core import validators
 import re
 from supra import views as supra
+from django.core.validators import MaxLengthValidator
 
 
 # Create your models here.
@@ -34,7 +35,7 @@ class Cliente(models.Model):
     apellidos = models.CharField(max_length=300, null=True, blank=True)
     dirreccion = models.CharField(max_length=300, null=True, blank=True)
     correo = models.EmailField(max_length=200, verbose_name="Correo electrònico", null=True, blank=True)
-    celular = models.CharField(max_length=10, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Celular no valida'), 'invalid')], null=True, blank=True)
+    celular = models.CharField(max_length=10, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){6,20}$'), ('Celular no valida'), 'invalid')], null=True, blank=True)
     nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True, blank=True)
 
     def __unicode__(self):
