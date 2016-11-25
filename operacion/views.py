@@ -290,7 +290,7 @@ class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
     list_display = ['ordenv', 'placa', 'marca', 'kilometraje', 'color',
                     'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
-    paginate_by = 5
+    paginate_by = 100
 
     class Renderer:
         ordenv = 'orden__id'
