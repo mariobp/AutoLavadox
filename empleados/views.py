@@ -52,7 +52,6 @@ class Login(supra.SupraSession):
 
     def form_invalid(self, form):
         errors = dict(form.errors)
-        print errors
         for i in self.invalided_inilines:
             errors['inlines'] = list(i.errors)
         # end for
