@@ -49,3 +49,8 @@ urlpatterns += [
 urlpatterns += [
     url(r'^generar/excel/mservicio/$', views.ReporteMServicio.as_view(), name='get_orden_pendien'),
 ]
+
+# ordenes del dia
+urlpatterns += [
+    url(r'^get/ordenes/$', views.OrdenesDia.as_view(), name='get_orden_dia'),
+]

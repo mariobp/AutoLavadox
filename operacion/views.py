@@ -184,8 +184,9 @@ class AddServicio(supra.SupraFormView):
     body = True
 
     @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super(AddServicio, self).dispatch(*args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        print request,"desde el modificar"
+        return super(AddServicio, self).dispatch(request, *args, **kwargs)
     # end def
 # end class
 
@@ -210,6 +211,7 @@ class OkService(supra.SupraFormView):
                     # end if
                     order = models.Orden.objects.filter(id=tem_o[0]).first()
                     if not servicio.estado:
+                        print "cambiar a true"
                         servicios = models.Servicio.objects.filter(
                             orden=order, status=True).latest('fin')
                         servicio.inicio = servicios.fin if servicios.fin is not None else tem_o[
@@ -224,10 +226,12 @@ class OkService(supra.SupraFormView):
                         order.save()
                         return HttpResponse('{"info":"Ok"}', content_type='application/json', status=200)
                     # end if
+                    print "cambiar a false"
                     order.valor = order.valor - servicio.valor
                     order.comision = order.comision - servicio.comision
                     servicio.estado = False
                     servicio.save()
+                    order.save()
                     return HttpResponse('{"info":"Ok cancel"}', content_type='application/json', status=201)
                 # end if
             # end if
@@ -265,7 +269,13 @@ class CancelService(supra.SupraFormView):
             if servicio:
                 servicio.status = False
                 servicio.save()
-                return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
+                orden = models.Orden.objects.filter(id=servicio.orden.id).first()
+                if orden :
+                    orden.valor = orden.valor - servicio.valor
+                    orden.comision = orden.comision - servicio.comision
+                    orden.save()
+                    return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
+                # end if
             # end if
         # end if
         return HttpResponse('{"info":"Not"}', content_type='application/json', status=204)
@@ -400,4 +410,21 @@ class ReporteMServicio(View):
         wb.save(response)
         return response
     # end class
+# end class  OrdenesDia
+
+
+class OrdenesDia(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(OrdenesDia, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        cursor = connection.cursor()
+        cursor.execute('select ordenes_dia()')
+        row = cursor.fetchone()
+
+        return HttpResponse(json.dumps(row[0]), content_type='application/json', status=200)
+    # end def
 # end class
