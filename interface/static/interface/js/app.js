@@ -32,13 +32,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           $window.close();
          return null;
       } else {
-         var con = confirm("Are you sure you want to navigate away from this page");
-         if (con) {
-            return con;
-         } else {
-           $scope.cerrar = false;
-           return false;
-         }
+         return "Esta seguro de que quiere salir?";
       }
 	  };
     $scope.cerrar = false;
