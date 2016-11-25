@@ -425,6 +425,6 @@ class OrdenesDia(View):
         cursor.execute('select ordenes_dia()')
         row = cursor.fetchone()
 
-        return HttpResponse(json.dumps(row[0]), content_type='application/json', status=200)
+        return HttpResponse(json.dumps(row[0][0]), content_type='application/json', status=200)
     # end def
 # end class
