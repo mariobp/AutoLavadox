@@ -164,7 +164,8 @@ INSTALLED_APPS = [
     'operacion.apps.OperacionConfig',
     'interface',
     'import_export',
-    'estadistica'
+    'estadistica',
+    'cierre',
 ]
 
 MIDDLEWARE = [

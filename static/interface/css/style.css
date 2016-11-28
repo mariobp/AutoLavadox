@@ -120,3 +120,20 @@ md-tab-content{
 .md-dialog-container {
   z-index: 101;
 }
+
+.navbar-fixed {
+  position: relative;
+  height: 56px;
+  z-index: 998;
+}
+
+.navbar-fixed md-toolbar {
+  position: fixed;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+@media only screen and (min-width: 601px) {
+  .navbar-fixed {
+    height: 64px;
+  }
+}

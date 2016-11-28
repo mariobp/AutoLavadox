@@ -32,13 +32,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
           $window.close();
          return null;
       } else {
-         var con = confirm("Are you sure you want to navigate away from this page");
-         if (con) {
-            return con;
-         } else {
-           $scope.cerrar = false;
-           return false;
-         }
+         return "Esta seguro de que quiere salir?";
       }
 	  };
     $scope.cerrar = false;
@@ -56,6 +50,10 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
     $scope.habilitarObservacion = true;
     $scope.cancelarOrden = true;
 		$scope.bandera = false;
+    $scope.cerrada = 0;
+    $scope.pagadas = 0;
+    $scope.enservicio = 0;
+    $scope.total = 0;
     $scope.editarVehiculo = true;
 		$scope.serv1 = false;
 		$scope.serv2 = false;
@@ -128,6 +126,21 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       }, function() {
 
       });
+    };
+
+    $scope.totalOrdenes = function(searchText){
+        $http({
+          'url': '/operacion/get/ordenes/',
+          'method': 'GET'
+        }).then(function doneCallbacks(response){
+            var data = response.data;
+            $scope.cerrada = data.cerradas;
+            $scope.pagadas = data.pagas;
+            $scope.enservicio = parseInt(data.total) - (parseInt(data.cerradas)+parseInt(data.pagas));
+            $scope.total = data.total;
+        },function failCallbacks(response){
+            $scope.dialogError();
+        });
     };
 
 		//Lista de vehiculos
@@ -502,6 +515,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		};
 
 		//Invocar servicios
+    $scope.totalOrdenes();
 		$scope.tipoVehiculo();
 		$scope.operariosList();
 		$scope.ordenesPendientes();
@@ -654,6 +668,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							$scope.serviciosPorHacer = [];
 							removeFromArray($scope.placas, $scope.selectedPlaca);
 							valor($scope.serviciosPorHacer);
+              $scope.totalOrdenes();
 							$mdToast.show(
 								$mdToast.simple()
 									.textContent('Orden finalizada')

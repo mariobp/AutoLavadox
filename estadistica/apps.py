@@ -5,3 +5,4 @@ from django.apps import AppConfig
 
 class EstadisticaConfig(AppConfig):
     name = 'estadistica'
+    verbose_name ="Cierre"
