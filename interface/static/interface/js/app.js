@@ -506,6 +506,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						data.forEach(function(item){
 							$scope.placas.push(item);
 						});
+            $scope.enservicio = $scope.placas.length;
 						$scope.serv4 = true;
 				}, function failCallbacks(response){
 						if (response.status == 500) {
