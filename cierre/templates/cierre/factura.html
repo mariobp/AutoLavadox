@@ -1,0 +1,59 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Total Factura</title>
+  <style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{background-color:#f5f5f5}
+</style>
+
+</head>
+<body>
+  <h1>Reporte de venta facura entre <span>{{ inicio }}</span> y <span>{{ fin }}</span></h1>
+    {% if existe %}
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Valor</th>
+            <th>Comisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in f %}
+            <tr>
+              <td>{{ o.placa }}</td>
+              <td>{{ o.entrada|naturaltime }}</td>
+              <td>{{ o.fin|naturalday }}</td>
+              <td>$ {{ o.valor|intcomma }}</td>
+              <td>$ {{ o.comision|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>$ {{ total|intcomma }}</td>
+            <td>$ {{ comi|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+    {% else %}
+      No Existe la factura
+    {% endif %}
+</body>
+</html>

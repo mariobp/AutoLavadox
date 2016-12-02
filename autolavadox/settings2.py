@@ -78,13 +78,13 @@ EXILE_UI = {
                 },
             },
             'cierre': {
-                'icon': 'show_chart',
+                'icon': 'attach_money',
                 'groups': [
                     'Cierre'
                 ],
                 'models': {
-                    'TipoServicio': {'icon': 'alarm_on', 'group': 'Cierre'},
-                    'Factura': {'icon': 'alarm_on', 'group': 'Cierre'}
+                    'TipoServicio': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'}
                 },
             },
             'auth': {
