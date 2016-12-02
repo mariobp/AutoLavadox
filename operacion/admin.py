@@ -321,6 +321,7 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
     filter_horizontal = ('vehiculos',)
     resource_class = TipoInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
+    form = forms.AddTipoServicioForm
 # end class
 
 exileui.register(models.TipoServicio, TipoAdmin)
