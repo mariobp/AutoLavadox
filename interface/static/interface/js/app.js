@@ -136,7 +136,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
             var data = response.data;
             $scope.cerrada = data.cerradas;
             $scope.pagadas = data.pagas;
-            $scope.enservicio = parseInt(data.total) - (parseInt(data.cerradas)+parseInt(data.pagas));
+            $scope.enservicio = $scope.placas.length;
             $scope.total = data.total;
         },function failCallbacks(response){
             $scope.dialogError();
@@ -506,6 +506,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						data.forEach(function(item){
 							$scope.placas.push(item);
 						});
+            $scope.enservicio = $scope.placas.length;
 						$scope.serv4 = true;
 				}, function failCallbacks(response){
 						if (response.status == 500) {
