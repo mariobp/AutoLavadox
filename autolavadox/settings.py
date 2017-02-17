@@ -73,13 +73,14 @@ EXILE_UI = {
                     'Orden': {'icon': 'assignment', 'group': 'Operacion'}
                 },
             },
-            'estadistica': {
-                'icon': 'show_chart',
+            'cierre': {
+                'icon': 'attach_money',
                 'groups': [
-                    'LocalEstadistica'
+                    'Cierre'
                 ],
                 'models': {
-                    'TiemposOrden': {'icon': 'alarm_on', 'group': 'LocalEstadistica'}
+                    'TipoServicio': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'}
                 },
             },
             'auth': {
@@ -125,9 +126,10 @@ MENU_ORDER = [
         ]
     },
     {
-        'name': 'estadistica',
+        'name': 'cierre',
         'models': [
-            'TiemposOrden'
+            'TipoServicio',
+            'Factura'
         ]
     },
     {

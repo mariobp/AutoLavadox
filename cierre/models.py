@@ -6,6 +6,7 @@ from django.db import models
 
 class TipoServicio(models.Model):
     total = models.FloatField(default=0.0, null=True, blank=True)
+    comision = models.FloatField(default=0.0, null=True, blank=True) 
     inicio = models.DateField()
     fin = models.DateField()
 
@@ -18,6 +19,7 @@ class TipoServicio(models.Model):
 
 class Factura(models.Model):
     total = models.FloatField(default=0.0, null=True, blank=True)
+    comision = models.FloatField(default=0.0, null=True, blank=True)
     inicio = models.DateField()
     fin = models.DateField()
 

@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^empleados/', include('empleados.urls', namespace='empleado')),
     url(r'^cliente/', include('cliente.urls', namespace='cliente')),
     url(r'^operacion/', include('operacion.urls', namespace='operacion')),
+    url(r'^cierre/', include('cierre.urls', namespace='cierre')),
 ]
 
 if settings.DEBUG:
