@@ -24,7 +24,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', 'http://luxuryservice.com.co'
+    'localhost', '*'
 ]
 
 EXILE_UI = {
@@ -205,14 +205,6 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default1': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox',
-        'USER': 'luxury',
-        'PASSWORD': 'Exile*74522547',
-        'HOST': 'localhost',
-        'POST': '5432'
-    },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'lavado',
@@ -259,8 +251,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = '/home/luxuryadmin/webapps/static/'
+STATIC_ROOT = '/var/www/AutoLavadox/static/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-HOST_MEDIA = 'http://luxuryservice.com.co/media/'
-MEDIA_ROOT = '/home/luxuryadmin/webapps/media/'
+HOST_MEDIA = '/var/www/AutoLavadox/media/'
+MEDIA_ROOT = '/var/www/AutoLavadox/media/'
