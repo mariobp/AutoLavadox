@@ -22,9 +22,11 @@ class AddTipoServicioForm(forms.ModelForm):
         if not data.get('inicio') :
             self.add_error('fin', 'Debe digitar la fecha de fin de reporte')
         # end if
-        if data.get('fin') < data.get('inicio') :
-            self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
-        # end if
+        if data.get('fin')   and data.get('inicio')  :
+            if data.get('fin') < data.get('inicio') :
+                self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
+            # end if
+        #end if
     # end def
 
     class Media:
@@ -68,8 +70,10 @@ class AddFacturaForm(forms.ModelForm):
         if not data.get('inicio') :
             self.add_error('fin', 'Debe digitar la fecha de fin de reporte')
         # end if
-        if data.get('fin') < data.get('inicio') :
-            self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
-        # end if
+        if data.get('fin') and data.get('inicio'):
+            if data.get('fin') < data.get('inicio') :
+                self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
+            # end if
+        #end if
     # end def
 # end class
