@@ -96,9 +96,7 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
         """
         return queryset.filter(status=True).order_by('-id')
     # end def
-
-    class Media:
-        js = ('/static/operacion/js/servicio.js',)
+    
     # end class
 
     placa_nombre.allow_tags = True
