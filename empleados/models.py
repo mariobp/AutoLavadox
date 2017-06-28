@@ -45,3 +45,10 @@ class Cajero(Persona):
         verbose_name_plural = "Cajeros"
     # end class
 # end class
+
+class Administrador(Persona):
+    class Meta:
+        verbose_name = "Administrador"
+        verbose_name_plural = "Administradores"
+    # end class
+# end class
