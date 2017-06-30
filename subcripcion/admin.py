@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 from django.contrib import admin
 import models
 import forms
@@ -44,8 +44,8 @@ class InstModuloAdmin(admin.ModelAdmin):
 
 
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'operadores', 'asistentes', 'descripcion', 'valor', 'duracion', 'estado']
-    search_fields = ['nombre','descripcion', 'operadores', 'asistentes', 'valor', 'duracion']
+    list_display = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion'  ,'estado']
+    search_fields = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion' ,'estado']
     filter_horizontal = ['modulos']
     form = forms.PlanForm
 
@@ -102,11 +102,11 @@ class FacturaAdmin(admin.ModelAdmin):
 #end class
 
 
-admin.site.register(models.Funcionalidad)
-admin.site.register(models.Modulo, ModuloAdmin)
-admin.site.register(models.InstModulo, InstModuloAdmin)
-admin.site.register(models.Plan, PlanAdmin)
-admin.site.register(models.Suscripcion)
-admin.site.register(models.Factura, FacturaAdmin)
-admin.site.register(models.Cuenta, CuentaAdmin)
-admin.site.register(models.Cliente, ClienteAdmin)
+exileui.register(models.Funcionalidad)
+exileui.register(models.Modulo, ModuloAdmin)
+exileui.register(models.InstModulo, InstModuloAdmin)
+exileui.register(models.Plan, PlanAdmin)
+exileui.register(models.Suscripcion)
+exileui.register(models.Factura, FacturaAdmin)
+exileui.register(models.Cuenta, CuentaAdmin)
+exileui.register(models.Cliente, ClienteAdmin)

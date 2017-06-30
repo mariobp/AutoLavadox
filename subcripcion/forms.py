@@ -86,7 +86,7 @@ class InstModuloForm(forms.ModelForm):
 class PlanForm(forms.ModelForm):
     class Meta:
         model = models.Plan
-        fields = ['nombre', 'operadores', 'asistentes', 'descripcion', 'valor', 'duracion', 'modulos' ,'estado']
+        fields = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion', 'modulos' ,'estado']
         exclude = []
     #end class
 

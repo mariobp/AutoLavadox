@@ -1,6 +1,5 @@
 import json as simplejson
 from django.shortcuts import redirect, get_object_or_404, HttpResponse
-from usuarios import models as usuario
 import models
 from datetime import datetime
 import pytz

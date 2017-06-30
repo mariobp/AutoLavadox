@@ -15,7 +15,7 @@ class Service():
         #end if
         return Service.instance
     #end def
-
+"""
     @classmethod
     def isCliente(sef, request):
         empleado = usuario.Cliente.objects.filter(id=CuserMiddleware.get_user().id)
@@ -42,7 +42,7 @@ class Service():
         #end if
         return False, None
     #end def
-
+"""
     @classmethod
     def getCuenta(self, request):
         cuenta = models.Cuenta.objects.filter(Q(cliente__id=request.user.id)).first()
@@ -53,7 +53,7 @@ class Service():
         return 'el man es gerente'
     #end def
 #end class
-
+"""
 def main():
     servicio = Service.get_instance()
     print servicio.isCliente(12)
@@ -62,3 +62,4 @@ def main():
 
 # test de la clase
 main()
+""""
