@@ -83,6 +83,22 @@ EXILE_UI = {
                     'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'}
                 },
             },
+            'subcripcion': {
+                'icon': 'attach_money',
+                'groups': [
+                    'subcripcion'
+                ],
+                'models': {
+                    'Cuenta': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Cliente': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Funcionalidad': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Modulo': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'InstModulo': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Plan': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Suscripcion': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                },
+            },
             'auth': {
                 'icon': 'security',
                 'groups': [
@@ -133,6 +149,19 @@ MENU_ORDER = [
         ]
     },
     {
+        'name': 'subcripcion',
+        'models': [
+            'Cuenta',
+            'Cliente',
+            'Funcionalidad',
+            'Modulo',
+            'InstModulo',
+            'Plan',
+            'Suscripcion',
+            'Factura',
+        ]
+    },
+    {
         'name': 'auth',
         'models': [
             'Group',
@@ -168,6 +197,9 @@ INSTALLED_APPS = [
     'import_export',
     'estadistica',
     'cierre',
+    'subcripcion',
+    'cuser',
+    'django_user_agents',
 ]
 
 MIDDLEWARE = [
