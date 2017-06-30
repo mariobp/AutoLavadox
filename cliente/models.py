@@ -6,6 +6,7 @@ from django.core import validators
 import re
 from supra import views as supra
 from django.core.validators import MaxLengthValidator
+from subcripcion import models as suscripcion
 
 
 # Create your models here.
@@ -37,6 +38,7 @@ class Cliente(models.Model):
     correo = models.EmailField(max_length=200, verbose_name="Correo electrònico", null=True, blank=True)
     celular = models.CharField(max_length=10, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){6,20}$'), ('Celular no valida'), 'invalid')], null=True, blank=True)
     nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True, blank=True)
+    cuenta = models.ForeignKey(suscripcion.Cuenta, related_name='cliente_lavadero')
 
     def __unicode__(self):
         return '%s %s' % (self.nombre, self.apellidos)
