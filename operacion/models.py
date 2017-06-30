@@ -6,6 +6,7 @@ from cliente import models as cliente
 from empleados import models as empleado
 from django.core import validators
 import re
+from subcripcion import models as suscripcion
 
 
 # Create your models here.
@@ -14,6 +15,7 @@ class TipoServicio(models.Model):
     costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
     comision = models.FloatField("Comisión")
     vehiculos = models.ManyToManyField(cliente.TipoVehiculo)
+    cuenta = models.ForeignKey(suscripcion.Cuenta)
     state = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -44,6 +46,7 @@ class Orden(models.Model):
     cancelada = models.BooleanField(default=False)
     pago = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
+    cuenta = models.ForeignKey(suscripcion.Cuenta)
 
     def __unicode__(self):
         codigo = ""
@@ -74,6 +77,7 @@ class Servicio(models.Model):
     inicio = models.DateTimeField(null=True, blank=True)
     fin = models.DateTimeField(null=True, blank=True)
     status = models.BooleanField(default=True)
+    cuenta = models.ForeignKey(suscripcion.Cuenta)
 
     def __unicode__(self):
         return '%s' % (self.tipo.nombre)
