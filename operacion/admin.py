@@ -14,7 +14,12 @@ from import_export import fields
 import time
 from datetime import date, timedelta
 import datetime
+from autolavadox.service import Service
+from django.db.models import Q
+from autolavadox.views import BaseAdmin, set_queryset
 # Register your models here.
+
+
 
 
 class ServicioInline(admin.StackedInline):
@@ -94,9 +99,10 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
             )
         # end if
         """
+        queryset = set_queryset(queryset)
         return queryset.filter(status=True).order_by('-id')
     # end def
-    
+
     # end class
 
     placa_nombre.allow_tags = True
@@ -250,6 +256,7 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
             )
             return f1
         # end if
+        queryset = set_queryset(queryset)
         return queryset.order_by('-id')
     # end def
 
@@ -320,6 +327,21 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = TipoInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
     form = forms.AddTipoServicioForm
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if admin and obj:
+            kwargs['form'] = forms.AddTipoServicioFormAdmin
+        # end if
+        return super(TipoAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
+
+    def get_queryset(self, request):
+        queryset = super(TipoAdmin, self).get_queryset(request)
+        queryset= set_queryset(queryset)
+        return queryset.filter(Q(state=True)).order_by('-id')
+    # end def
 # end class
 
 exileui.register(models.TipoServicio, TipoAdmin)

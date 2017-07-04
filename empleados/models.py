@@ -13,7 +13,7 @@ class Persona(User):
     nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True,blank=True)
     telefono = models.CharField(max_length=10, null=True, blank=True)
     imagen = models.ImageField(upload_to="avatar", null=True, blank=True)
-    cuenta = models.ForeignKey(suscripcion.Cuenta)
+    cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     def __unicode__(self):
         return '%s %s' % (self.last_name, self.first_name)

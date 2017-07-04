@@ -123,7 +123,7 @@ class Plan(models.Model):
 
 
 class Cuenta(models.Model):
-    cliente = models.ForeignKey(Cliente)
+    cliente = models.ForeignKey(Cliente, related_name='cliente_cuenta')
     estado = models.BooleanField(default=True)
 
     def __unicode__(self):

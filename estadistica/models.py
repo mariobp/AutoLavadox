@@ -8,7 +8,7 @@ class TiemposOrden(models.Model):
     orden = models.ForeignKey(operacion.Orden)
     inicio = models.DateField()
     fin = models.DateField()
-    cuenta = models.ForeignKey(suscripcion.Cuenta)
+    cuenta = models.ForeignKey(suscripcion.Cuenta, related_name='tiempo_cuenta', null=True, blank=True)
 
     def __unicode__(self):
         print self.orden.vehiculo

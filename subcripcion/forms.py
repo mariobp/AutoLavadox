@@ -126,6 +126,8 @@ class ClienteForm(UserCreationForm):
 
     def save(self, commit = True):
         cliente = super(ClienteForm, self).save(commit=False)
+        cliente.is_staff = True
+        cliente.is_superuser = True
         cliente.save()
         cuenta = models.Cuenta(cliente=cliente,estado=True)
         cuenta.save()

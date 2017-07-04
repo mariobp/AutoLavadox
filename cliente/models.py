@@ -14,6 +14,7 @@ class TipoVehiculo(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
     descripcion = models.CharField(max_length=1000, null=True, blank=True)
     estado = models.BooleanField(default=True)
+    cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     def __unicode__(self):
         return self.nombre
@@ -38,7 +39,7 @@ class Cliente(models.Model):
     correo = models.EmailField(max_length=200, verbose_name="Correo electrònico", null=True, blank=True)
     celular = models.CharField(max_length=10, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){6,20}$'), ('Celular no valida'), 'invalid')], null=True, blank=True)
     nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True, blank=True)
-    cuenta = models.ForeignKey(suscripcion.Cuenta, related_name='cliente_lavadero')
+    cuenta = models.ForeignKey(suscripcion.Cuenta,related_name='cliente_lavado_cuenta',  null=True, blank=True)
 
     def __unicode__(self):
         return '%s %s' % (self.nombre, self.apellidos)

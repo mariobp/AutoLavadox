@@ -198,8 +198,9 @@ INSTALLED_APPS = [
     'estadistica',
     'cierre',
     'subcripcion',
-    'cuser',
     'django_user_agents',
+    'cuser',
+    'autolavadox',
 ]
 
 MIDDLEWARE = [
@@ -210,6 +211,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cuser.middleware.CuserMiddleware',
 ]
 
 ROOT_URLCONF = 'autolavadox.urls'

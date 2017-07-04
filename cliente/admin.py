@@ -38,6 +38,7 @@ class TipoVehiculoAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion']
     list_filter = ['nombre', 'descripcion']
     list_fileds = ['nombre', 'descripcion']
+    form = forms.TipoServicioForm
 # end class
 exileui.register(models.Cliente, ClienteAdmin)
 exileui.register(models.TipoVehiculo, TipoVehiculoAdmin)
