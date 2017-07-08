@@ -3,9 +3,17 @@ from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 import models
 import nested_admin
 import forms
+from autolavadox.views import set_queryset
 
 
-class OperarioAdmin(nested_admin.NestedModelAdmin):
+class BaseAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        queryset = super(BaseAdmin, self).get_queryset(request)
+        return set_queryset(queryset)
+    # end def
+#end class
+
+class OperarioAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('identificacion', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     list_filter =[('nacimiento', DateRangeEX)]
@@ -25,7 +33,7 @@ class OperarioAdmin(nested_admin.NestedModelAdmin):
 # end class
 
 
-class RecepcionistaAdmin(nested_admin.NestedModelAdmin):
+class RecepcionistaAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     search_fields = list_display
@@ -40,7 +48,7 @@ class RecepcionistaAdmin(nested_admin.NestedModelAdmin):
 # end class
 
 
-class CajeroAdmin(nested_admin.NestedModelAdmin):
+class CajeroAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     search_fields = list_display
@@ -55,7 +63,7 @@ class CajeroAdmin(nested_admin.NestedModelAdmin):
 # end class
 
 
-class AdministradorAdmin(nested_admin.NestedModelAdmin):
+class AdministradorAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     search_fields = list_display
@@ -74,3 +82,4 @@ class AdministradorAdmin(nested_admin.NestedModelAdmin):
 exileui.register(models.Empleado, OperarioAdmin)
 exileui.register(models.Recepcionista, RecepcionistaAdmin)
 exileui.register(models.Cajero, CajeroAdmin)
+exileui.register(models.Administrador, AdministradorAdmin)
