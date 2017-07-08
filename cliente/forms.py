@@ -30,6 +30,15 @@ class AddVehivuloForm(forms.ModelForm):
 
     def save(self, commit=True):
         vehiculo = super(AddVehivuloForm, self).save(commit)
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            vehiculo.cuenta = cuenta
+            vehiculo.save()
+        elif admin:
+            print 'Es un super usuario'
+        #end if
         if vehiculo.kilometraje:
             historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
             historial.save()
@@ -51,6 +60,7 @@ class EditVehivuloForm(forms.ModelForm):
         cuent,user,admin=servi.isUser()
         if cuent and user:
             cuenta=servi.getCuenta()
+            self.fields['cliente'].queryset = models.Cliente.objects.filter(cuenta=cuenta)
             self.fields['tipo'].queryset = models.TipoVehiculo.objects.filter(estado=True,cuenta=cuenta)
         #end if
     #end def
@@ -120,7 +130,7 @@ class AddVehivuloFormAdmin(forms.ModelForm):
 # end class
 
 
-class AddCliente(forms.ModelForm):
+class AddCliente(BaseForm):
     def __init__(self, *args, **kwargs):
         super(AddCliente, self).__init__(*args, **kwargs)
         self.fields['dirreccion'].label = "Dirección "
