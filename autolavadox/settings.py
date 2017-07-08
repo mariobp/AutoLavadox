@@ -48,6 +48,7 @@ EXILE_UI = {
                     'Empleado': {'icon': 'people', 'group': 'Empleado'},
                     'Cajero': {'icon': 'people', 'group': 'Empleado'},
                     'Recepcionista': {'icon': 'people', 'group': 'Empleado'},
+                    'Administrador': {'icon': 'people', 'group': 'Empleado'},
 
                 },
             },
@@ -122,7 +123,8 @@ MENU_ORDER = [
         'models': [
             'Empleado',
             'Recepcionista',
-            'Cajero'
+            'Cajero',
+            'Administrador'
         ]
     },
     {
@@ -285,8 +287,13 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = '/var/www/AutoLavadox/static/'
+STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-HOST_MEDIA = '/var/www/AutoLavadox/media/'
-MEDIA_ROOT = '/var/www/AutoLavadox/media/'
+HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
+MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
+# STATIC_ROOT = '/var/www/AutoLavadox/static/'
+# STATIC_URL = '/static/'
+# MEDIA_URL = '/media/'
+# HOST_MEDIA = '/var/www/AutoLavadox/media/'
+# MEDIA_ROOT = '/var/www/AutoLavadox/media/'
