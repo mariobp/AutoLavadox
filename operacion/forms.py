@@ -18,6 +18,7 @@ class AddTipoServicioForm(Base):
     class Meta:
         model = models.TipoServicio
         fields = ['nombre','costo','comision','vehiculos','state']
+        exclude = ['cuenta']
     # end class
 
     def __init__(self, *args, **kwargs):
@@ -28,6 +29,8 @@ class AddTipoServicioForm(Base):
             cuenta=servi.getCuenta()
             self.fields['vehiculos'].queryset = cliente.TipoVehiculo.objects.filter(estado=True,cuenta=cuenta)
         #end if
+        print 'cambio el nombre de la etiqueta state'
+        self.fields['state'].label="Estado"
     # end def
 
     def clean(self):
@@ -36,15 +39,21 @@ class AddTipoServicioForm(Base):
         if not data.get('nombre') :
             self.add_error('nombre', 'El nombre es requerido')
         # end if
-        if not data.get('costo') :
+        if  data.get('costo') == None :
             self.add_error('costo', 'Digite el costo del servicio.')
-        elif data.get('costo') < 0 :
-            self.add_error('costo', 'El valor debe ser mayor a cero.')
+        #end if
+        if data.get('costo') != None:
+            if data.get('costo') < 0 :
+                self.add_error('costo', 'El valor debe ser mayor a cero.')
+            #end if
         # end if
-        if not data.get('comision') :
+        if data.get('comision') == None:
+            print 'Esto es lo q hay en comision de servicio ',data.get('comision'),' ',(not data.get('comision'))
             self.add_error('comision', 'Digite la comision del servicio.')
-        elif data.get('comision') < 0 :
-            self.add_error('comision', 'El valor debe ser mayor a cero.')
+        if data.get('comision') != None:
+            if data.get('comision') < 0 :
+                self.add_error('comision', 'El valor debe ser mayor a cero.')
+            #end if
         # end if
         if not data.get('vehiculos') :
             self.add_error('vehiculos', 'Seleccione el tipo de vehiculo.')
@@ -70,7 +79,7 @@ class AddTipoServicioFormAdmin(Base):
     # end def
 
     def clean(self):
-        data = super(AddTipoServicioForm, self).clean()
+        data = super(AddTipoServicioFormAdmin, self).clean()
         print self.add_error
         if not data.get('nombre') :
             self.add_error('nombre', 'El nombre es requerido')
