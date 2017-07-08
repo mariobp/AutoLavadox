@@ -125,7 +125,7 @@
                             </div>
                             <md-list flex ng-if="servicios.length>0 && !serv5 && !serv6">
                                <md-list-item ng-repeat="servicio in servicios">
-                                 <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio)" ng-checked="servicio.status"></md-checkbox>
+                                 <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio, $event)" ng-checked="servicio.status"></md-checkbox>
                                  <p>[[servicio.nombre]]</p>
                                   <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
                                </md-list-item>
