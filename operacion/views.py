@@ -18,6 +18,8 @@ from datetime import date
 import json
 from django.db import connection
 import xlwt
+from autolavadox.views import set_queryset, BaseListSupra
+from autolavadox.service import Service
 
 
 class TiposServicios(supra.SupraListView):
@@ -30,6 +32,7 @@ class TiposServicios(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(TiposServicios, self).get_queryset()
+        queryset =set_queryset(queryset)
         obj = queryset.order_by('nombre')
         return obj
     # end def
@@ -45,8 +48,11 @@ class TiposServiciosPorAplicar(supra.SupraListView):
         tipo = self.request.GET.get('tipo', False)
         orden = self.request.GET.get('orden', False)
         queryset = super(TiposServiciosPorAplicar, self).get_queryset()
+        queryset =set_queryset(queryset)
         obj = queryset
-        oper_ser = models.Servicio.objects.filter(orden__id=int(orden) if orden and re.match(
+        ser = Service.get_instance()
+        cuenta = ser.getCuenta()
+        oper_ser = models.Servicio.objects.filter(cuenta=cuenta, orden__id=int(orden) if orden and re.match(
             '^\d+$', orden) else 0, status=True).values_list('tipo__id', flat=True)
         return queryset.filter(vehiculos__id=int(tipo) if tipo and re.match('^\d+$', tipo) else 0).exclude(id__in=list(oper_ser)).order_by('nombre')
     # end def
@@ -77,7 +83,7 @@ class ObservacionOrdenForm(supra.SupraFormView):
 # end class
 
 
-class OrdenList(supra.SupraListView):
+class OrdenList(BaseListSupra):
     model = models.Orden
     list_display = ('id', 'observacion')
     search_fields = ['id',]
@@ -171,6 +177,7 @@ class WsServiciosOrden(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(WsServiciosOrden, self).get_queryset()
+        queryset = set_queryset(queryset)
         obj = queryset.filter(status=True)
         return obj.order_by('tipo__nombre')
     # end def
@@ -313,6 +320,12 @@ class GetOrdenesPendientes(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(GetOrdenesPendientes, self).get_queryset()
+        ser = Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            queryset = queryset.filter(cliente__cuenta=cuenta)
+        #end if
         return queryset.filter(orden__cerrada=False)
     # end def
 # end class
