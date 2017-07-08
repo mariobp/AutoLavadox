@@ -10,9 +10,10 @@ import re
 from django.shortcuts import HttpResponse
 from django.views.generic import TemplateView
 import forms
+from autolavadox.views import BaseListSupra
 
 
-class TiposVehiculos(supra.SupraListView):
+class TiposVehiculos(BaseListSupra):
     model = models.TipoVehiculo
     list_display = ['id', 'nombre']
     paginate_by = 100000
@@ -83,7 +84,7 @@ class ClienteSupra(supra.SupraFormView):
 # end class
 
 
-class ClienteList(supra.SupraListView):
+class ClienteList(BaseListSupra):
     model = models.Cliente
     search_key = 'q'
     list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
