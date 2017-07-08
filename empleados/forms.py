@@ -4,6 +4,7 @@ from django import forms
 from exileui.widgets import DatePickerWidget
 import models
 from django.contrib.admin import widgets
+from autolavadox import service 
 
 
 class OperarioForm(UserCreationForm):
@@ -33,6 +34,14 @@ class OperarioForm(UserCreationForm):
         operario = super(OperarioForm, self).save(commit)
         operario.is_staff = True
         operario.is_superuser = True
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            operario.cuenta = cuenta
+        elif admin:
+            print 'Es un super usuario'
+        #end if
         operario.save()
         return operario
     # end def
@@ -100,6 +109,14 @@ class RecepcionistaForm(UserCreationForm):
         recepcionista = super(RecepcionistaForm, self).save(commit)
         recepcionista.is_staff = True
         recepcionista.is_superuser = True
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            recepcionista.cuenta = cuenta
+        elif admin:
+            print 'Es un super usuario'
+        #end if
         recepcionista.save()
         return recepcionista
     # end def
@@ -167,6 +184,14 @@ class CajeroForm(UserCreationForm):
         cajero = super(CajeroForm, self).save(commit)
         cajero.is_staff = True
         cajero.is_superuser = True
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            cajero.cuenta = cuenta
+        elif admin:
+            print 'Es un super usuario'
+        #end if
         cajero.save()
         return cajero
     # end def
@@ -234,6 +259,14 @@ class AdministradorForm(UserCreationForm):
         cajero = super(AdministradorForm, self).save(commit)
         cajero.is_staff = True
         cajero.is_superuser = True
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            cajero.cuenta = cuenta
+        elif admin:
+            print 'Es un super usuario'
+        #end if
         cajero.save()
         return cajero
     # end def
