@@ -4,10 +4,20 @@ import models
 from django.utils.html import format_html
 import forms
 from django.db import connection
+from autolavadox.views import set_queryset
 # Register your models here.
 
 
-class TipoServicioAdmin(admin.ModelAdmin):
+class BaseAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        queryset = super(BaseAdmin, self).get_queryset(request)
+        queryset= set_queryset(queryset)
+        return queryset.filter(Q(status=True)|Q(state=True)).order_by('-id')
+    # end def
+#end class
+
+
+class TipoServicioAdmin(BaseAdmin):
     form = forms.AddTipoServicioForm
     list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte']
     list_filter = ['id','inicio','fin',]
@@ -49,7 +59,7 @@ class TipoServicioAdmin(admin.ModelAdmin):
 # end class
 
 
-class FacturaAdmin(admin.ModelAdmin):
+class FacturaAdmin(BaseAdmin):
     form = forms.AddTipoServicioForm
     list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte']
     list_filter = ['id','inicio','fin',]
