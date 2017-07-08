@@ -17,6 +17,8 @@ import re
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
+from autolavadox.views import BaseListSupra, set_queryset
+from autolavadox.service import Service
 
 
 # Create your views here.
@@ -34,6 +36,12 @@ class Login(supra.SupraSession):
         nex = self.request.GET.get('next', False)
         if nex:
             return HttpResponseRedirect(nex)
+        servi = Service.get_instance()
+        print servi.isRecepcionista(),'  ',servi.isCajero(),' ',servi.isAdministrador(),' ',servi.isUserCuenta()
+        if servi.isRecepcionista():
+            return HttpResponseRedirect('/')
+        elif servi.isCajero() or servi.isAdministrador() or servi.isUserCuenta():
+            return HttpResponseRedirect('/dashboard')
         return HttpResponseRedirect('/')
     # end def
 
@@ -69,7 +77,7 @@ class Logout(TemplateView):
 # end class
 
 
-class WsOperariosServicio(supra.SupraListView):
+class WsOperariosServicio(BaseListSupra):
     model = models.Empleado
     search_key = 'q'
     list_display = ['id']
@@ -98,6 +106,7 @@ class WsOperarios(supra.SupraListView):
 
     def get_queryset(self):
         queryset = super(WsOperarios, self).get_queryset()
+        queryset = set_queryset(queryset)
         return queryset.order_by('first_name', 'last_name')
 # end class
 
