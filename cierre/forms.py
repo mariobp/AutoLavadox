@@ -1,8 +1,28 @@
+# -*- coding: utf-8 -*-
 from django import forms
 import models
 from exileui.widgets import DatePickerWidget
+from autolavadox import service
 
-class AddTipoServicioForm(forms.ModelForm):
+
+class BaseForm(forms.ModelForm):
+    def save(self, commit=True):
+        data = super(BaseForm, self).save(commit)
+        data.save()
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta and is_user :
+            cuenta = ser.getCuenta()
+            data.cuenta = cuenta
+        elif admin:
+            print 'Es un super usuario'
+        #end if
+        data.save()
+        return data
+    #end def
+#end class
+
+class AddTipoServicioForm(BaseForm):
     def __init__(self, *args, **kwargs):
         super(AddTipoServicioForm, self).__init__(*args, **kwargs)
         self.fields['inicio'].widget = DatePickerWidget(
@@ -41,7 +61,7 @@ class AddTipoServicioForm(forms.ModelForm):
 # end class
 
 
-class AddFacturaForm(forms.ModelForm):
+class AddFacturaForm(BaseForm):
     def __init__(self, *args, **kwargs):
         super(AddTipoServicioForm, self).__init__(*args, **kwargs)
         self.fields['inicio'].widget = DatePickerWidget(
