@@ -20,6 +20,7 @@ from django.db import connection
 import xlwt
 from easy_pdf.views import PDFTemplateView
 from django.db import connection
+from autolavadox import service
 
 
 class Factura(PDFTemplateView):
@@ -28,7 +29,14 @@ class Factura(PDFTemplateView):
     def get_context_data(self, **kwargs):
         factura = get_object_or_404(models.Factura, pk=kwargs['pk'])
         cursor = connection.cursor()
-        cursor.execute('select cierre_factura(\'%s\',\'%s\')'%(factura.inicio, factura.fin))
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta :
+            cuenta = ser.getCuenta()
+            cursor.execute('select cierre_factura_cuenta(\'%s\',\'%s\',%d::integer)'%(factura.inicio, factura.fin,cuenta.id))
+        else:
+            cursor.execute('select cierre_factura(\'%s\',\'%s\')'%(factura.inicio, factura.fin))
+        #end if
         row=cursor.fetchone()
         resul = row[0][0]
         return super(Factura, self).get_context_data(
@@ -46,7 +54,14 @@ class FacturaTipo(PDFTemplateView):
     def get_context_data(self, **kwargs):
         factura = get_object_or_404(models.TipoServicio, pk=kwargs['pk'])
         cursor = connection.cursor()
-        cursor.execute('select cierre_total_tipo_factura(\'%s\',\'%s\')'%(factura.inicio, factura.fin))
+        ser = service.Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if tem_cuenta :
+            cuenta = ser.getCuenta()
+            cursor.execute('select cierre_total_tipo_factura_cuenta(\'%s\',\'%s\',%d::integer)'%(factura.inicio, factura.fin,cuenta.id))
+        else:
+            cursor.execute('select cierre_total_tipo_factura(\'%s\',\'%s\')'%(factura.inicio, factura.fin))
+        #end if
         row=cursor.fetchone()
         resul = row[0][0]
         return super(FacturaTipo, self).get_context_data(
