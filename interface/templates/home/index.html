@@ -100,7 +100,7 @@
                           <h3>En servicio</h3>
                           <md-divider></md-divider>
                           <md-content flex layout-padding style="height: 70%">
-                            <md-radio-group ng-model="selectedPlaca" ng-change="placaChange()">
+                            <md-radio-group ng-model ="selectedPlaca" ng-change="placaChange()">
                               <div ng-repeat='placa in placas' class="row">
                                 <div flex layout='row' layout-padding layout-align="start center" >
                                   <md-radio-button flex
@@ -127,7 +127,9 @@
                                <md-list-item ng-repeat="servicio in servicios">
                                  <md-checkbox ng-model="servicioSelect" ng-if="!servicio.estado" ng-click="changeCheck(servicio, $event)" ng-checked="servicio.status"></md-checkbox>
                                  <p>[[servicio.nombre]]</p>
-                                  <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-icon="/media/iconos/ic_person.svg"></md-icon>
+                                 <!--md-icon class="material-icons md-light md-48" md-svg-src="/media/iconos/ic_person.svg"> face </md-icon-->
+                                  <md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-src="/media/iconos/ic_person.svg"></md-icon>
+                                  <!--md-icon class="md-secondary" aria-label="Person" ng-show="servicio.status" ng-click="asignarOperarioDialog(servicio, $event)"  md-svg-src="/media/iconos/ic_person.svg"></md-icon-->
                                </md-list-item>
                              </md-list>
                              <div layout="row" layout-align="center center" ng-if="servicios.length==0 && !serv5">
