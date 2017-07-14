@@ -17,7 +17,7 @@ import re
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
-from autolavadox.views import BaseListSupra, set_queryset
+from autolavadox.views import BaseListSupra, set_queryset, get_cuenta
 from autolavadox.service import Service
 from autolavadox import service
 
@@ -351,7 +351,12 @@ class ReporteComisionE(View):
         ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
         ws.write(1,3,fin.encode('utf-8'), font_style)
         exc_row=2
-        sql = 'select report_empleados_comision(\'%s\',\'%s\')'%(ini,fin)
+        cuenta,cuenta_id = get_cuenta()
+        if cuenta:
+            sql = 'select report_empleados_comision_cuenta(\'%s\',\'%s\',%d::integer)'%(ini,fin,cuenta_id)
+        else:
+            sql = 'select report_empleados_comision(\'%s\',\'%s\')'%(ini,fin)
+        #end if
         cursor = connection.cursor()
         cursor.execute(sql)
         row = cursor.fetchone()
