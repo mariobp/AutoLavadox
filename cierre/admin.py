@@ -4,7 +4,7 @@ import models
 from django.utils.html import format_html
 import forms
 from django.db import connection
-from autolavadox.views import set_queryset
+from autolavadox.views import set_queryset, get_cuenta
 # Register your models here.
 
 
