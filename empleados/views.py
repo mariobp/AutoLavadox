@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 from autolavadox.views import BaseListSupra, set_queryset
 from autolavadox.service import Service
+from autolavadox import service
 
 
 # Create your views here.

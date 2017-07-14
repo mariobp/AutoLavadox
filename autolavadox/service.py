@@ -51,7 +51,6 @@ class Service():
         user = CuserMiddleware.get_user()
         if user:
             id =CuserMiddleware.get_user().id
-            print 'el id del usuario es ',id
             cuenta = suscripcion.Cuenta.objects.filter(Q(cliente__id=id)|Q(persona__id=id)).first()
             return cuenta
         #end if

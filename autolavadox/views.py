@@ -15,6 +15,17 @@ def set_queryset(query):
     return query
 #end def
 
+def get_cuenta():
+    ser = service.Service.get_instance()
+    tem_cuenta,is_user,admin = ser.isUser()
+    if tem_cuenta :
+        cuenta = ser.getCuenta()
+        return True,cuenta.id
+    else:
+        return False,0
+    #end if
+#end def
+
 class BaseAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(BaseAdmin, self).get_queryset(request)
