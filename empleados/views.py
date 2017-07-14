@@ -266,7 +266,11 @@ class ExcelEmpleados(View):
         ws = wb.add_sheet("Empleados")
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        sql='select informe_time_operarios(\'%s\', \'%s\')'%(ini,fin)
+        cuenta, cuenta_id = get_cuenta()
+        if cuenta:
+            sql='select informe_time_operarios_cuenta(\'%s\', \'%s\',%d::cuenta)'%(ini,fin,cuenta_id)
+        else:
+            sql='select informe_time_operarios(\'%s\', \'%s\')'%(ini,fin)
         cursor=connection.cursor()
         cursor.execute(sql)
         row=cursor.fetchone()
