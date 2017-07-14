@@ -18,8 +18,9 @@ from datetime import date
 import json
 from django.db import connection
 import xlwt
-from autolavadox.views import set_queryset, BaseListSupra
+from autolavadox.views import set_queryset, BaseListSupra,get_cuenta
 from autolavadox.service import Service
+from autolavadox.views import get_cuenta
 
 
 class TiposServicios(supra.SupraListView):
@@ -406,7 +407,12 @@ class ReporteMServicio(View):
         ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
         ws.write(1,3,fin.encode('utf-8'), font_style)
         exc_row=2
-        sql = 'select get_tiempo_servicio(\'%s\',\'%s\')'%(ini,fin)
+        cuenta, cuenta_id = get_cuenta()
+        if cuenta:
+            sql = 'select get_tiempo_servicio_cuenta(\'%s\',\'%s\',%d::integer)'%(ini,fin,cuenta_id)
+        else:
+            sql = 'select get_tiempo_servicio(\'%s\',\'%s\')'%(ini,fin)
+        #end if
         cursor = connection.cursor()
         cursor.execute(sql)
         row = cursor.fetchone()
@@ -435,9 +441,13 @@ class OrdenesDia(View):
 
     def get(self, request, *args, **kwargs):
         cursor = connection.cursor()
-        cursor.execute('select ordenes_dia()')
+        cuenta, cuenta_id = get_cuenta()
+        if cuenta:
+            cursor.execute('select ordenes_dia_cuenta(%d::integer)'%cuenta_id)
+        else:
+            cursor.execute('select ordenes_dia()')
+        #end if
         row = cursor.fetchone()
-
         return HttpResponse(json.dumps(row[0][0]), content_type='application/json', status=200)
     # end def
 # end class
