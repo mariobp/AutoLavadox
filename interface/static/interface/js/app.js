@@ -402,7 +402,6 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
                   data.operario = servicio.operario;
                 }else if(existOperario()){
                   data.operario = extractOperario();
-                  console.log(data.operario);
                 }
   							registrarServicio(data, servicio);
               }else{
@@ -580,7 +579,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
       var operarios = $scope.operarios;
       for(var i=0; i < operarios.length; i++){
         if(operarios[i].elegido){
-          seleccionados.push(operarios[i]);
+          seleccionados.push(operarios[i].id);
         }
       }
       return seleccionados;
@@ -1234,7 +1233,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 					dataSend.tipo = servicio.tipo;
           $scope.cargando = false;
           selecServicio(servicio,evet);
-
+          $mdDialog.hide();
 					// $http({
 					// 	'url': '/operacion/edit/servicio/'+ servicio.id +'/',
 					// 	 'method': 'POST',
