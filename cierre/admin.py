@@ -40,7 +40,12 @@ class TipoServicioAdmin(BaseAdmin):
 
     def save_model(self, request, obj, form, change):
         cursor = connection.cursor()
-        cursor.execute('select cierre_factura_total(\'%s\',\'%s\')'%(str(obj.inicio),str(obj.fin)))
+        cuenta,cuenta = get_cuenta()
+        if cuenta:
+            cursor.execute('select cierre_factura_total_cuenta(\'%s\',\'%s\',%d::integer)'%(str(obj.inicio),str(obj.fin),cuenta_id))
+        else:
+            cursor.execute('select cierre_factura_total(\'%s\',\'%s\')'%(str(obj.inicio),str(obj.fin)))
+        #end if
         row = cursor.fetchone()
         r = row[0][0]
         obj.total=r['total']
