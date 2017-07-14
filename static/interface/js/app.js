@@ -136,7 +136,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
             var data = response.data;
             $scope.cerrada = data.cerradas;
             $scope.pagadas = data.pagas;
-            $scope.enservicio = parseInt(data.total) - (parseInt(data.cerradas)+parseInt(data.pagas));
+            $scope.enservicio = $scope.placas.length;
             $scope.total = data.total;
         },function failCallbacks(response){
             $scope.dialogError();
@@ -240,7 +240,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		//Lista de servicios aplicables
 		$scope.serviciosList = function(){
         habilitar3();
-				function porasignar() {
+				function porasignar(){
 					$http({
 						'url': '/operacion/ws/tipo/servicio/por/asignar/?tipo='+$scope.selectedPlaca.tipo+"&orden="+$scope.selectedPlaca.ordenv,
 						'method': 'GET'
@@ -314,6 +314,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
 		//Agrega servicio
 		function registrarServicio(data, servicio){
+      console.log('******** Servicio con operario --> ',data);
 				$http({
 					'url': '/operacion/add/servicio/',
 					'method': 'POST',
@@ -344,7 +345,8 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		}
 
 
-		$scope.changeCheck = function (servicio) {
+		$scope.changeCheck = function (servicio, ev) {
+      //$scope.asignarOperarioDialog(servicio, ev);
       habilitar3();
 			if(servicio.status){
 			  var confirm = $mdDialog.confirm()
@@ -392,8 +394,28 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							} else {
 									data.tipo = servicio.id;
 							}
-							data.operario = servicio.operario;
-							registrarServicio(data, servicio);
+							// data.operario = servicio.operario;
+							// registrarServicio(data, servicio);
+              console.log(existOperario(),'   ',$scope.operarios,'    ',servicio.operario,' respuestas de las variables ',$scope.serv5,' esto es el server ',$scope.serv5);
+              if(existOperario()){
+                if (servicio.operario != undefined){
+                  data.operario = servicio.operario;
+                }else if(existOperario()){
+                  data.operario = extractOperario();
+                }
+  							registrarServicio(data, servicio);
+              }else{
+                  $scope.asignarPreOperarioDialog(servicio, ev);
+              }
+              // if (servicio.operario.length > 0){
+              //   data.operario = servicio.operario;
+  						// 	//registrarServicio(data, servicio);
+              //   console.log("Si hay operarios seleccionados");
+              //   return;
+              // }else{
+              //   console.log("No hay operarios seleccionados");
+              //   return;
+              // }
 					}else {
 							data.vehiculo = $scope.selectedPlaca.id;
 							$http({
@@ -506,6 +528,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 						data.forEach(function(item){
 							$scope.placas.push(item);
 						});
+            $scope.enservicio = $scope.placas.length;
 						$scope.serv4 = true;
 				}, function failCallbacks(response){
 						if (response.status == 500) {
@@ -541,6 +564,27 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 		}
 
     //Habilita o desabilita el boton de cancelar orden, siempre y cuando no tenga ningun servicio asignano
+    function existOperario(){
+      var operarios = $scope.operarios;
+      for(var i=0; i < operarios.length; i++){
+        if(operarios[i].elegido){
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function extractOperario(){
+      var seleccionados = [];
+      var operarios = $scope.operarios;
+      for(var i=0; i < operarios.length; i++){
+        if(operarios[i].elegido){
+          seleccionados.push(operarios[i].id);
+        }
+      }
+      return seleccionados;
+    }
+
 		function habilitar2(){
 				var n = $scope.servicios.length;
 				if (n > 0) {
@@ -959,6 +1003,63 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 
         });
     };
+    $scope.asignarPreOperarioDialog = function(servicio, ev){
+      console.log('Este es estado antes de enviar ',$scope.serv5,'  ',$scope.serv6);
+      $scope.serv6=false;
+      $scope.serv5=false;
+				  var dialog = $mdDialog.show({
+			      template:
+			      '<md-dialog aria-label="operarios">' +
+			        '<form ng-cloak name="form">' +
+			          '<md-toolbar>' +
+			            '<div class="md-toolbar-tools">' +
+			              '<h2>Operarios</h2>' +
+			              '<span flex></span>' +
+			            '</div>' +
+			          '</md-toolbar>' +
+			          '<md-dialog-content>' +
+									'<div layout="row" layout-align="center center" ng-if="cargando" style="height:200px">' +
+											'<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
+									'</div>' +
+			            '<div class="md-dialog-content"  ng-if="!cargando">' +
+			              '<md-list >' +
+			                 '<md-list-item ng-click="null" ng-repeat="operario in operarios">' +
+			                    '<p>[[operario.nombre]]</p>' +
+			                    '<md-checkbox class="md-secondary" ng-model="operario.elegido"></md-checkbox>' +
+			                '</md-list-item>' +
+			              '</md-list >' +
+			            '</div>'+
+			          '</md-dialog-content>'+
+			          '<md-dialog-actions  ng-if="!cargando" layout="row">'+
+			            '<md-button class="md-raised red" ng-click="closeDialogPre()" flex>'+
+			              'Cancelar'+
+			            '</md-button>'+
+			            '<md-button class="md-primary md-raised" ng-click="asignarOperarioPre()" flex>'+
+			              'Agregar'+
+			            '</md-button>'+
+			          '</md-dialog-actions>'+
+			        '</form>'+
+			      '</md-dialog>',
+			      controller: 'DialogPreEnvio',
+			      locals: {
+			        data: $scope.operarios,
+			        servicio: servicio,
+							orden: $scope.selectedPlaca.ordenv,
+              server5:$scope.serv5,
+              server6:$scope.serv6,
+              selecServicio:$scope.changeCheck,
+              evet:ev,
+							dialogError: $scope.dialogError,
+			      },
+			      clickOutsideToClose:true,
+			      parent: angular.element(document.querySelector('#popupContainer')),
+						targetEvent: ev,
+			    }).then(function(){
+
+			    },function(){
+
+			    });
+		};
 })
 .controller('Dialog2Controller', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden, dialogError){
 		$scope.closeDialog = function() {
@@ -1051,6 +1152,109 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 									dialogError();
 							}
 					});
+				}
+		};
+})
+.controller('DialogPreEnvio', function($scope, $mdDialog, $http, $mdToast, $httpParamSerializer, $timeout, data, servicio, orden,server5,server6,selecServicio,evet, dialogError){
+		$scope.closeDialogPre = function() {
+			  $mdDialog.hide();
+		};
+
+		$scope.cargando = false;
+		$scope.operarios = data;
+		var dataSend = {};
+		dataSend.operario = [];
+
+		function selecionarOperarioPre(array) {
+			cleanSelect();
+			array.forEach(function(item){
+				$scope.operarios.forEach(function(operario){
+					if (item.id === operario.id) {
+						operario.elegido = true;
+					}
+				});
+			});
+		}
+
+		$scope.operariosSeleccionadosPre = function(){
+			$scope.cargando = true;
+      console.log('Esta vaina se exploto en el server --> ',servicio,'    ',server5,'  ',server6);
+      $scope.cargando = false;
+      // selecServicio(servicio,evet);
+      // server5=true;
+      // server6=true;
+      // $scope.cargando = false;
+			// $http({
+			// 	'url': '/empleados/operarios/servicio/?q='+ servicio.id,
+			// 	'method': 'GET',
+			// }).then(function doneCallbacks(response){
+			// 		selecionarOperario(response.data.object_list);
+			// 		$scope.cargando = false;
+			// },function failCallbacks(response){
+			// 	if (response.status == 500) {
+			// 			$scope.cargando = false;
+			// 			dialogError();
+			// 	}else {
+			// 		$timeout(function () {
+			// 			$scope.operariosSeleccionadosPre();
+			// 		}, 2000);
+			// 	}
+			// });
+		};
+
+		$scope.operariosSeleccionadosPre();
+
+		function selectCheckPre(){
+			$scope.operarios.forEach(function(item){
+				if (item.elegido) {
+					dataSend.operario.push(item.id);
+				}
+			});
+		}
+
+		function cleanSelectPre(){
+			$scope.operarios.forEach(function(item){
+				item.elegido = false;
+			});
+		}
+
+		$scope.asignarOperarioPre = function(){
+      console.log(servicio);
+				if(orden){
+					// $mdDialog.hide();
+					// $mdToast.show(
+					// 	$mdToast.simple()
+					// 		.textContent('Guardando...')
+					// 		.hideDelay(3000)
+					// 		.position('bottom right')
+					// );
+					selectCheckPre();
+					dataSend.orden = orden;
+					dataSend.tipo = servicio.tipo;
+          $scope.cargando = false;
+          selecServicio(servicio,evet);
+          $mdDialog.hide();
+					// $http({
+					// 	'url': '/operacion/edit/servicio/'+ servicio.id +'/',
+					// 	 'method': 'POST',
+					// 	 'data': dataSend,
+          // eaders: {
+			 	// 					'Content-Type': 'application/x-www-form-urlencoded'
+          //
+					// }).then(function doneCallbacks(response){
+					// 		$mdDialog.hide();
+					// 		cleanSelect();
+					// 		$mdToast.show(
+					// 			$mdToast.simple()
+					// 				.textContent('Guardado Exitoso')
+					//         .hideDelay(3000)
+					// 				.position('bottom right')
+					// 		);
+					// }, function failCallbacks(response){
+					// 		if (response.status == 500) {
+					// 				dialogError();
+					// 		}
+					// });
 				}
 		};
 })
