@@ -16,7 +16,7 @@ def set_queryset(query):
 #end def
 
 def get_cuenta():
-    ser = service.Service.get_instance()
+    ser = Service.get_instance()
     tem_cuenta,is_user,admin = ser.isUser()
     if tem_cuenta :
         cuenta = ser.getCuenta()
