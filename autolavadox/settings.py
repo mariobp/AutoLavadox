@@ -293,8 +293,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
-STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
-MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
+STATIC_URL = 'https://storage.googleapis.com/autolavadox-1/static/'
+MEDIA_URL = 'https://storage.googleapis.com/autolavadox-1/media/'
 HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 # STATIC_ROOT = '/var/www/AutoLavadox/static/'
