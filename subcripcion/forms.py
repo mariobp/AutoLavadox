@@ -7,6 +7,10 @@ from cuser.middleware import CuserMiddleware
 from django.utils import timezone
 from datetime import datetime
 import pytz
+from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
+
 
 class ModuloForm(forms.ModelForm):
     class Meta:
@@ -127,10 +131,15 @@ class ClienteForm(UserCreationForm):
     def save(self, commit = True):
         cliente = super(ClienteForm, self).save(commit=False)
         cliente.is_staff = True
-        cliente.is_superuser = True
+        cliente.is_superuser = False
         cliente.save()
         cuenta = models.Cuenta(cliente=cliente,estado=True)
         cuenta.save()
+        usuario = User.objects.filter(id=cliente.id).first()
+        grupo = Group.objects.get(name='Administrador')
+        if usuario and grupo :
+            usuario.groups.add(grupo)
+        #end if
         return cliente
     #end def
 #end class
