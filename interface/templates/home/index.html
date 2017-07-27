@@ -1,11 +1,13 @@
 {% load static %}
 <html lang="es" ng-app="App" ng-cloak>
     <head>
-      <title>Luxury Service</title>
+      <title>Exile Cars Service</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Angular Material style sheet -->
         <link rel="stylesheet" href="{% static 'interface/bower_components/angular-material/angular-material.min.css' %}">
         <link rel="stylesheet" href="{% static 'interface/css/style.css' %}" >
+        <link rel="shortcut icon" type="image/png" href="media/iconos/favicon-16x16.png"/>
+        <link rel="shortcut icon" type="image/png" href="http://eg.com/favicon.png"/>
     </head>
     <body ng-controller="AppCtrl" class="color-fondo" id="popupContainer">
         <!--
@@ -19,7 +21,7 @@
           <div class="navbar-fixed">
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <span style="font-size: 0.8em;">Luxury Service | Cerradas: [[cerrada]] | Pagas: [[pagadas]] | En Servicio: [[enservicio]]</span>
+                    <span style="font-size: 0.8em;">Exile Cars Service | Cerradas: [[cerrada]] | Pagas: [[pagadas]] | En Servicio: [[enservicio]]</span>
                     <!-- fill up the space between left and right area -->
                     <span flex></span>
                     <div class=""></div>

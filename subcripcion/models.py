@@ -14,6 +14,11 @@ class Cliente(User):
         "Dirección", max_length=200, blank=True, null=True)
     telefono = models.CharField(
         "Teléfono", max_length=15, blank=True, null=True)
+    nombre_negocio = models.CharField(max_length=150, null=True,blank=True, verbose_name='Nombre de la empresa')
+    invima = models.CharField(max_length=100, verbose_name='Registro sanitario', null=True, blank=True)
+    nit = models.CharField(max_length=150, verbose_name='Nit', null=True, blank=True)
+    consecutivo= models.IntegerField(default=0)
+    logo = models.ImageField(upload_to = 'media/logos/', null=True, blank=True)
 
     class Meta:
         verbose_name = "Cliente"

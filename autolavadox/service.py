@@ -17,9 +17,11 @@ class Service():
     #end def
 
     @classmethod
-    def isRecepcionista(self):
+    def isRecepcionista(self,id_user):
         user = CuserMiddleware.get_user()
-        recepcionista = empleados.Recepcionista.objects.filter(id=user.id).first()
+        print 'Valor para el usuario tales ',user
+        recepcionista = empleados.Recepcionista.objects.filter(id=id_user)
+        print 'esto es lo q hay en recepcionista ',len(recepcionista)
         if recepcionista:
             return True
         #end if
@@ -27,9 +29,9 @@ class Service():
     #end def
 
     @classmethod
-    def isAdministrador(self):
+    def isAdministrador(self,id_user):
         user = CuserMiddleware.get_user()
-        administrador = empleados.Administrador.objects.filter(id=user.id).first()
+        administrador = empleados.Administrador.objects.filter(id=id_user).first()
         if administrador:
             return True
         #end if
@@ -37,9 +39,9 @@ class Service():
     #end def
 
     @classmethod
-    def isCajero(self):
+    def isCajero(self,id_user):
         user = CuserMiddleware.get_user()
-        cajero = empleados.Cajero.objects.filter(id=user.id).first()
+        cajero = empleados.Cajero.objects.filter(id=id_user).first()
         if cajero:
             return True
         #end if
@@ -79,5 +81,14 @@ class Service():
             return r_cuenta
         #end if
         return False
+    #end def
+
+    @classmethod
+    def getCliente(self):
+        user = CuserMiddleware.get_user()
+        if user:
+            return None
+        #end if
+        return None
     #end def
 #end class

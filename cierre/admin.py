@@ -5,6 +5,7 @@ from django.utils.html import format_html
 import forms
 from django.db import connection
 from autolavadox.views import set_queryset, get_cuenta
+from django.db.models import Q
 # Register your models here.
 
 
@@ -12,7 +13,7 @@ class BaseAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(BaseAdmin, self).get_queryset(request)
         queryset= set_queryset(queryset)
-        return queryset.filter(Q(status=True)|Q(state=True)).order_by('-id')
+        return queryset.order_by('-id')
     # end def
 #end class
 

@@ -24,13 +24,13 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '*'
+    'localhost', '*','https://www.autolavadox.appspot.com'
 ]
 
 EXILE_UI = {
-    'site_title': 'LavaAutox',
-    'site_header': 'LavaAutox',
-    'index_title': 'Software para lavaautos',
+    'site_title': 'Exile Cars Service',
+    'site_header': 'Exile Cars Service',
+    'index_title': 'Exile Cars Service',
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
@@ -242,17 +242,22 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lavado',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'autolavadox',
         'USER': 'postgres',
-        'PASSWORD': 'Exile*74522547',
-        'HOST': '104.236.33.228',
+        'PASSWORD': 'exile123456',
         'POST': '5432'
     }
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+
+DATABASES['default']['HOST'] = '/cloudsql/autolavadox:us-central1:autolavadodb'
+if os.getenv('GAE_INSTANCE'):
+    pass
+else:
+    DATABASES['default']['HOST'] = '127.0.0.1'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -288,8 +293,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
+MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
 HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 # STATIC_ROOT = '/var/www/AutoLavadox/static/'

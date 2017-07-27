@@ -4,7 +4,10 @@ from django import forms
 from exileui.widgets import DatePickerWidget
 import models
 from django.contrib.admin import widgets
-from autolavadox import service 
+from autolavadox import service
+from subcripcion import models as suscripcion
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 
 
 class OperarioForm(UserCreationForm):
@@ -32,8 +35,8 @@ class OperarioForm(UserCreationForm):
 
     def save(self, commit=True):
         operario = super(OperarioForm, self).save(commit)
-        operario.is_staff = True
-        operario.is_superuser = True
+        operario.is_staff = False
+        operario.is_superuser = False
         ser = service.Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
         if tem_cuenta and is_user :
@@ -73,8 +76,8 @@ class OperarioFormEdit(forms.ModelForm):
 
     def save(self, commit=True):
         operario = super(OperarioFormEdit, self).save(commit)
-        operario.is_staff = True
-        operario.is_superuser = True
+        operario.is_staff = False
+        operario.is_superuser = False
         operario.save()
         return operario
     # end def
@@ -108,7 +111,7 @@ class RecepcionistaForm(UserCreationForm):
     def save(self, commit=True):
         recepcionista = super(RecepcionistaForm, self).save(commit)
         recepcionista.is_staff = True
-        recepcionista.is_superuser = True
+        recepcionista.is_superuser = False
         ser = service.Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
         if tem_cuenta and is_user :
@@ -149,7 +152,7 @@ class RecepcionistaFormEdit(forms.ModelForm):
     def save(self, commit=True):
         recepcionista = super(RecepcionistaFormEdit, self).save(commit)
         recepcionista.is_staff = True
-        recepcionista.is_superuser = True
+        recepcionista.is_superuser = False
         recepcionista.save()
         return recepcionista
     # end def
@@ -183,7 +186,7 @@ class CajeroForm(UserCreationForm):
     def save(self, commit=True):
         cajero = super(CajeroForm, self).save(commit)
         cajero.is_staff = True
-        cajero.is_superuser = True
+        cajero.is_superuser = False
         ser = service.Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
         if tem_cuenta and is_user :
@@ -193,6 +196,13 @@ class CajeroForm(UserCreationForm):
             print 'Es un super usuario'
         #end if
         cajero.save()
+        if tem_cuenta and is_user :
+            usuario = User.objects.filter(id=cajero.id).first()
+            grupo = Group.objects.get(name='Cajero')
+            if usuario and grupo :
+                usuario.groups.add(grupo)
+            #end if
+        #end if
         return cajero
     # end def
 # end class
@@ -201,6 +211,8 @@ class CajeroForm(UserCreationForm):
 class CajeroFormEdit(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CajeroFormEdit, self).__init__(*args, **kwargs)
+        ser = service.Service.get_instance()
+        print ser.getCuenta().cliente
         self.fields['email'].label = "Correo Electrtónico"
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellidos"
@@ -224,8 +236,13 @@ class CajeroFormEdit(forms.ModelForm):
     def save(self, commit=True):
         cajero = super(CajeroFormEdit, self).save(commit)
         cajero.is_staff = True
-        cajero.is_superuser = True
+        cajero.is_superuser = False
         cajero.save()
+        usuario = User.objects.filter(id=cajero.id).first()
+        grupo = Group.objects.get(name='Cajero')
+        if usuario and grupo:
+            usuario.groups.add(grupo)
+        #end if
         return cajero
     # end def
 # end class
@@ -258,7 +275,7 @@ class AdministradorForm(UserCreationForm):
     def save(self, commit=True):
         cajero = super(AdministradorForm, self).save(commit)
         cajero.is_staff = True
-        cajero.is_superuser = True
+        cajero.is_superuser = False
         ser = service.Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
         if tem_cuenta and is_user :
@@ -268,6 +285,13 @@ class AdministradorForm(UserCreationForm):
             print 'Es un super usuario'
         #end if
         cajero.save()
+        if tem_cuenta and is_user :
+            usuario = User.objects.filter(id=cajero.id).first()
+            grupo = Group.objects.get(name='Administrador')
+            if usuario and grupo :
+                usuario.groups.add(grupo)
+            #end if
+        #end if
         return cajero
     # end def
 # end class
@@ -299,8 +323,13 @@ class AdministradorFormEdit(forms.ModelForm):
     def save(self, commit=True):
         cajero = super(AdministradorFormEdit, self).save(commit)
         cajero.is_staff = True
-        cajero.is_superuser = True
+        cajero.is_superuser = False
         cajero.save()
+        usuario = User.objects.filter(id=cajero.id).first()
+        grupo = Group.objects.get(name='Administrador')
+        if User.objects.filter(id=cajero.id).first() :
+            usuario.groups.add(grupo)
+        #end if
         return cajero
     # end def
 # end class

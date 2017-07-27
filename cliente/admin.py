@@ -5,6 +5,7 @@ import models
 import forms
 from autolavadox.views import set_queryset
 from autolavadox.service import Service
+from autolavadox import service
 from django.db.models import Q
 
 

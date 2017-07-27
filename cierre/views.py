@@ -21,7 +21,7 @@ import xlwt
 from easy_pdf.views import PDFTemplateView
 from django.db import connection
 from autolavadox import service
-
+from django.db.models import Q
 
 class Factura(PDFTemplateView):
     template_name = "cierre/factura.html"

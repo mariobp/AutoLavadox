@@ -11,6 +11,8 @@ from django.shortcuts import HttpResponse
 from django.views.generic import TemplateView
 import forms
 from autolavadox.views import BaseListSupra
+from autolavadox import service
+from autolavadox.service import Service
 
 
 class TiposVehiculos(BaseListSupra):
@@ -35,6 +37,14 @@ class VehiculoInfo(supra.SupraListView):
         tipov = 'tipo__nombre'
         celular = 'cliente__celular'
     # end class
+
+    def get_queryset(self):
+        queryset = super(VehiculoInfo, self).get_queryset()
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        queryset = queryset.filter(cliente__cuenta=cuenta)
+        return queryset
+    # end def
 # end class# end if
 
 

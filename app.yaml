@@ -1,0 +1,3 @@
+entrypoint: autolavadox
+env: flex
+runtime: python

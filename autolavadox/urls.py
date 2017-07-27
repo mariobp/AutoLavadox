@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from exileui.admin import exileui
 import settings
+from django.views.generic.base import RedirectView
+
+favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     url(r'^dashboard/', exileui.urls),
@@ -28,6 +31,7 @@ urlpatterns = [
     url(r'^cliente/', include('cliente.urls', namespace='cliente')),
     url(r'^operacion/', include('operacion.urls', namespace='operacion')),
     url(r'^cierre/', include('cierre.urls', namespace='cierre')),
+    url(r'^favicon\.ico$', favicon_view),
 ]
 
 if settings.DEBUG:

@@ -3,6 +3,7 @@ from django import forms
 import models
 from exileui.widgets import DatePickerWidget
 from autolavadox import service
+from django.db.models import Q
 
 
 class BaseForm(forms.ModelForm):

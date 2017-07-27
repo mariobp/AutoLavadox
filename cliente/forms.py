@@ -9,6 +9,7 @@ from django_select2.forms import (
 )
 from autolavadox.service import Service
 from autolavadox.forms import BaseForm
+from autolavadox import service
 
 
 class AddVehivuloForm(forms.ModelForm):
@@ -102,10 +103,7 @@ class AddVehivuloFormAdmin(forms.ModelForm):
     class Meta:
         model = models.Vehiculo
         exclude = ()
-        widgets = {
-            'tipo': Select2Widget,
-            'cliente': Select2Widget
-        }
+        fields  = '__all__'
     # end class
 
     def __init__(self, *args, **kwargs):

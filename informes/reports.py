@@ -21,7 +21,7 @@ class PdfExportMixin(ExportMixin):
         if self.template:
             PDF.template = self.template
         # end if
-        return [PDF, base_formats.CSV, base_formats.XLSX]
+        return [base_formats.CSV, base_formats.XLSX]
     # end def
 # end class
 

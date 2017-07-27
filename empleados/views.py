@@ -35,13 +35,15 @@ class Login(supra.SupraSession):
             inline.save()
         # end for
         nex = self.request.GET.get('next', False)
-        if nex:
-            return HttpResponseRedirect(nex)
+        #if nex:
+        #    print next,' Esto es en lo q esta el redireccionamiento ' ,self.request.path
+        #    return HttpResponseRedirect(nex)
         servi = Service.get_instance()
-        print servi.isRecepcionista(),'  ',servi.isCajero(),' ',servi.isAdministrador(),' ',servi.isUserCuenta()
-        if servi.isRecepcionista():
+        print 'Id del usuario --> ',self.request.user.id,' estdo del usuario ',self.request.user.is_authenticated
+        print servi.isRecepcionista(self.request.user.id),'  ',servi.isCajero(self.request.user.id),' ',servi.isAdministrador(self.request.user.id),' ',servi.isUserCuenta()
+        if servi.isRecepcionista(self.request.user.id):
             return HttpResponseRedirect('/')
-        elif servi.isCajero() or servi.isAdministrador() or servi.isUserCuenta():
+        elif servi.isCajero(self.request.user.id) or servi.isAdministrador(self.request.user.id) or servi.isUserCuenta():
             return HttpResponseRedirect('/dashboard')
         return HttpResponseRedirect('/')
     # end def
@@ -151,6 +153,8 @@ class Excel(View):
         d1 ='%s-%s-%s'%(f1[2],f1[0],f1[1])
         d2 ='%s-%s-%s'%(f2[2],f2[0],f2[1])
         estado = request.GET.get('estado', False)
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
         # CURSOR DE LA INFO EMPLEADO
         sql = """select ts.nombre from public.cliente_tipovehiculo as tv
                 inner join public.operacion_tiposervicio_vehiculos as ts_tv
@@ -166,7 +170,8 @@ class Excel(View):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="Reporte Empleados.csv"'
         writer = csv.writer(response)
-        writer.writerow(['Luxury Service Car Zone'.encode('utf-8')])
+
+        writer.writerow([(cuenta.cliente.nombre_negocio if cuenta else 'Exile Cars Service').encode('utf-8')])
         writer.writerow(['Fecha de inicio para el reporte'.encode('utf-8'),d1.encode('utf-8'),''.encode('utf-8'),''.encode('utf-8'),'Fecha de fin para el reporte'.encode('utf-8'),d2.encode('utf-8')])
         lista.append(u'Identificacion'.encode('utf-8'))
         lista.append(u'Nombre'.encode('utf-8'))
@@ -279,7 +284,9 @@ class ExcelEmpleados(View):
         servicios = rt['servicios']
         operarios = rt['empleados']
         li=list()
-        ws.write(0,1,'Luxury'.encode('utf-8'),font_style)
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        ws.write(0,1,(cuenta.cliente.nombre_negocio if cuenta else 'Exile Cars Service').encode('utf-8'),font_style)
         ws.write(1,0,'Fecha de inicio para el reporte'.encode('utf-8'), font_style)
         ws.write(1,1,ini.encode('utf-8'), font_style)
         ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
@@ -296,13 +303,13 @@ class ExcelEmpleados(View):
         i=0
         while i < len(operarios):
             j = 0
-            ws.write(exc_row, j, (operarios[i]['identificacion']).encode('utf-8'), font_style)
+            ws.write(exc_row, j, (operarios[i]['identificacion']).encode('utf-8') if operarios[i]['identificacion'] else 'XXXXX-XXXX', font_style)
             j = j + 1
-            ws.write(exc_row, j, (operarios[i]['first_name']).encode('utf-8'), font_style)
+            ws.write(exc_row, j, (operarios[i]['first_name']).encode('utf-8') if operarios[i]['first_name'] else 'XXXXX-XXXX', font_style)
             j = j + 1
-            ws.write(exc_row, j, (operarios[i]['last_name']).encode('utf-8'), font_style)
+            ws.write(exc_row, j, (operarios[i]['last_name']).encode('utf-8') if operarios[i]['last_name'] else 'XXXXX-XXXX', font_style)
             j = j + 1
-            ws.write(exc_row, j, (operarios[i]['telefono']).encode('utf-8'), font_style)
+            ws.write(exc_row, j, (operarios[i]['telefono']).encode('utf-8') if operarios[i]['telefono'] else 'XXXXX-XXXX', font_style)
             j = j + 1
             servi = operarios[i]['servicios']
             print servi
@@ -349,7 +356,9 @@ class ReporteComisionE(View):
         r=0
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        ws.write(0,1,'Luxury'.encode('utf-8'),font_style)
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        ws.write(0,1,(cuenta.cliente.nombre_negocio if cuenta else 'Exile Cars Service').encode('utf-8'),font_style)
         ws.write(1,0,'Fecha de inicio para el reporte'.encode('utf-8'), font_style)
         ws.write(1,1,ini.encode('utf-8'), font_style)
         ws.write(1,2,'Fecha de fin para el reportee'.encode('utf-8'), font_style)
@@ -385,11 +394,11 @@ class ReporteComisionE(View):
         font_style.alignment.wrap = 1
         i = 0
         while i < len(traba):
-            ws.write(r, 0, (traba[i]['identificacion']).encode('utf-8'), font_style)
-            ws.write(r, 1, (traba[i]['nombre']).encode('utf-8'), font_style)
-            ws.write(r, 2, (traba[i]['apellido']).encode('utf-8'), font_style)
-            ws.write(r, 3, (traba[i]['direccion']).encode('utf-8'), font_style)
-            ws.write(r, 4, (traba[i]['telefono']).encode('utf-8'), font_style)
+            ws.write(r, 0, (traba[i]['identificacion']).encode('utf-8') if traba[i]['identificacion'] else 'XXXXX-XXXX', font_style)
+            ws.write(r, 1, (traba[i]['nombre']).encode('utf-8') if traba[i]['nombre'] else 'XXXXX-XXXXX', font_style)
+            ws.write(r, 2, (traba[i]['apellido']).encode('utf-8') if traba[i]['apellido'] else 'XXXXX-XXXXX', font_style)
+            ws.write(r, 3, (traba[i]['direccion']).encode('utf-8') if traba[i]['direccion'] else 'XXXXX-XXXXX', font_style)
+            ws.write(r, 4, (traba[i]['telefono']).encode('utf-8') if traba[i]['telefono'] else 'XXXXX-XXXXX', font_style)
             ser = traba[i]['trabajos']
             y = 5
             total_ser = 0

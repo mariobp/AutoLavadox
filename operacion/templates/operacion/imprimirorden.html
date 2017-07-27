@@ -113,11 +113,20 @@
 <body>
     <div id="printableArea">
         <ul>
-          <li><img src="http://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
-          <li>NIT: 45560342-1</li>
-          <li>LUXURY SERVICE CAR ZONE</li>
-          <li>Direccion : Manga 4a. Av. Calle 29 No. 23A-18</li>
-          <li>Telefono : 6430080 - 3163431592</li>
+          {% if cliente %}
+            <li><img src="https://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
+            <li>NIT: {{ cliente.nit }}</li>
+            <li>Invima: {{ cliente.invima }}</li>
+            <li>{{ cliente.nombre_negocio }}</li>
+            <li>Direccion : {{ cliente.direccion }}</li>
+            <li>Telefono :  {{ cliente.telefono }}</li>
+          {% else %}
+            <li><img src="https://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
+            <li>NIT: XXXXXX-XX</li>
+            <li>Exile Cars Service</li>
+            <!--li>Direccion : Manga 4a. Av. Calle 29 No. 23A-18</li-->
+            <li>Telefono : ###### - ##########</li>
+          {% endif %}
         </ul>
         =======================================================
         <ul id="cliente">
@@ -138,10 +147,12 @@
           <th>VALOR UNITARIO</th>
       </tr>
       {% for ser in s %}
-      <tr>
-          <td>{{ ser.tipo.nombre }}</td>
-          <td>$ {{ ser.tipo.costo|intcomma|split_valor }}</td>
-      </tr>
+        {% if ser.estado %}
+          <tr>
+              <td>{{ ser.tipo.nombre }}</td>
+              <td>$ {{ ser.tipo.costo|intcomma|split_valor }}</td>
+          </tr>
+        {% endif %}  
       {% endfor %}
       <tr>
           <td>Total</td>

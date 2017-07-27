@@ -20,8 +20,6 @@ from autolavadox.views import BaseAdmin, set_queryset
 # Register your models here.
 
 
-
-
 class ServicioInline(admin.StackedInline):
     model = models.Servicio
     form = forms.ServicioForm
@@ -108,6 +106,7 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
     placa_nombre.allow_tags = True
     placa_nombre.short_description = 'Placa'
 # end class
+
 
 class OrdenInforme(ModelResource):
 

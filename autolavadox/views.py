@@ -16,7 +16,7 @@ def set_queryset(query):
 #end def
 
 def get_cuenta():
-    ser = service.Service.get_instance()
+    ser = Service.get_instance()
     tem_cuenta,is_user,admin = ser.isUser()
     if tem_cuenta :
         cuenta = ser.getCuenta()
@@ -26,6 +26,7 @@ def get_cuenta():
     #end if
 #end def
 
+
 class BaseAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(BaseAdmin, self).get_queryset(request)
@@ -33,6 +34,7 @@ class BaseAdmin(admin.ModelAdmin):
         return queryset.filter(Q(status=True)|Q(state=True)).order_by('-id')
     # end def
 #end class
+
 
 class BaseListSupra(supra.SupraListView):
     def get_queryset(self):
