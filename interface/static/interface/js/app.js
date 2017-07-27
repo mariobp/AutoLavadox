@@ -404,6 +404,7 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
                   data.operario = extractOperario();
                 }
   							registrarServicio(data, servicio);
+                changeStateOperario();
               }else{
                   $scope.asignarPreOperarioDialog(servicio, ev);
               }
@@ -572,6 +573,15 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
         }
       }
       return false;
+    }
+
+    function changeStateOperario(){
+      var operarios = $scope.operarios;
+      for(var i=0; i < operarios.length; i++){
+        if(!operarios[i].elegido){
+          operarios[i].elegido=false;
+        }
+      }
     }
 
     function extractOperario(){
