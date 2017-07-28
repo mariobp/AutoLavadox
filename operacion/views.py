@@ -345,7 +345,10 @@ class ImprimirOrden(supra.SupraFormView):
         servicio = models.Servicio.objects.filter(orden__id=int(id))
         usuario = '%s %s' % (request.user.first_name, request.user.last_name)
         servi = Service.get_instance()
-        cliente = servi.getCuenta().cliente
+        cliente = None
+        if servi.getCuenta():
+            cliente = servi.getCuenta().cliente
+        #end if
         return render(request, 'operacion/imprimirorden.html', {'o': orden, 's': servicio, 'usuario': usuario, 'cliente':cliente})
     # end def
 
