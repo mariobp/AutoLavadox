@@ -160,8 +160,8 @@ class OrdenInforme(ModelResource):
 class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     inlines = [ServicioInline]
     list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'cancelada', 'cerrada', 'pago', 'imprimir_orden']
-    list_filter = ['cancelada', 'cerrada', 'pago', ('fin', DateRangeEX)]
-    search_fields = ['entrada', 'vehiculo__placa', 'valor', 'comision', 'pago',]
+    list_filter = [('fin', DateRangeEX)]
+    search_fields = ['entrada', 'vehiculo__placa','vehiculo__cliente__nombre', 'valor', 'comision', 'pago',]
     list_editable = ['cerrada', 'cancelada', 'pago', 'vehiculo']
     form = forms.OrdenForm
     list_display_links = ['id_reporte']
@@ -321,11 +321,21 @@ class TipoInforme(ModelResource):
 
 
 class TipoAdmin(ExportMixin, admin.ModelAdmin):
-    list_display = ('nombre', 'costo', 'comision', 'state')
+    list_display = ('nombre','vehiculoTipo','costo', 'comision', 'state')
+    search_fields = ['nombre','vehiculos__nombre']
     filter_horizontal = ('vehiculos',)
     resource_class = TipoInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
     form = forms.AddTipoServicioForm
+
+    def vehiculoTipo(self, obj):
+        l = []
+        for x in obj.vehiculos.all():
+            l.append(x.nombre)
+        #end for
+        print ','.join([str(i) for i in l])
+        return ','.join([str(i) for i in l]) if l  else 'No asignado.'
+    # end def
 
     def get_form(self, request, obj=None, *args, **kwargs):
         ser = Service.get_instance()
@@ -341,6 +351,9 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
         queryset= set_queryset(queryset)
         return queryset.filter(Q(state=True)).order_by('-id')
     # end def
+
+    vehiculoTipo.allow_tags = True
+    vehiculoTipo.short_description = 'Vehiculo'
 # end class
 
 exileui.register(models.TipoServicio, TipoAdmin)
