@@ -84,15 +84,14 @@ class AddTipoServicioFormAdmin(Base):
         if not data.get('nombre') :
             self.add_error('nombre', 'El nombre es requerido')
         # end if
-        if not data.get('costo') :
-            self.add_error('costo', 'Digite el costo del servicio.')
-        elif data.get('costo') < 0 :
-            self.add_error('costo', 'El valor debe ser mayor a cero.')
+        if  data.get('costo') :
+            if data.get('costo') < 0 :
+                self.add_error('costo', 'El valor debe ser mayor a cero.')
+            #end if
         # end if
         if not data.get('comision') :
-            self.add_error('comision', 'Digite la comision del servicio.')
-        elif data.get('comision') < 0 :
-            self.add_error('comision', 'El valor debe ser mayor a cero.')
+            if data.get('comision') < 0 :
+                self.add_error('comision', 'El valor debe ser mayor a cero.')
         # end if
         if not data.get('vehiculos') :
             self.add_error('vehiculos', 'Seleccione el tipo de vehiculo.')
