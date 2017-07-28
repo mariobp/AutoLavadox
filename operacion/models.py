@@ -11,7 +11,7 @@ from subcripcion import models as suscripcion
 
 # Create your models here.
 class TipoServicio(models.Model):
-    nombre = models.CharField(max_length=500, unique=True)
+    nombre = models.CharField(max_length=500)
     costo = models.FloatField(validators=[validators.RegexValidator(re.compile('^[1-9]+[0-9]*.[0-9]+[0-9]*|[1-9]+[0-9]*$'), ('Costo no valido'), 'invalid')])
     comision = models.FloatField("Comisión")
     vehiculos = models.ManyToManyField(cliente.TipoVehiculo)
