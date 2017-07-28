@@ -34,9 +34,9 @@ EXILE_UI = {
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
-            'dashboard': '/media/logo/carrito_mojado.svg',
-            'page': '/media/logo/carrito_mojado.svg',
-            'login': '/media/logo/carrito_mojado.png'
+            'dashboard': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.svg',
+            'page': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.svg',
+            'login': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.png'
         },
         'icons': {
             'empleados': {
@@ -297,8 +297,11 @@ STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
 MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
 HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
-# STATIC_ROOT = '/var/www/AutoLavadox/static/'
-# STATIC_URL = '/static/'
-# MEDIA_URL = '/media/'
-# HOST_MEDIA = '/var/www/AutoLavadox/media/'
-# MEDIA_ROOT = '/var/www/AutoLavadox/media/'
+#HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
+#MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
+#STATIC_ROOT = '/var/www/AutoLavadox/static/'
+STATIC_URL = '/static/'
+#MEDIA_URL = '/media/'
+#HOST_MEDIA = '/var/www/AutoLavadox/media/'
+#MEDIA_ROOT = '/var/www/AutoLavadox/media/'
+LOGOUT_URL = '/accounts/login/'
