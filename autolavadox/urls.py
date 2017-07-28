@@ -19,10 +19,12 @@ from django.conf.urls.static import static
 from exileui.admin import exileui
 import settings
 from django.views.generic.base import RedirectView
-
+from empleados import views as empleado
 favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
+    url(r'^dashboard/logout/$', empleado.Logout.as_view()),
+    url(r'^dashboard/login/$', empleado.Login.as_view()),    
     url(r'^dashboard/', exileui.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^select2/', include('django_select2.urls')),
