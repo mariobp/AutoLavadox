@@ -16,6 +16,13 @@ th, td {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    font-size: 150%;
+}
+h4{
+  font-size: 200%;
+}
+h5{
+  font-size: 250%;
 }
 
 tr:hover{background-color:#f5f5f5}
@@ -23,8 +30,43 @@ tr:hover{background-color:#f5f5f5}
 
 </head>
 <body>
-  <h1>Reporte de venta facura entre <span>{{ inicio }}</span> y <span>{{ fin }}</span></h1>
+  <img src="https://storage.googleapis.com/autolavadox/media/iconos/favicon-16x16.png" alt="Exile">
+  <h5>Exile Cars Service</h5>
+  <h4>Reporte de venta facura entre <span>{{ inicio }}</span> y <span>{{ fin }}</span></h4>
     {% if existe %}
+    <br>
+    <h4>Reporte general facturas</h4>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Facturas</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pagas</td>
+          <td>{{ totales.num_pagas }}</td>
+          <td>$ {{ totales.pagas|intcomma }}</td>
+        </tr>
+        <tr>
+          <td>Cerradas</td>
+          <td>{{ totales.num_cerradas }}</td>
+          <td>$ {{ totales.cerradas|intcomma }}</td>
+        </tr>
+        <tr>
+          <td>Canceladas</td>
+          <td>{{ totales.num_canceladas }}</td>
+          <td>${{ totales.canceladas|intcomma }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <h4>Reporte especifico facturas pagas</h4>
+    <br>
       <table>
         <thead>
           <tr>
@@ -52,6 +94,70 @@ tr:hover{background-color:#f5f5f5}
           </tr>
         </tbody>
       </table>
+      <br>
+      <br>
+      <h4>Reporte especifico facturas cerradas</h4>
+      <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Valor</th>
+            <th>Comisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cerradas %}
+            <tr>
+              <td>{{ c.placa }}</td>
+              <td>{{ c.entrada|naturaltime }}</td>
+              <td>{{ c.fin|naturalday }}</td>
+              <td>$ {{ c.valor|intcomma }}</td>
+              <td>$ {{ c.comision|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>$ {{ totales.cerradas|intcomma }}</td>
+            <td>$ {{ 0|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+      <h4>Reporte especifico facturas canceladas</h4>
+      <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Valor</th>
+            <th>Comisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for can in canceladas %}
+            <tr>
+              <td>{{ can.placa }}</td>
+              <td>{{ can.entrada|naturaltime }}</td>
+              <td>{{ can.fin|naturalday }}</td>
+              <td>$ {{ can.valor|intcomma }}</td>
+              <td>$ {{ can.comision|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>$ {{ totales.canceladas|intcomma }}</td>
+            <td>$ {{ 0|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
     {% else %}
       No Existe la factura
     {% endif %}
