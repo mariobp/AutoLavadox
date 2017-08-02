@@ -24,7 +24,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '*','https://www.autolavadox.appspot.com'
+    'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
 ]
 
 EXILE_UI = {
@@ -300,7 +300,7 @@ MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 #HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 #MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 #STATIC_ROOT = '/var/www/AutoLavadox/static/'
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 #MEDIA_URL = '/media/'
 #HOST_MEDIA = '/var/www/AutoLavadox/media/'
 #MEDIA_ROOT = '/var/www/AutoLavadox/media/'
