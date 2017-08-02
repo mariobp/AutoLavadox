@@ -39,13 +39,13 @@ class Login(supra.SupraSession):
         #    print next,' Esto es en lo q esta el redireccionamiento ' ,self.request.path
         #    return HttpResponseRedirect(nex)
         servi = Service.get_instance()
-        print 'Id del usuario --> ',self.request.user.id,' estdo del usuario ',self.request.user.is_authenticated
+        print '  Id del usuario --> ',self.request.user.id,' estdo del usuario ',self.request.user.is_authenticated
         print servi.isRecepcionista(self.request.user.id),'  ',servi.isCajero(self.request.user.id),' ',servi.isAdministrador(self.request.user.id),' ',servi.isUserCuenta()
         if servi.isRecepcionista(self.request.user.id):
             return HttpResponseRedirect('/')
         elif servi.isCajero(self.request.user.id) or servi.isAdministrador(self.request.user.id) or servi.isUserCuenta():
             return HttpResponseRedirect('/dashboard')
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/dashboard')
     # end def
 
     def login(self, request, cleaned_data):
