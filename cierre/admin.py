@@ -6,6 +6,7 @@ import forms
 from django.db import connection
 from autolavadox.views import set_queryset, get_cuenta
 from django.db.models import Q
+from autolavadox.service import Service
 # Register your models here.
 
 
@@ -43,6 +44,7 @@ class TipoServicioAdmin(BaseAdmin):
         cursor = connection.cursor()
         cuenta,cuenta = get_cuenta()
         if cuenta:
+            cuenta_id = Service.getCuenta().id
             cursor.execute('select cierre_factura_total_cuenta(\'%s\',\'%s\',%d::integer)'%(str(obj.inicio),str(obj.fin),cuenta_id))
         else:
             cursor.execute('select cierre_factura_total(\'%s\',\'%s\')'%(str(obj.inicio),str(obj.fin)))
