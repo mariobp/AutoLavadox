@@ -22,6 +22,7 @@ from easy_pdf.views import PDFTemplateView
 from django.db import connection
 from autolavadox import service
 from django.db.models import Q
+from subcripcion import models as suscripcion
 
 class Factura(PDFTemplateView):
     template_name = "cierre/factura.html"
@@ -31,18 +32,19 @@ class Factura(PDFTemplateView):
         cursor = connection.cursor()
         ser = service.Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
+        cliente=False
         if tem_cuenta :
             cuenta = ser.getCuenta()
+            cliente = cuenta.cliente
             cursor.execute('select cierre_factura_cuenta(\'%s\',\'%s\',%d::integer)'%(factura.inicio, factura.fin,cuenta.id))
         else:
             cursor.execute('select cierre_factura(\'%s\',\'%s\')'%(factura.inicio, factura.fin))
         #end if
         row=cursor.fetchone()
         resul = row[0][0]
-        print 'El resultado del server --> ',resul['totales'][0]
         return super(Factura, self).get_context_data(
             pagesize="A5",fin=factura.fin,inicio=factura.inicio,existe=resul['existe'], f=resul['facturas'], total=resul['total'],comi=resul['comi'],
-            cerradas=resul['cerradas'],canceladas=resul['canceladas'],totales=resul['totales'][0],title="Reporte Dia",
+            cerradas=resul['cerradas'],cliente=cliente,canceladas=resul['canceladas'],totales=resul['totales'][0],title="Reporte Dia",
             **kwargs
         )
     # end def
