@@ -114,10 +114,10 @@
     <div id="printableArea">
         <ul>
           {% if cliente %}
-            <li><img src="https://luxuryservice.com.co/media/logo/luxu.png" alt=""></li>
-            <li>NIT: {{ cliente.nit }}</li>
-            <li>Invima: {{ cliente.invima }}</li>
+            <li><img src="https://storage.googleapis.com/autolavadox/media/logo/splash.png" alt="" height="42" width="42"></li>
             <li>{{ cliente.nombre_negocio }}</li>
+            <li>{{ cliente.invima }}</li>
+            <li>NIT: {{ cliente.nit }}</li>
             <li>Direccion : {{ cliente.direccion }}</li>
             <li>Telefono :  {{ cliente.telefono }}</li>
           {% else %}
@@ -152,7 +152,7 @@
               <td>{{ ser.tipo.nombre }}</td>
               <td>$ {{ ser.tipo.costo|intcomma|split_valor }}</td>
           </tr>
-        {% endif %}  
+        {% endif %}
       {% endfor %}
       <tr>
           <td>Total</td>
