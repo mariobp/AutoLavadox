@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE FUNCTION cierre_factura(
     d1 text,
     d2 text)
@@ -8,6 +7,7 @@ declare
 	id_factura json;
 	id_cerradas json;
 	id_canceladas json;
+	totales json;
     total_f record;
 begin
 	select sum(valor) as valor, sum(comision) as comosion
@@ -56,11 +56,22 @@ begin
             		o.vehiculo_id=v.id and cast(o.fin as date) >= cast(d1 as date) and cast(o.fin as date) <= cast(d2 as date) and
                 		  o.activo=true and o.cancelada=true) order by id desc
         ) p4);
+        totales := (SELECT COALESCE(array_to_json(array_agg(row_to_json(p6))), '[]') from (
+        	select sum(case when  o.activo=true and o.cerrada=true and o.pago=true and o.cancelada=false then o.valor else 0 end) as pagas,
+        	       sum(case when  o.activo=true and o.cerrada=true and o.pago=true and o.cancelada=false then 1 else 0 end) as num_pagas,
+        	       sum(case when  o.activo=true and o.cancelada=true then o.valor else 0 end) as canceladas,
+        	       sum(case when  o.activo=true and o.cancelada=true then 1 else 0 end) as num_canceladas,
+        	       sum(case when  o.activo=true and o.cerrada=true and o.pago=false and o.cancelada=false then o.valor else 0 end) as cerradas,
+        	       sum(case when  o.activo=true and o.cerrada=true and o.pago=false and o.cancelada=false then 1 else 0 end) as num_cerradas,
+        	 sum(comision) as comosion
+    		from operacion_orden as o
+            		where cast(fin as date) >= cast(d1 as date) and cast(fin as date) <= cast(d2 as date)
+        ) p6);
     return (SELECT COALESCE(array_to_json(array_agg(row_to_json(p5))), '[]') from (
         	select case when total_f.valor is not null then total_f.valor else 0 end as total,
         			case when total_f.comosion is not null then total_f.comosion else 0 end as comi,
         		   case when total_f is not null then true else false end as existe,
-        		   id_factura as facturas,id_cerradas as cerradas, id_canceladas as canceladas
+        		   id_factura as facturas,id_cerradas as cerradas, id_canceladas as canceladas, totales
         ) p5);
 end;
 $BODY$
