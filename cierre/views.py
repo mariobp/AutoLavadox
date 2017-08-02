@@ -39,9 +39,10 @@ class Factura(PDFTemplateView):
         #end if
         row=cursor.fetchone()
         resul = row[0][0]
+        print 'El resultado del server --> ',resul['totales'][0]
         return super(Factura, self).get_context_data(
             pagesize="A5",fin=factura.fin,inicio=factura.inicio,existe=resul['existe'], f=resul['facturas'], total=resul['total'],comi=resul['comi'],
-            title="Reporte Dia",
+            cerradas=resul['cerradas'],canceladas=resul['canceladas'],totales=resul['totales'][0],title="Reporte Dia",
             **kwargs
         )
     # end def
