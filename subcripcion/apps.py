@@ -6,3 +6,4 @@ from django.apps import AppConfig
 
 class SubcripcionConfig(AppConfig):
     name = 'subcripcion'
+    verbose_name='Suscripción'
