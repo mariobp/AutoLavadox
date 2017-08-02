@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["https://autolavadox.appspot.com"],
+      "origin": ["https://autolavadox.appspot.com","https://storage.googleapis.com"],
       "responseHeader": ["Content-Type"],
       "method": ["GET", "HEAD", "DELETE","POST"],
       "maxAgeSeconds": 3600
