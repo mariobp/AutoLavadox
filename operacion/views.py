@@ -280,7 +280,13 @@ class CancelService(supra.SupraFormView):
                 orden = models.Orden.objects.filter(id=servicio.orden.id).first()
                 if orden :
                     orden.valor = orden.valor - servicio.valor
+                    if orden.valor <= 0:
+                        orden.valor = 0
+                    #end if
                     orden.comision = orden.comision - servicio.comision
+                    if orden.comision <= 0:
+                        orden.comision = 0
+                    #end if
                     orden.save()
                     return HttpResponse('{"info":"Ok "}', content_type='application/json', status=201)
                 # end if
