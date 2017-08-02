@@ -9,7 +9,7 @@ from django.core import validators
 
 
 class Cliente(User):
-    identificacion = models.CharField(max_length=100, unique=True, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Identificacion invalida'), 'invalid')])
+    identificacion = models.CharField(max_length=100, validators=[validators.RegexValidator(re.compile('^([1-9]+[0-9]*){7,20}$'), ('Identificacion invalida'), 'invalid')])
     direccion = models.CharField(
         "Dirección", max_length=200, blank=True, null=True)
     telefono = models.CharField(
