@@ -155,8 +155,8 @@ class ClienteEditForm(forms.ModelForm):
 
     class Meta:
         model = models.Cliente
-        fields = ['username', 'email', 'first_name','last_name', 'identificacion',
-         'direccion', 'telefono']
+        fields = ['username','email', 'first_name','last_name','identificacion',
+         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo']
         exclude = ['estado', 'password1', 'password2']
     # end class
 #end class
