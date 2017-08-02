@@ -20,7 +20,6 @@ class TipoServicio(models.Model):
 
 
 class Factura(models.Model):
-    num_total = models.
     total = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total factura')
     comision = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total comisión')
     inicio = models.DateField()
