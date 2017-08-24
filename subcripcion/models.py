@@ -19,6 +19,8 @@ class Cliente(User):
     nit = models.CharField(max_length=150, verbose_name='Nit', null=True, blank=True)
     consecutivo= models.IntegerField(default=0)
     logo = models.ImageField(upload_to = 'media/logos/', null=True, blank=True)
+    impresora = models.CharField(max_length=20, blank=True, null=True, verbose_name="Nombre de la impresora")
+    reiniciar = models.BooleanField(default=False, verbose_name="Reiniciar serial")
 
     class Meta:
         verbose_name = "Cliente"
