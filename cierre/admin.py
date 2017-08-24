@@ -57,7 +57,7 @@ class TipoServicioAdmin(BaseAdmin):
     # end def
 
     class Media:
-        js = ('/static/cierre/js/cierre.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/cierre/js/cierre.js',)
     # end class
 
     id_cierre.allow_tags = True
