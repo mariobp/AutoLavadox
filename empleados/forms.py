@@ -24,7 +24,7 @@ class OperarioForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -64,7 +64,7 @@ class OperarioFormEdit(forms.ModelForm):
     # end def
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -105,7 +105,7 @@ class RecepcionistaForm(UserCreationForm):
     # end class
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -146,7 +146,7 @@ class RecepcionistaFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -174,7 +174,7 @@ class CajeroForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -230,7 +230,7 @@ class CajeroFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -263,7 +263,7 @@ class AdministradorForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -317,7 +317,7 @@ class AdministradorFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('/static/empleados/js/dateoperario.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
