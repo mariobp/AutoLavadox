@@ -46,6 +46,7 @@ class Orden(models.Model):
     cancelada = models.BooleanField(default=False)
     pago = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
+    numero = models.IntegerField(default=0)
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     def __unicode__(self):
