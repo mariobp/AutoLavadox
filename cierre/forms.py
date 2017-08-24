@@ -51,7 +51,7 @@ class AddTipoServicioForm(BaseForm):
     # end def
 
     class Media:
-        js = ('/static/cierre/js/date.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/cierre/js/date.js',)
     # end class
 
     class Meta:
@@ -74,7 +74,7 @@ class AddFacturaForm(BaseForm):
     # end def
 
     class Media:
-        js = ('/static/cierre/js/date.js',)
+        js = ('https://storage.googleapis.com/autolavadox/static/cierre/js/date.js',)
     # end class
 
     class Meta:
