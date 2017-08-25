@@ -1,4 +1,3 @@
-
 create or replace function get_orden_cliente(id_orden integer,id_cuenta integer) returns json as $$
 declare
 begin
@@ -26,7 +25,7 @@ begin
 			    ) p1) as cliente,
 			    (SELECT COALESCE(array_to_json(array_agg(row_to_json(p1))), '[]') from (
 				select tp_ser.nombre,
-				 to_char(ser.valor, 'FM999,999,999,990')
+				 to_char(ser.valor, 'FM999,999,999,990') as valor
 				from operacion_servicio as ser
 				inner join operacion_tiposervicio as tp_ser on ( ser.tipo_id=tp_ser.id and ser.orden_id=id_orden)
 			    ) p1) as servicios,
