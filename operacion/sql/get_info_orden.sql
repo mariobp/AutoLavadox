@@ -34,7 +34,7 @@ begin
 				select  to_char(sum(ser.valor), 'FM$999,999,999,990')
 				from operacion_servicio as ser
 				inner join operacion_tiposervicio as tp_ser on ( ser.tipo_id=tp_ser.id and ser.orden_id=id_orden)
-			    ) as total,o.id as id, o.numero as identificador,cast(o.entrada as date) as entrada, case when o.fin is null then cast(o.entrada as date) else cast(o.fin as date) end as salida
+			    ) as total,cast(o.id as text) as id, cast(o.numero as text) as identificador,cast(o.entrada as date) as entrada, case when o.fin is null then cast(o.entrada as date) else cast(o.fin as date) end as salida
 	        from operacion_orden as o where o.id= id_orden
         ) p4);
 end;
