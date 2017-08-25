@@ -260,7 +260,7 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     # end def
 
     class Media:
-        js = ('https://storage.googleapis.com/autolavadox/static/operacion/js/operacion.js',)
+        js = ('http://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.js','https://storage.googleapis.com/autolavadox/static/operacion/js/operacion.js',)
         css = {
             'all': ('https://storage.googleapis.com/autolavadox/static/operacion/css/operacion.css',)
         }
