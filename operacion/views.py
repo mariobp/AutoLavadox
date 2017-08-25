@@ -462,3 +462,25 @@ class OrdenesDia(View):
         return HttpResponse(json.dumps(row[0][0]), content_type='application/json', status=200)
     # end def
 # end class
+
+
+class InfoOrden(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(InfoOrden, self).dispatch(*args, **kwargs)
+    # end def
+
+    def get(self, request, *args, **kwargs):
+        orden = request.GET.get('orden_id','0')
+        cursor = connection.cursor()
+        cuenta, cuenta_id = get_cuenta()
+        cursor.execute('select get_orden_cliente(%s::integer,%d::integer)'%(orden, cuenta_id if cuenta else 0))
+        row = cursor.fetchone()
+        print 'Esto es lo q debe contener ',len(row[0])
+        if len(row[0]) :
+            return HttpResponse(json.dumps(row[0][0]), content_type='application/json',status=200)
+        #end if
+        return HttpResponse(json.dumps({}), content_type='application/json',status=200)
+    #end class
+
+# end class
