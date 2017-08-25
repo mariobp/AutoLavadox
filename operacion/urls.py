@@ -54,3 +54,8 @@ urlpatterns += [
 urlpatterns += [
     url(r'^get/ordenes/$', views.OrdenesDia.as_view(), name='get_orden_dia'),
 ]
+
+# informacion de la orden y descripcion de servicio
+urlpatterns += [
+    url(r'^get/info/orden/$', views.InfoOrden.as_view(), name='get_info_orden'),
+]
