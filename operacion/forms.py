@@ -104,7 +104,7 @@ class AddOrdenForm(Base):
     class Meta:
         model = models.Orden
         fields = ['recepcionista', 'vehiculo', ]
-        exclude = ['fin', 'cajero', 'observacion', 'valor', 'comision', ]
+        exclude = ['fin', 'cajero', 'observacion', 'valor', 'comision', 'numero']
     # end class
 
     def __init__(self, *args, **kwargs):
