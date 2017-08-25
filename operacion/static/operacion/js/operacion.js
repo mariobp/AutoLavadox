@@ -3,35 +3,23 @@ $(document).on('ready', function() {
         return false;
     });
     $('.imprimir').on('click', function(event) {
-      window.open("/operacion/imprimir/orden/"+$(this).attr('href')+"/", '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes')
-        /*$.ajax({
-            url: '/operacion/ws/imprimir/orden/?q=1',
+      //window.open("/operacion/imprimir/orden/"+$(this).attr('href')+"/", '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes')
+        $.ajax({
+            url: "/operacion/get/info/orden/?orden_id="+$(this).attr('href'),
             type: 'get',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
-                var res = "<table width=\"50%\">",
-                    r = "";
-                res += "<tr><th width=\"70%\">SERVICIOS AUTOMOVILES</th><th width=\"30%\">VALOR UNITARIO</th></tr>";
-                var d = data.object_list;
-                window.ra =data;
-                for (var i = 0; i < d.length; i++) {
-                    if (i == 0) {
-                        r += "<ul>";
-                        r += "<li>Orden : " + d[i].orden_id + "</li>";
-                        r += "<li>Cliente : " + d[i].nombre +" " + d[i].apellidos + "</li>";
-                        r += "<li>Identificacion : " + d[i].identificacion + "</li>";
-                        r += "<li>Placa : " + d[i].placa + "</li>";
-                        res = "</ul>";
-                    }
-                    res += "<tr><td>" + d[i].servicio + "</td><td>$ " + d[i].costo + "</td></tr>";
-                }
-                var printContents = r+res;
-                var originalContents = document.body.innerHTML;
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
+              $.ajax({
+                  url:'http://127.0.0.1:9004/printp',
+                  contentType: 'application/json; charset=utf-8',
+                  dataType:'text',
+                  method:'post',
+                  data: JSON.stringify(data),
+                  success:function(datas){
+                    console.log(datas);
+                  }
+                });
             }
-        });*/
+        });
     });
 });
