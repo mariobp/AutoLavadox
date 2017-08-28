@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 # Create your views here.
 from django.shortcuts import render
@@ -24,7 +26,7 @@ from autolavadox import service
 from django.db.models import Q
 from subcripcion import models as suscripcion
 
-class Factura(PDFTemplateView):
+class FacturaT(PDFTemplateView):
     template_name = "cierre/factura.html"
 
     def get_context_data(self, **kwargs):
@@ -42,12 +44,15 @@ class Factura(PDFTemplateView):
         #end if
         row=cursor.fetchone()
         resul = row[0][0]
-        return super(Factura, self).get_context_data(
-            pagesize="A5",fin=factura.fin,inicio=factura.inicio,existe=resul['existe'], f=resul['facturas'], total=resul['total'],comi=resul['comi'],
-            cerradas=resul['cerradas'],cliente=cliente,canceladas=resul['canceladas'],totales=resul['totales'][0],title="Reporte Dia",
-            **kwargs
-        )
-    # end def
+        print "Esto es el resul server ",resul
+        print resul['existe']
+        print resul['facturas'] if resul['facturas'] else []
+        print resul['total'] if resul['total'] else []
+        return super(FacturaT, self).get_context_data(
+            pagesize="A5",fin=factura.fin,inicio=factura.inicio,
+            existe=resul['existe'], f=resul['facturas'] if resul['facturas'] else [] , total=resul['total'] if resul['total'] else [],comi=resul['comi'] if resul['comi'] else [],
+            cerradas=resul['cerradas'] if resul['cerradas'] else [],cliente=cliente if cliente else [],canceladas=resul['canceladas'] if resul['canceladas'] else [],totales=resul['totales'][0] if resul['totales'][0] else [],title="Reporte Dia",
+            **kwargs)
 # end class
 
 
