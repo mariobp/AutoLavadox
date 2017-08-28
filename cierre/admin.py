@@ -111,3 +111,5 @@ class FacturaAdmin(BaseAdmin):
 
 exileui.register(models.TipoServicio, TipoServicioAdmin)
 exileui.register(models.Factura, FacturaAdmin)
+exileui.register(models.Turno)
+exileui.register(models.Cierre)
