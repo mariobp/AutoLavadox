@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION cierre_factura_cuenta(
-    d1 text,
+    d1 text,d2 text,
     id_cuenta integer)
   RETURNS json AS
 $BODY$
