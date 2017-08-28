@@ -396,18 +396,19 @@ angular.module('App', ['ngMaterial', 'ngMessages'])
 							}
 							// data.operario = servicio.operario;
 							// registrarServicio(data, servicio);
-              console.log(existOperario(),'   ',$scope.operarios,'    ',servicio.operario,' respuestas de las variables ',$scope.serv5,' esto es el server ',$scope.serv5);
-              if(existOperario()){
-                if (servicio.operario != undefined){
-                  data.operario = servicio.operario;
-                }else if(existOperario()){
-                  data.operario = extractOperario();
-                }
-  							registrarServicio(data, servicio);
-                changeStateOperario();
-              }else{
-                  $scope.asignarPreOperarioDialog(servicio, ev);
-              }
+              // console.log(existOperario(),'   ',$scope.operarios,'    ',servicio.operario,' respuestas de las variables ',$scope.serv5,' esto es el server ',$scope.serv5);
+              // if(existOperario()){
+              //   if (servicio.operario != undefined){
+              //     data.operario = servicio.operario;
+              //   }else if(existOperario()){
+              //     data.operario = extractOperario();
+              //   }
+  						// 	registrarServicio(data, servicio);
+              //   changeStateOperario();
+              // }else{
+              //     $scope.asignarPreOperarioDialog(servicio, ev);
+              // }
+              registrarServicio(data, servicio);
               // if (servicio.operario.length > 0){
               //   data.operario = servicio.operario;
   						// 	//registrarServicio(data, servicio);
