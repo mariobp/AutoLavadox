@@ -24,7 +24,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
+    'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com', 'https://35.188.237.25'
 ]
 
 EXILE_UI = {
@@ -249,18 +249,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'autolavadox',
-        'USER': 'postgres',
-        'PASSWORD': 'exile123456',
+        'USER': 'postgrest',
+        'PASSWORD': 'exile*74522547',
         'POST': '5432'
     }
 }
 
-
-DATABASES['default']['HOST'] = '/cloudsql/autolavadox:us-central1:autolavadodb'
-if os.getenv('GAE_INSTANCE'):
-    pass
-else:
-    DATABASES['default']['HOST'] = '127.0.0.1'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -284,7 +278,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'es-la'
+LANGUAGE_CODE = 'es-co'
 
 TIME_ZONE = 'America/Bogota'
 
@@ -298,11 +292,11 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = 'https://storage.googleapis.com/autolavadox/static/'
-STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
-MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
-HOST_MEDIA = 'https://storage.googleapis.com/autolavadox/media/'
-MEDIA_ROOT = 'https://storage.googleapis.com/autolavadox/media/'
+STATIC_ROOT = '/home/eugeniopajaro/AutoLavadox/static/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+HOST_MEDIA = '/media/'
+MEDIA_ROOT = '/home/eugeniopajaro/AutoLavadox/media/'
 #HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 #MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 #STATIC_ROOT = '/var/www/AutoLavadox/static/'
