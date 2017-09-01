@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
@@ -81,7 +81,9 @@ EXILE_UI = {
                 ],
                 'models': {
                     'TipoServicio': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'}
+                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Turno': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Cierre': {'icon': 'move_to_inbox', 'group': 'Cierre'}
                 },
             },
             'subcripcion': {
@@ -147,7 +149,9 @@ MENU_ORDER = [
         'name': 'cierre',
         'models': [
             'TipoServicio',
-            'Factura'
+            'Factura',
+            'Turno',
+            'Cierre'
         ]
     },
     {
@@ -192,6 +196,7 @@ INSTALLED_APPS = [
     'django_select2',
     'daterange_filter',
     'supra',
+    'xhtml2pdf',
     'empleados.apps.EmpleadosConfig',
     'cliente.apps.ClienteConfig',
     'operacion.apps.OperacionConfig',
@@ -250,14 +255,15 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 DATABASES['default']['HOST'] = '/cloudsql/autolavadox:us-central1:autolavadodb'
 if os.getenv('GAE_INSTANCE'):
     pass
 else:
     DATABASES['default']['HOST'] = '127.0.0.1'
+
+# Password validation
+# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -292,11 +298,11 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = '/home/dark/proyectos/AutoLavadox/static/'
+STATIC_ROOT = 'https://storage.googleapis.com/autolavadox/static/'
 STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
 MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
-HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
-MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
+HOST_MEDIA = 'https://storage.googleapis.com/autolavadox/media/'
+MEDIA_ROOT = 'https://storage.googleapis.com/autolavadox/media/'
 #HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
 #MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
 #STATIC_ROOT = '/var/www/AutoLavadox/static/'
