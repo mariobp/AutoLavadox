@@ -251,7 +251,8 @@ DATABASES = {
         'NAME': 'autolavadox',
         'USER': 'postgrest',
         'PASSWORD': 'exile*74522547',
-        'POST': '5432'
+        'POST': '5432',
+        'HOST': 'localhost'
     }
 }
 
