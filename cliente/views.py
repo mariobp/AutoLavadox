@@ -48,6 +48,33 @@ class VehiculoInfo(supra.SupraListView):
 # end class# end if
 
 
+class VehiculoInfoList(supra.SupraListView):
+    model = models.Vehiculo
+    search_key = 'q'
+    list_display = ['placa', 'marca', 'kilometraje', 'color', 'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
+    search_fields = ['placa']
+    list_filter = ['placa']
+    paginate_by = 1000
+
+    class Renderer:
+        cedula = 'cliente__identificacion'
+        nombre = 'cliente__nombre'
+        apellidos = 'cliente__apellidos'
+        tipov = 'tipo__nombre'
+        celular = 'cliente__celular'
+    # end class
+
+    def get_queryset(self):
+        queryset = super(VehiculoInfoList, self).get_queryset()
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        queryset = queryset.filter(cliente__cuenta=cuenta)
+        #print 'total de vehiculos ---> ',len(queryset)
+        return queryset
+    # end def
+# end class# end if
+
+
 class VehiculoAdd(supra.SupraFormView):
     model = models.Vehiculo
     form_class = forms.AddVehivuloForm
@@ -98,10 +125,31 @@ class ClienteList(BaseListSupra):
     model = models.Cliente
     search_key = 'q'
     list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
-    search_fields = ['identificacion', 'celular']
+    search_fields = ['identificacion', 'celular','id']
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(ClienteList, self).dispatch(request, *args, **kwargs)
+    # end def
+# end class
+
+
+class ClienteListAll(supra.SupraListView):
+    model = models.Cliente
+    search_key = 'q'
+    list_display = ['id', 'nombre', 'apellidos', 'identificacion', 'celular']
+    search_fields = ['identificacion', 'celular']
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ClienteListAll, self).dispatch(request, *args, **kwargs)
+    # end def
+
+    def get_queryset(self):
+        queryset = super(ClienteListAll, self).get_queryset()
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        cliente = models.Cliente.objects.filter(cuenta=cuenta)
+        return queryset
     # end def
 # end class
