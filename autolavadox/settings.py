@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
@@ -239,7 +239,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'autolavadox.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
@@ -298,16 +298,16 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_ROOT = 'https://storage.googleapis.com/autolavadox/static/'
-STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
-MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
-HOST_MEDIA = 'https://storage.googleapis.com/autolavadox/media/'
-MEDIA_ROOT = 'https://storage.googleapis.com/autolavadox/media/'
-#HOST_MEDIA = '/home/dark/proyectos/AutoLavadox/media/'
-#MEDIA_ROOT = '/home/dark/proyectos/AutoLavadox/media/'
-#STATIC_ROOT = '/var/www/AutoLavadox/static/'
-#STATIC_URL = '/static/'
-#MEDIA_URL = '/media/'
+#STATIC_ROOT = 'https://storage.googleapis.com/autolavadox/static/'
+#STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
+#MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
+#HOST_MEDIA = 'https://storage.googleapis.com/autolavadox/media/'
+#MEDIA_ROOT = 'https://storage.googleapis.com/autolavadox/media/'
+HOST_MEDIA = '/home/dark/AutoLavadox/media/'
+MEDIA_ROOT = '/home/dark/AutoLavadox/media/'
+STATIC_ROOT = '/home/dark/AutoLavadox/static/'
+STATIC_URL = '/home/dark/AutoLavadox/static/'
+MEDIA_URL = '/home/dark/AutoLavadox/media/'
 #HOST_MEDIA = '/var/www/AutoLavadox/media/'
 #MEDIA_ROOT = '/var/www/AutoLavadox/media/'
 LOGOUT_URL = '/accounts/login/'
