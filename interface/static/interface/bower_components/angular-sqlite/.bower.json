@@ -1,0 +1,21 @@
+{
+  "name": "angular-sqlite",
+  "version": "0.1.2",
+  "license": "MIT",
+  "main": "./angular-sqlite.js",
+  "ignore": [],
+  "dependencies": {
+    "angular": ">=1"
+  },
+  "homepage": "https://github.com/reduardo7/angular-sqlite",
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.2",
+    "commit": "4f0c725b52f6817feee171f45906615bb7e1dfd3"
+  },
+  "_source": "https://github.com/reduardo7/angular-sqlite.git",
+  "_target": "^0.1.2",
+  "_originalSource": "angular-sqlite",
+  "_direct": true
+}
