@@ -248,9 +248,9 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox_db',
+        'NAME': 'autolavadox',
         'HOST' :'localhost',
-        'USER': 'postgres_autolavadox',
+        'USER': 'autolavadox',
         'PASSWORD': 'exile123456',
         'POST': '5432'
     }

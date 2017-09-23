@@ -17,6 +17,7 @@ import datetime
 from autolavadox.service import Service
 from django.db.models import Q
 from autolavadox.views import BaseAdmin, set_queryset
+from autolavadox import settings
 # Register your models here.
 
 
@@ -260,9 +261,9 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     # end def
 
     class Media:
-        js = ('https://storage.googleapis.com/autolavadox/static/operacion/js/json3.min.js','https://storage.googleapis.com/autolavadox/static/operacion/js/operacion.js',)
+        js = ('/home/coviyarce/webapps/static_autolavadox/static/operacion/js/json3.min.js','/home/coviyarce/webapps/static_autolavadox/static/operacion/js/operacion.js',)
         css = {
-            'all': ('https://storage.googleapis.com/autolavadox/static/operacion/css/operacion.css',)
+            'all': ('/home/coviyarce/webapps/static_autolavadox/static/operacion/css/operacion.css',)
         }
     # end class
 
