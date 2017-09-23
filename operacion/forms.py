@@ -197,9 +197,6 @@ class ServicioForm(Base):
         if not data.get('tipo') :
             self.add_error('tipo', 'Debe seleccionar el tipo de servicio.')
         # end if
-        if not data.get('operario') :
-            self.add_error('operario', 'Debe seleccionar los operarios.')
-        # end if
     # end def
 # end class
 
@@ -218,10 +215,9 @@ class OrdenForm(Base):
 
     class Meta:
         model = models.Orden
-        exclude = ('valor',)
+        exclude = ('valor','recepcionista',)
         fields = {
             'observacion',
-	    'recepcionista',
             'vehiculo'
         }
         widgets = {
