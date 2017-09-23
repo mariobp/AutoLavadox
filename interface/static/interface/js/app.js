@@ -1161,6 +1161,7 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
 
     //Agrega nuevo vechiculo
     $scope.nuevo = function(placa) {
+      document.querySelector('md-virtual-repeat-container').classList.add('ng-hide');
       $mdDialog.show({
           template: '<md-dialog aria-label="Registrar Vehículo">' +
             '<form ng-cloak name="form" ng-submit="form.$valid && enviar()" novalidate>' +
@@ -1178,6 +1179,17 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
             '<md-progress-circular ng-disabled="!cargando" md-mode="indeterminate" md-diameter="50"></md-progress-circular>' +
             '</div>' +
             '<div class="md-dialog-content" ng-hide="cargando">' +
+            '<md-input-container class="md-block" >' +
+            '<label>Tipo</label>' +
+            '<md-select ng-model="data.tipo" name="tipo" required>' +
+            '<md-option ng-repeat="tipo in tipos"  value="[[tipo.id]]">' +
+            '[[tipo.nombre]]' +
+            '</md-option>' +
+            '</md-select>' +
+            '<div ng-messages="form.tipo.$error">' +
+            '<div ng-message="required">Este campo es requerido.</div>' +
+            '</div>' +
+            '</md-input-container>' +
             '<div layout="row">' +
             '<md-autocomplete md-input-name="celular" md-input-minlength="7"	md-input-maxlength="20" md-floating-label="Celular" md-no-float md-selected-item="selectedCliente" md-no-cache="true" md-min-length="0" md-selected-item-change="clienteActual($event)"	md-search-text-change="textChange3(search3)" md-search-text="search3" md-items="cliente in listClientes(search3)" md-item-text="cliente.celular" placeholder="Escribir el numero de celular"  flex>' +
             '<md-item-template>' +
@@ -1256,17 +1268,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
             '</div>' +
             '</md-input-container>' +
             '</div>' +
-            '<md-input-container class="md-block" >' +
-            '<label>Tipo</label>' +
-            '<md-select ng-model="data.tipo" name="tipo" required>' +
-            '<md-option ng-repeat="tipo in tipos"  value="[[tipo.id]]">' +
-            '[[tipo.nombre]]' +
-            '</md-option>' +
-            '</md-select>' +
-            '<div ng-messages="form.tipo.$error">' +
-            '<div ng-message="required">Este campo es requerido.</div>' +
-            '</div>' +
-            '</md-input-container>' +
             '</div>' +
             '</md-dialog-content>' +
             '<md-dialog-actions layout="row" ng-if="!cargando">' +
@@ -1692,24 +1693,62 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     };
 
     $scope.clienteActual = function(ev) {
-      console.log("Se selecciono el servicio ****************************");
+      console.log("Se selecciono el servicio **************************** ************  ",ev);
       $scope.data.nombre = this.selectedCliente.nombre;
       $scope.data.apellidos = this.selectedCliente.apellidos;
       $scope.data.celular = this.selectedCliente.celular;
       $scope.data.cliente = this.selectedCliente.id;
       $scope.data.identificacion = this.selectedCliente.identificacion;
-      if(this.selectedCliente.celular.length >)
-      this.selectedCliente="saasasa";
+      console.log(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null);
+      console.log(this.selectedCliente.celular == null && this.selectedCliente.identificacion != null);
+      console.log(this.selectedCliente.celular != null && this.selectedCliente.identificacion == null);
+      console.log(this.selectedCliente.celular ,"  ", this.selectedCliente.identificacion);
+      if(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null){
+        console.log("entro en la primera ");
+        this.selectedCliente = "";
+      }else if(this.selectedCliente.celular == null && this.selectedCliente.identificacion != null){
+        console.log("entro en la 2");
+        this.selectedCliente = this.selectedCliente.celular;
+      }else if(this.selectedCliente.celular != null && this.selectedCliente.identificacion == null){
+        console.log("entro en la 3");
+        this.selectedCliente = this.selectedCliente.celular;
+      }else if(!(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null)){
+        if(this.selectedCliente.celular == "" && this.selectedCliente.identificacion != ""){
+          $scope.data.celular ="0000000";
+          this.selectedCliente = $scope.data;          
+        }else if(this.selectedCliente.celular != "" && this.selectedCliente.identificacion == ""){
+          $scope.data.identificacion ="00000000";
+          this.selectedCliente = $scope.data; 
+          //this.selectedCliente = this.selectedCliente.celular;
+        }
+      }
       console.log($scope.selectedCliente,'  ',$scope.data);
     };
 
     $scope.listClientes = function(searchText) {
       var v = [];
       var t = allVehiculo.getDataElement(2);
+      console.log(t);
+      var semaforo = false;
       for (var x in t) {
-        if (t[x].identificacion.includes(searchText) || t[x].celular.includes(searchText)) {
+        console.log(t[x].identificacion,"  ",t[x].celular);
+        semaforo =false;
+        if (t[x].identificacion != null){
+          if (t[x].identificacion.includes(searchText)){
+            semaforo =true;
+          }
+        }
+        if (t[x].celular != null){
+          if (t[x].celular.includes(searchText)){
+            semaforo =true;
+          }
+        }
+        if (semaforo) {
           v.push(t[x]);
         }
+        /*if (t[x].identificacion.includes(searchText) || t[x].celular.includes(searchText)) {
+          v.push(t[x]);
+        }*/
       }
       return v;
       /*var deferred = $q.defer();

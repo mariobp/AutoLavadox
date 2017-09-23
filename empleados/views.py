@@ -89,6 +89,9 @@ class WsOperariosServicio(BaseListSupra):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        print 'esto es lo que hay en la cuenta ',cuenta
         return super(WsOperariosServicio, self).dispatch(*args, **kwargs)
     # end def
 # end class

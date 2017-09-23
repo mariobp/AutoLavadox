@@ -13,7 +13,7 @@ import forms
 from autolavadox.views import BaseListSupra
 from autolavadox import service
 from autolavadox.service import Service
-
+from django.db.models import Q
 
 class TiposVehiculos(BaseListSupra):
     model = models.TipoVehiculo
@@ -48,7 +48,7 @@ class VehiculoInfo(supra.SupraListView):
 # end class# end if
 
 
-class VehiculoInfoList(supra.SupraListView):
+class VehiculoInfoList(supra.SupraListView): 
     model = models.Vehiculo
     search_key = 'q'
     list_display = ['placa', 'marca', 'kilometraje', 'color', 'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
@@ -68,6 +68,7 @@ class VehiculoInfoList(supra.SupraListView):
         queryset = super(VehiculoInfoList, self).get_queryset()
         servi = Service.get_instance()
         cuenta = servi.getCuenta()
+        print 'esta es la cuenta  ',cuenta
         queryset = queryset.filter(cliente__cuenta=cuenta)
         #print 'total de vehiculos ---> ',len(queryset)
         return queryset
@@ -149,7 +150,7 @@ class ClienteListAll(supra.SupraListView):
         queryset = super(ClienteListAll, self).get_queryset()
         servi = Service.get_instance()
         cuenta = servi.getCuenta()
-        cliente = models.Cliente.objects.filter(cuenta=cuenta)
+        cliente = models.Cliente.objects.filter(Q(cuenta=cuenta) &~Q(identificacion__exact='',celular__exact=''))
         return queryset
     # end def
 # end class

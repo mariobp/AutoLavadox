@@ -1,0 +1,372 @@
+/*#ex_collapse, */
+
+@import "ripple.css";
+@import "material-input.css";
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #FAFAFA !important;
+    overflow: hidden;
+}
+body.popup {
+    overflow: auto;
+}
+#ex_collapse label {
+    padding: 7px;
+}
+.ex-card {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    margin-bottom: 7px;
+    background: #fff;
+}
+.ex-card .head, .ex-card .footer {
+    padding: 14px;
+    margin: 0;
+}
+.ex-card .head {
+    background: #26A69A;
+    color: #fff;
+}
+.ex-card .footer> * {
+    margin: 0;
+}
+.ex-card .head select {
+    background: #fff;
+}
+.module h2 {
+    background: transparent !important;
+    color: inherit !important;
+}
+a i.micon {
+    font-size: 24px;
+}
+.object-tools a {
+    margin-right: 7px;
+}
+.object-tools a.addlink {
+    position: fixed;
+    bottom: 67px;
+    right: 47px;
+    border-radius: 50%;
+    padding: 16px !important;
+    z-index: 666;
+}
+#ex-main {
+    float: left;
+    width: 100%;
+}
+body.login #ex-main.ex-card {
+    border: inherit;
+    box-shadow: inherit;
+    margin-top: inherit;
+}
+.module caption, .inline-group h2 {
+    background: #26A69A !important;
+    color: #fff !important;
+}
+.ex-date-filter ul {
+    list-style: none;
+}
+.ex-date-filter ul> li {
+    display: inline-block;
+}
+a.related-widget-wrapper-link> i.micon {
+    font-size: 16px;
+    width: 16px;
+    font-weight: bold;
+}
+.historylink {
+    background: transparent !important;
+}
+#container {
+    height: 100%;
+}
+aside {
+    width: 200px;
+    height: 100%;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    float: left;
+    border-right: #fff;
+    margin-bottom: 0 !important;
+    overflow: auto;
+}
+aside> ul, aside ul> li> ul {
+    margin: 0;
+    padding: 0;
+    list-style: inherit;
+}
+aside ul> li> ul {
+    background: #fff;
+    /*display: none;*/
+}
+aside> ul> li, aside> ul> li> ul> li {
+    list-style: none;
+    padding: 0;
+}
+aside> ul> li {
+    background: #4a5154;
+}
+aside> ul> li> a {
+    color: #fff !important;
+}
+aside> ul> li.activate> a {
+    background: #00695C;
+    color: #fff;
+}
+aside> ul> li> ul> li> a {
+    -webkit-transition: all .7s;
+    transition: all .7s;
+}
+aside> ul> li> ul> li.activate> a, aside> ul> li> ul> li> a:hover {
+    background: #00B0FF;
+    color: #fff;
+}
+aside> ul> li> a, aside> ul> li> ul> li> a {
+    display: block;
+    padding: 7px;
+}
+aside> ul> li> ul> li> a {
+    padding-left: 28px;
+}
+aside+ article {
+    width: calc(100% - 200px);
+    height: 100%;
+    float: right;
+    overflow: auto;
+}
+header, section {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+section {
+    height: calc(100% - 142px);
+}
+.exflag p, .exflag> a, .exflag> h2, .exflag > form > section {
+    padding: 14px;
+}
+.ex-miga {
+    height: 42px;
+    background: #26A69A;
+}
+.ex-miga .left {
+    width: 200px;
+    height: 17px;
+    padding: 10px 0;
+    display: inline-block;
+}
+.ex-miga .breadcrumbs {
+    width: calc(100% - 280px);
+    float: right;
+}
+li.menu {
+    color: #fff;
+    -webkit-transition: all .7s;
+    transition: all .7s;
+}
+li.menu ul.close {
+    display: none;
+}
+li.menu.activate, li.menu:hover {
+    background: #00695C;
+    color: #fff;
+}
+li.menu span {
+    display: block;
+    padding: 7px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.object-tools .addlink {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+td, th {
+    vertical-align: middle !important;
+}
+.ex-filters-bar input[type=text], .ex-filters-bar input[type=password], .ex-filters-bar input[type=email], .ex-filters-bar input[type=url], .ex-filters-bar input[type=number], .ex-filters-bar .vTextField {
+    width: 100px;
+    border-radius: 2px;
+    border: solid 1px #ccc;
+    margin: 0;
+    padding: 5px 2px;
+    height: 15px;
+}
+.ex-filters-bar select {
+    width: 100px;
+    margin: 0;
+    border-radius: 2px;
+    padding: 5px 2px;
+}
+.ex-filters-bar input[type="submit"], .ex-filters-bar input[type="reset"] {
+    margin: 0;
+    padding: 2px 8px;
+    font-size: 17px;
+}
+#changelist-filter {
+    min-height: 58px;
+    padding: 3px 14px;
+    background-color: #26A69A !important;
+    color: #fff !important;
+}
+#ex_collapse> label {
+    margin-top: 8px;
+}
+#changelist-filter ul {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+p.paginator {
+    width: calc(100% - 20px) !important;
+}
+.campo, .ex-date-filter, .ex-date-filter> * {
+    display: inline-block;
+    padding: 5px
+}
+.ex-filters-bar {
+    display: table;
+    width: 100%;
+    background-color: #26A69A;
+    text-align: left;
+}
+.ex-filters-bar .ex-filter {
+    display: table-cell;
+}
+.ex-filters-bar .ex-filter.search {
+    width: 360px;
+}
+.assistant.box.close {
+    display: none;
+}
+.assistant-btn {
+    text-align: right;
+    padding: 0 16px;
+}
+.assistant-btn> a {
+    display: inline-block;
+}
+#header {
+    height: 80px !important;
+}
+.miga> ul {
+    padding: 0;
+    margin: 0;
+    background: #26A69A;
+    padding: 7px;
+}
+.miga> ul> li {
+    list-style: none;
+    display: inline-block;
+    color: #fff;
+    padding-right: 7px;
+}
+.miga> ul> li> a {
+    vertical-align: middle;
+    color: #fff;
+}
+#changelist #toolbar form input[type="submit"] {
+    padding: 2px 8px;
+}
+.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Inside_Right:focus {
+    outline: none;
+}
+.Zebra_DatePicker_Icon.Zebra_DatePicker_Icon_Inside_Right {
+    box-shadow: none;
+    background-size: initial;
+    background-position: center;
+}
+*:focus {
+    outline: 1px;
+}
+.assistant-lk {
+    display: inline-block;
+    background: #26A69A;
+    padding: 7px;
+    border-radius: 2px;
+    color: #fff !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.assistant-lk:hover {
+    background: #00695C;
+}
+#user-tools {
+    margin-top: 44px !important;
+}
+input[type="checkbox"], input[type="radio"] {
+    color: #26A69A;
+}
+#subdashboard .items ul {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    color: #26A69A;
+}
+#subdashboard .items ul> li {
+    list-style: none;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin: 3.5px;
+    vertical-align: middle;
+    border-radius: 2px;
+    transition: all .7s;
+}
+#subdashboard .items ul> li:hover {
+    background: #B3E5FC;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+#subdashboard .items ul> li> a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    font-weight: bold;
+}
+#subdashboard .items ul> li> a> div {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    justify-content: center;
+    text-align: center;
+}
+#subdashboard .items ul> li> a> div:nth-child(1) {
+    height: 70%
+}
+#subdashboard .items ul> li> a> div:nth-child(2) {
+    height: 30%
+}
+#subdashboard .items ul> li> a> div> i {
+    font-size: 40px
+}
+.search.ex-card {
+    margin: 0;
+    padding: 2px 40px;
+}
+.search.ex-card i.micon {
+    color: #26A69A;
+}
+.search.ex-card input#subdashboard-search {
+    border: none;
+    width: calc(100% - 28px);
+    padding: 5px 0;
+}
+.exbtn {
+    display: inline-block;
+    background: #00B0FF;
+    padding: 10px 15px !important;
+    margin: 7px 0;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    color: #fff !important;
+    cursor: pointer;
+    font-size: 14px
+}
+.export_link, .import_link{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
