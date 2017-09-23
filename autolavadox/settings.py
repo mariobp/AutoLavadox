@@ -24,7 +24,7 @@ SECRET_KEY = 'yup+#q@+j!^gt9oi=wal33n#0n4)t(j19d6fz97a*91_v@*4$^'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '*','autolavadox.exile.com.co'
+    'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
 ]
 
 EXILE_UI = {
@@ -248,13 +248,14 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox',
+        'NAME': 'autolavadox_db',
         'HOST' :'localhost',
-        'USER': 'autolavadox',
+        'USER': 'postgres_autolavadox',
         'PASSWORD': 'exile123456',
         'POST': '5432'
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -292,15 +293,16 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-
-#HOST_MEDIA = '/home/dark/AutoLavadox/media/'
-#MEDIA_ROOT = '/home/dark/AutoLavadox/media/'
-#STATIC_ROOT = '/home/dark/AutoLavadox/static/'
-#STATIC_URL = '/home/dark/AutoLavadox/static/'
-#MEDIA_URL = '/home/dark/AutoLavadox/media/'
+#STATIC_ROOT = 'https://storage.googleapis.com/autolavadox/static/'
+#STATIC_URL = 'https://storage.googleapis.com/autolavadox/static/'
+#MEDIA_URL = 'https://storage.googleapis.com/autolavadox/media/'
+#HOST_MEDIA = 'https://storage.googleapis.com/autolavadox/media/'
+#MEDIA_ROOT = 'https://storage.googleapis.com/autolavadox/media/'
 STATIC_ROOT = '/home/coviyarce/webapps/static_autolavadox'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/home/coviyarce/webapps/media_autolavadox'
 LOGOUT_URL = '/accounts/login/'
+#HOST_MEDIA = '/var/www/AutoLavadox/media/'
+#MEDIA_ROOT = '/var/www/AutoLavadox/media/'
