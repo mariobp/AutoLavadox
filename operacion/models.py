@@ -70,7 +70,7 @@ class Orden(models.Model):
 
 class Servicio(models.Model):
     orden = models.ForeignKey(Orden, null=True, blank=True)
-    operario = models.ManyToManyField(empleado.Empleado, blank=True,null=True)
+    operario = models.ManyToManyField(empleado.Empleado, blank=True)
     tipo = models.ForeignKey(TipoServicio)
     valor = models.FloatField(default=0)
     comision = models.FloatField(verbose_name="comisión", default=0)
