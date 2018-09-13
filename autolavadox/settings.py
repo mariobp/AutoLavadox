@@ -251,8 +251,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
         'HOST' :'localhost',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
+        'USER': 'epic',
+        'PASSWORD': '96522569*74522547',
         'POST': '5432'
     }
 }
@@ -293,8 +293,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/coviyarce/webapps/static_autolavadox'
+STATIC_ROOT = '/var/www/Autolavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
-MEDIA_ROOT = '/home/coviyarce/webapps/media_autolavadox'
+MEDIA_ROOT = '/var/www/Autolavadox/media'
 LOGOUT_URL = '/accounts/login/'
