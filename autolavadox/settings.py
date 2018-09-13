@@ -219,6 +219,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+'cuser.middleware.CuserMiddleware',
 ]
 
 ROOT_URLCONF = 'autolavadox.urls'
@@ -250,7 +251,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
-        'HOST' :'localhost',
+        #'HOST' :'localhost',
+        'HOST': 'ec2-18-223-116-221.us-east-2.compute.amazonaws.com',
         'USER': 'epic',
         'PASSWORD': '96522569*74522547',
         'POST': '5432'
