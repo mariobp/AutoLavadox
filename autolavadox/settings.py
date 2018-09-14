@@ -36,9 +36,9 @@ EXILE_UI = {
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
-            'dashboard': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.svg',
-            'page': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.svg',
-            'login': 'https://storage.googleapis.com/autolavadox/media/logo/carrito_mojado.png'
+            'dashboard': 'http://127.0.0.1:8000/media/logo/carrito_mojado.svg',
+            'page': 'http://127.0.0.1:8000/media/logo/carrito_mojado.svg',
+            'login': 'http://127.0.0.1:8000/media/logo/carrito_mojado.png'
         },
         'icons': {
             'empleados': {
@@ -251,8 +251,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
-        #'HOST' :'localhost',
-        'HOST': 'ec2-18-223-116-221.us-east-2.compute.amazonaws.com',
+        'HOST' :'localhost',
+        #'HOST': 'ec2-18-223-116-221.us-east-2.compute.amazonaws.com',
         'USER': 'epic',
         'PASSWORD': '96522569*74522547',
         'POST': '5432'
@@ -293,7 +293,13 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+"""
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
+MEDIA_URL = '/media/'
+HOST_MEDIA = '/home/dark/practicas/AutoLavadox/media'
+MEDIA_ROOT = '/home/dark/practicas/AutoLavadox/media'
+LOGOUT_URL = '/accounts/login/'"""
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/Autolavadox/static'
 MEDIA_URL = '/media/'
