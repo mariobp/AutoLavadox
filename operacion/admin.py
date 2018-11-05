@@ -169,6 +169,13 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = OrdenInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 
+    def get_form(self, request, obj=None, *args, **kwargs):
+        if obj:
+            kwargs['form'] = forms.OrdenEditForm
+        # end if
+        return super(OrdenAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
+
     def save_model(self, request, obj, form, change):
         obj.save()
         total = 0

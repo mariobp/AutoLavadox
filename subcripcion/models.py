@@ -21,6 +21,9 @@ class Cliente(User):
     logo = models.ImageField(upload_to = 'media/logos/', null=True, blank=True)
     impresora = models.CharField(max_length=20, blank=True, null=True, verbose_name="Nombre de la impresora")
     reiniciar = models.BooleanField(default=False, verbose_name="Reiniciar serial")
+    inventario = models.BooleanField(default=False)
+    ventas_sin_existencias = models.BooleanField(default=False, verbose_name='Ventas sin existencias para la operacion')
+    turnero = models.IntegerField(default=0, verbose_name='Contador Turnero')
 
     class Meta:
         verbose_name = "Cliente"

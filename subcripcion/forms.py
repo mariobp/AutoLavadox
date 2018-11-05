@@ -124,7 +124,7 @@ class ClienteForm(UserCreationForm):
     class Meta:
         model = models.Cliente
         fields = ['username', 'password1', 'password2', 'email', 'first_name','last_name','identificacion',
-         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo']
+         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo', 'inventario', 'ventas_sin_existencias']
         exclude = ['estado']
     # end class
 
@@ -156,7 +156,7 @@ class ClienteEditForm(forms.ModelForm):
     class Meta:
         model = models.Cliente
         fields = ['username','email', 'first_name','last_name','identificacion',
-         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo']
+         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo', 'inventario', 'ventas_sin_existencias']
         exclude = ['estado', 'password1', 'password2']
     # end class
 #end class

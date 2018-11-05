@@ -5,7 +5,7 @@ django-import-export==0.5.1
 django-nested-admin==3.0.10
 Django-Select2==5.8.9
 exileui==0.1.8.5
-html5lib>=0.2b1
+html5lib==1.0b8
 Pillow==3.4.1
 psycopg2
 PyPDF2==1.26.0
@@ -22,3 +22,6 @@ xlwt==1.1.2
 django-easy-pdf
 django-user_agents
 django-cuser
+psycopg2-binary
+gpcharts
+django-easy-select2==1.5.5

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from easy_select2 import apply_select2, Select2Multiple
+
 import models
 from django_select2.forms import (
     HeavySelect2MultipleWidget, HeavySelect2Widget, ModelSelect2MultipleWidget,
@@ -111,6 +113,7 @@ class AddOrdenForm(Base):
         super(AddOrdenForm, self).__init__(*args, **kwargs)
         servi = Service.get_instance()
         cuent,user,admin=servi.isUser()
+        self
         if cuent and user:
             cuenta=servi.getCuenta()
             self.fields['vehiculo'].queryset = cliente.Vehiculo.objects.filter(cliente__cuenta=cuenta)
@@ -156,10 +159,10 @@ class AddServicioForm(Base):
 
     def clean(self):
         data = super(AddServicioForm, self).clean()
-        if not data.get('orden') :
+        if not data.get('orden'):
             self.add_error('orden', 'Debe seleccionar la orden')
         # end if
-        if not data.get('tipo') :
+        if not data.get('tipo'):
             self.add_error('tipo', 'Debe seleccionar el tipo de servicio.')
         # end if
     # end def
@@ -175,8 +178,8 @@ class ServicioForm(Base):
             'operario'
         }
         widgets = {
-            'tipo': Select2Widget,
-            'operario': Select2MultipleWidget
+            'tipo': apply_select2(forms.Select),
+            'operario': Select2Multiple
         }
     # end class
 
@@ -220,10 +223,35 @@ class OrdenForm(Base):
             'observacion',
             'vehiculo'
         }
-        widgets = {
-            'vehiculo': Select2Widget,
-	    'recepcionista': Select2Widget,
-            'observacion': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
+    # end class
+
+    def clean(self):
+        data = super(OrdenForm, self).clean()
+        if not data.get('vehiculo') :
+            self.add_error('vehiculo', 'Debe seleccionar un vehiculo')
+        # end if
+    # end def
+# end class
+
+
+class OrdenEditForm(Base):
+    def __init__(self, *args, **kwargs):
+        super(OrdenForm, self).__init__(*args, **kwargs)
+        servi = Service.get_instance()
+        cuent,user,admin=servi.isUser()
+        if cuent and user:
+            cuenta=servi.getCuenta()
+            self.fields['vehiculo'].queryset = cliente.Vehiculo.objects.filter(cliente__cuenta=cuenta)
+            self.fields['recepcionista'].queryset = empleado.Recepcionista.objects.filter(is_active=True,cuenta=cuenta)
+        #end if
+    # end def
+
+    class Meta:
+        model = models.Orden
+        exclude = ('valor','recepcionista',)
+        fields = {
+            'observacion',
+            'vehiculo'
         }
     # end class
 

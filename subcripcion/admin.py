@@ -102,9 +102,9 @@ class FacturaAdmin(admin.ModelAdmin):
 #end class
 
 
-exileui.register(models.Funcionalidad)
-exileui.register(models.Modulo, ModuloAdmin)
-exileui.register(models.InstModulo, InstModuloAdmin)
+#exileui.register(models.Funcionalidad)
+#exileui.register(models.Modulo, ModuloAdmin)
+#exileui.register(models.InstModulo, InstModuloAdmin)
 exileui.register(models.Plan, PlanAdmin)
 exileui.register(models.Suscripcion)
 exileui.register(models.Factura, FacturaAdmin)

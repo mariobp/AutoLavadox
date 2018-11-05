@@ -209,6 +209,8 @@ INSTALLED_APPS = [
     'django_user_agents',
     'cuser',
     'autolavadox',
+    'easy_select2',
+    'inventario',
 ]
 
 MIDDLEWARE = [
@@ -253,8 +255,10 @@ DATABASES = {
         'NAME': 'autolavadox',
         'HOST' :'localhost',
         #'HOST': 'ec2-18-223-116-221.us-east-2.compute.amazonaws.com',
-        'USER': 'epic',
-        'PASSWORD': '96522569*74522547',
+        #'USER': 'epic',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        #'PASSWORD': '96522569*74522547',
         'POST': '5432'
     }
 }
@@ -293,7 +297,7 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-"""
+
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
 MEDIA_URL = '/media/'
@@ -305,4 +309,4 @@ STATIC_ROOT = '/var/www/AutoLavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
-LOGOUT_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/login/'"""

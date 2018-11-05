@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION report_empleados_comision_cuenta(
     d1 text,
-    d2 text, id_cuenta)
+    d2 text, id_cuenta integer)
   RETURNS json AS
 $BODY$
 declare

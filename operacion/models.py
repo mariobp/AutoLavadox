@@ -48,6 +48,7 @@ class Orden(models.Model):
     activo = models.BooleanField(default=True)
     numero = models.IntegerField(default=0)
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
+    turno = models.IntegerField(default=0)
 
     def __unicode__(self):
         codigo = ""
@@ -65,6 +66,8 @@ class Orden(models.Model):
         verbose_name = "Factura"
         verbose_name_plural = "Facturas"
     # end class
+
+
 # end class
 
 
