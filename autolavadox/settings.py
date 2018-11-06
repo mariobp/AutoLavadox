@@ -91,17 +91,31 @@ EXILE_UI = {
             'subcripcion': {
                 'icon': 'attach_money',
                 'groups': [
-                    'subcripcion'
+                    'Subcripcion'
                 ],
                 'models': {
-                    'Cuenta': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Cliente': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Funcionalidad': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Modulo': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'InstModulo': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Plan': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Suscripcion': {'icon': 'move_to_inbox', 'group': 'Cierre'},
-                    'Factura': {'icon': 'move_to_inbox', 'group': 'Cierre'},
+                    'Cuenta': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Cliente': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Funcionalidad': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Modulo': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'InstModulo': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Plan': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Suscripcion': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                    'Factura': {'icon': 'move_to_inbox', 'group': 'Subcripcion'},
+                },
+            },
+            'inventario': {
+                'icon': 'storage',
+                'groups': [
+                    'Inventario'
+                ],
+                'models': {
+                    'Presentacion': {'icon': 'move_to_inbox', 'group': 'Inventario'},
+                    'Producto': {'icon': 'move_to_inbox', 'group': 'Inventario'},
+                    'Venta': {'icon': 'move_to_inbox', 'group': 'Inventario'},
+                    'Operacion': {'icon': 'extension', 'group': 'Inventario'},
+                    'ComposicionServicio': {'icon': 'build', 'group': 'Inventario'},
+                    'Componente': {'icon': 'move_to_inbox', 'group': 'Inventario'},
                 },
             },
             'auth': {
@@ -167,6 +181,17 @@ MENU_ORDER = [
             'Plan',
             'Suscripcion',
             'Factura',
+        ]
+    },
+    {
+        'name': 'inventario',
+        'models': [
+            'Presentacion',
+            'Producto',
+            'Venta',
+            'Operacion',
+            'ComposicionServicio',
+            'Componente',
         ]
     },
     {
