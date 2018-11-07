@@ -233,16 +233,41 @@ class OrdenForm(Base):
     # end def
 # end class
 
+class OrdenAdminForm(Base):
+    def __init__(self, *args, **kwargs):
+        super(OrdenAdminForm, self).__init__(*args, **kwargs)
+
+        if self.instance.cuenta:
+            if self.fields.has_key('vehiculo'):
+                self.fields['vehiculo'].queryset = cliente.Vehiculo.objects.filter(cliente__cuenta=self.instance.cuenta)
+            if self.fields.has_key('recepcionista'):
+                self.fields['recepcionista'].queryset = empleado.Recepcionista.objects.filter(is_active=True,cuenta=self.instance.cuenta)
+        #end if
+    # end def
+
+    class Meta:
+        model = models.Orden
+        exclude = ('valor',)
+        fields = {
+            'observacion',
+            'vehiculo',
+            'recepcionista',
+            'cuenta',
+        }
+    # end class
+# end class
+
 
 class OrdenEditForm(Base):
     def __init__(self, *args, **kwargs):
-        super(OrdenForm, self).__init__(*args, **kwargs)
+        super(OrdenEditForm, self).__init__(*args, **kwargs)
         servi = Service.get_instance()
         cuent,user,admin=servi.isUser()
         if cuent and user:
             cuenta=servi.getCuenta()
             self.fields['vehiculo'].queryset = cliente.Vehiculo.objects.filter(cliente__cuenta=cuenta)
-            self.fields['recepcionista'].queryset = empleado.Recepcionista.objects.filter(is_active=True,cuenta=cuenta)
+            if self.fields.has_key('recepcionista'):
+                self.fields['recepcionista'].queryset = empleado.Recepcionista.objects.filter(is_active=True,cuenta=cuenta)
         #end if
     # end def
 
@@ -256,7 +281,7 @@ class OrdenEditForm(Base):
     # end class
 
     def clean(self):
-        data = super(OrdenForm, self).clean()
+        data = super(OrdenEditForm, self).clean()
         if not data.get('vehiculo') :
             self.add_error('vehiculo', 'Debe seleccionar un vehiculo')
         # end if

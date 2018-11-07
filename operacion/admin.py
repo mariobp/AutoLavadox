@@ -17,7 +17,9 @@ import datetime
 from autolavadox.service import Service
 from django.db.models import Q
 from autolavadox.views import BaseAdmin, set_queryset
-from autolavadox import settings
+from autolavadox import settings, service
+
+
 # Register your models here.
 
 
@@ -164,13 +166,34 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     list_filter = [('fin', DateRangeEX)]
     search_fields = ['entrada', 'vehiculo__placa','vehiculo__cliente__nombre', 'valor', 'comision', 'pago',]
     list_editable = ['cerrada', 'cancelada', 'pago', 'vehiculo']
-    form = forms.OrdenForm
+    form = forms.OrdenAdminForm
     list_display_links = ['id_reporte']
     resource_class = OrdenInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
 
-    def get_form(self, request, obj=None, *args, **kwargs):
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
         if obj:
+
+            return ('cuenta',)
+        if admin:
+            return ('observacion',
+            'vehiculo',
+            'recepcionista',)
+        return ()
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.OrdenForm
+            # end if
+        if obj and not admin:
             kwargs['form'] = forms.OrdenEditForm
         # end if
         return super(OrdenAdmin, self).get_form(request, obj, *args, **kwargs)
@@ -209,10 +232,18 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     # end def
 
     def nombre_cliente(self, obj):
+        if not obj.vehiculo:
+            return '--- ---'
+        if not obj.vehiculo.cliente:
+            return '--- ---'
         return '%s %s'%(obj.vehiculo.cliente.nombre,obj.vehiculo.cliente.apellidos) if obj.vehiculo.cliente else '---- -----'
     #end
 
     def identificacion_cliente(self, obj):
+        if not obj.vehiculo:
+            return '--- ---'
+        if not obj.vehiculo.cliente:
+            return '--- ---'
         return '%s'%(obj.vehiculo.cliente.identificacion) if obj.vehiculo.cliente else '-------'
     #end
 
