@@ -34,10 +34,16 @@ class Factura(models.Model):
 
 
 class Turno(models.Model):
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=100, null=True, blank=True)
     inicio = models.TimeField()
     fin = models.TimeField()
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.nombre if self.nombre else 'Sin asignar'
+
+    def __str__(self):
+        return self.nombre if self.nombre else 'Sin asignar'
 
     class Meta:
         verbose_name = 'Turno'
@@ -47,11 +53,11 @@ class Turno(models.Model):
 
 
 class Cierre(models.Model):
-    turno = models.ForeignKey(Turno)
+    turno = models.ForeignKey(Turno, null=True, blank=True)
     total = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total factura')
     comision = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total comisión')
-    inicio = models.DateField()
-    fin = models.DateField()
+    inicio = models.DateField(null=True, blank=True)
+    fin = models.DateField(null=True, blank=True)
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     class Meta:

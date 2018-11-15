@@ -73,7 +73,11 @@ EXILE_UI = {
                 'models': {
                     'TipoServicio': {'icon': 'settings', 'group': 'Operacion'},
                     'Servicio': {'icon': 'build', 'group': 'Operacion'},
-                    'Orden': {'icon': 'assignment', 'group': 'Operacion'}
+                    'Orden': {'icon': 'assignment', 'group': 'Operacion'},
+                    'ComposicionServicio': {'icon': 'build', 'group': 'Operacion'},
+                    'Componente': {'icon': 'move_to_inbox', 'group': 'Operacion'},
+                    'HistoriaDeServicioVenta': {'icon': 'move_to_inbox', 'group': 'Operacion'},
+                    'HistoriaDeServicioOperacion': {'icon': 'move_to_inbox', 'group': 'Operacion'}
                 },
             },
             'cierre': {
@@ -114,8 +118,7 @@ EXILE_UI = {
                     'Producto': {'icon': 'move_to_inbox', 'group': 'Inventario'},
                     'Venta': {'icon': 'move_to_inbox', 'group': 'Inventario'},
                     'Operacion': {'icon': 'extension', 'group': 'Inventario'},
-                    'ComposicionServicio': {'icon': 'build', 'group': 'Inventario'},
-                    'Componente': {'icon': 'move_to_inbox', 'group': 'Inventario'},
+                    'Cierre': {'icon': 'extension', 'group': 'Inventario'},
                 },
             },
             'auth': {
@@ -158,7 +161,11 @@ MENU_ORDER = [
         'models': [
             'TipoServicio',
             'Servicio',
-            'Orden'
+            'Orden',
+            'ComposicionServicio',
+            'Componente',
+            'HistoriaDeServicioVenta',
+            'HistoriaDeServicioOperacion',
         ]
     },
     {
@@ -190,8 +197,7 @@ MENU_ORDER = [
             'Producto',
             'Venta',
             'Operacion',
-            'ComposicionServicio',
-            'Componente',
+            'Cierre',
         ]
     },
     {
@@ -335,3 +341,5 @@ MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'"""
+SERVER_STATIC='127.0.0.1:8000'
+SERVER_M='127.0.0.1:8000'

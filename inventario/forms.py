@@ -4,7 +4,8 @@ from django.db.models import Q
 from django.forms.models import BaseInlineFormSet, BaseModelFormSet
 import models
 from autolavadox import service
-from operacion.models import TipoServicio
+from easy_select2 import apply_select2, Select2Multiple
+from django.contrib.admin import widgets
 
 
 class PresentacionForm(forms.ModelForm):
@@ -196,44 +197,59 @@ class ProductoVentaAdminForm(forms.ModelForm):
         model = models.Venta
         fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
         exclude = []
+        widgets = {
+            'cuenta': apply_select2(forms.Select),
+            'presentacion': apply_select2(forms.Select)
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProductoVentaAdminForm, self).__init__(*args, **kwargs)
+        if self.fields.has_key('presentacion'):
+            self.fields['presentacion'].queryset = self.instance.cuenta.presentacion_set.all()
+
 
     def clean(self):
         data = super(ProductoVentaAdminForm, self).clean()
         productos = None
-        if not data.get('cuenta'):
-            self.add_error('cuenta', 'Debe asociar una cuenta.')
-
-        if data.get('cuenta'):
-            productos = data.get('cuenta').producto_set.all()
-            productos = data.get('cuenta').producto_set.all().values_list('id', flat=True)
-            productos = models.Venta.objects.filter(id__in=list(productos) if productos else [])
-
-        if data.get('nombre'):
-            if productos:
-                existir_producto = productos.filter(Q(nombre=data.get('nombre').title())&~Q(id=self.instance.id if self.instance else 0))
-                if existir_producto:
-                    self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
-        if data.get('existencia'):
-            if data.get('existencia') < 0:
-                self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
-
-        if data.get('stock_minimo'):
-            if data.get('stock_minimo') < 0:
-                self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
-
-        if data.get('precio_compra'):
-            if data.get('precio_compra') < 0:
-                self.add_error('precio_compra', 'El precio de venta debe mayores igual a cero.')
-
-        if data.get('precio_venta'):
-            if data.get('precio_venta') < 0:
-                self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('presentacion'):
+            if not data.get('presentacion'):self.add_error('presentacion', 'Debe selecionar una opcion.')
+        if self.fields.has_key('cuenta'):
+            if not data.get('cuenta'):
+                self.add_error('cuenta', 'Debe asociar una cuenta.')
+        if self.fields.has_key('nombre'):
+            if data.get('nombre'):
+                productos = data.get('cuenta').producto_set.all()
+                productos = data.get('cuenta').producto_set.all().values_list('id', flat=True)
+                productos = models.Venta.objects.filter(id__in=list(productos) if productos else [])
+                if productos:
+                    existir_producto = productos.filter(Q(nombre=data.get('nombre').title())&~Q(id=self.instance.id if self.instance else 0))
+                    if existir_producto:
+                        self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
+            else:
+                self.add_error('nombre', 'Debe digitar el nombre.')
+        if self.fields.has_key('existencia'):
+            if data.get('existencia'):
+                if data.get('existencia') < 0:
+                    self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
+        if self.fields.has_key('stock_minimo'):
+            if data.get('stock_minimo'):
+                if data.get('stock_minimo') < 0:
+                    self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('precio_compra'):
+            if data.get('precio_compra'):
+                if data.get('precio_compra') < 0:
+                    self.add_error('precio_compra', 'El precio de venta debe mayores igual a cero.')
+        if self.fields.has_key('precio_venta'):
+            if data.get('precio_venta'):
+                if data.get('precio_venta') < 0:
+                    self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
 
     def save(self, commit=True):
         venta = super(ProductoVentaAdminForm, self).save(commit)
-        venta.nombre = venta.nombre.title()
-        venta.save()
-        return venta()
+        if self.fields.has_key('nombre') :
+            venta.nombre = venta.nombre.title() if venta.nombre else ''
+            venta.save()
+        return venta
 
 
 class ProductoOperacionForm(forms.ModelForm):
@@ -338,158 +354,76 @@ class ProductoOperacionAdminForm(forms.ModelForm):
         return producto
 
 
-class ComposicionServicioForm(forms.ModelForm):
+class CierreadminForm(forms.ModelForm):
     class Meta:
-        model = models.ComposicionServicio
-        fields = ['servicio']
-        exclude = ['cuenta']
+        model = models.Cierre
+        fields = ['cuenta', 'inicio', 'fin', 'costo_producto_venta', 'utilidad_producto_venta', 'total_producto_venta', 'costo_producto_operacion', 'utilidad_producto_operacion', 'total_producto_operacion']
+        widgets = {
+            'tipo': apply_select2(forms.Select),
+        }
 
     def __init__(self, *args, **kwargs):
-        super(ComposicionServicioForm, self).__init__(*args, **kwargs)
+        super(CierreadminForm, self).__init__(*args, **kwargs)
+        if self.fields.has_key('inicio'):
+            self.fields['inicio'].widget = widgets.AdminDateWidget()
+        if self.fields.has_key('fin'):
+            self.fields['fin'].widget = widgets.AdminDateWidget()
+
+    def clean(self):
+        data = super(CierreadminForm, self).clean()
+        if self.fields.has_key('cuenta'):
+            if not data.get('cuenta'):
+                self.add_error('cuenta', 'Debe seleccionar una cuenta')
+
+        if self.fields.has_key('inicio'):
+            if not data.get('inicio'):
+                self.add_error('inicio', 'Debe digitar una fecha de inicio.')
+
+        if self.fields.has_key('fin'):
+            if not data.get('fin'):
+                self.add_error('fin', 'Debe digitar una fecha de fin.')
+        if self.fields.has_key('inicio') and self.fields.has_key('fin'):
+            if data.get('inicio') and data.get('fin'):
+                if data.get('inicio') > data.get('fin'):
+                    self.add_error('inicio', 'La fecha de inicio debe ser mayor a la inicial.')
+
+
+class CierreForm(forms.ModelForm):
+    class Meta:
+        model = models.Cierre
+        fields = ['inicio', 'fin', 'costo_producto_venta', 'utilidad_producto_venta', 'total_producto_venta', 'costo_producto_operacion', 'utilidad_producto_operacion', 'total_producto_operacion']
+        widgets = {
+            'tipo': apply_select2(forms.Select),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CierreForm, self).__init__(*args, **kwargs)
+        self.fields['inicio'].widget = widgets.AdminDateWidget()
+        self.fields['fin'].widget = widgets.AdminDateWidget()
         ser = service.Service.get_instance()
-        tem_cuenta, is_user, admin = ser.isUser()
         self.cuenta = ser.getCuenta()
-        if not admin and self.fields.has_key('servicio'):
-            self.fields['servicio'].queryset = TipoServicio.objects.filter(Q(composicionservicio__isnull=True, cuenta=self.cuenta)|Q(id=self.instance.servicio.id if self.instance.servicio else 0))
 
     def clean(self):
-        data = super(ComposicionServicioForm, self).clean()
-        if not data.get('servicio'):
-            self.add_error('servicio', 'Debe seleccionar un servicio.')
+        data = super(CierreForm, self).clean()
+        if self.fields.has_key('cuenta'):
+            if not data.get('cuenta'):
+                self.add_error('cuenta', 'Debe seleccionar una cuenta')
+
+        if self.fields.has_key('inicio'):
+            if not data.get('inicio'):
+                self.add_error('inicio', 'Debe digitar una fecha de inicio.')
+
+        if self.fields.has_key('fin'):
+            if not data.get('fin'):
+                self.add_error('fin', 'Debe digitar una fecha de fin.')
+        if self.fields.has_key('inicio') and self.fields.has_key('fin'):
+            if data.get('inicio') and data.get('fin'):
+                if data.get('inicio') > data.get('fin'):
+                    self.add_error('inicio', 'La fecha de inicio debe ser mayor a la inicial.')
 
     def save(self, commit=True):
-        composicion = super(ComposicionServicioForm, self).save(commit)
-        composicion.cuenta = self.cuenta
-        composicion.save()
-        return composicion
-
-
-class ComposicionServicioAdminForm(forms.ModelForm):
-    class Meta:
-        model = models.ComposicionServicio
-        fields = ['servicio', 'cuenta']
-
-    def __init__(self, *args, **kwargs):
-        super(ComposicionServicioAdminForm, self).__init__(*args, **kwargs)
-        if self.fields.has_key('servicio') and self.instance.cuenta:
-            self.fields['servicio'].queryset = TipoServicio.objects.filter(Q(composicionservicio__isnull=True, cuenta=self.instance.cuenta)|Q(id=self.instance.servicio.id if self.instance.servicio else 0))
-
-    def clean(self):
-        data = super(ComposicionServicioAdminForm, self).clean()
-        if data.has_key('servicio'):
-            if not data.get('servicio'):
-                self.add_error('servicio', 'Debe seleccionar un servicio.')
-
-
-class ComponenteInlineFormset(BaseInlineFormSet):
-    def _construct_form(self, i, **kwargs):
-        kwargs.update({'composicion_servicio': self.instance})
-        form = super(ComponenteInlineFormset, self)._construct_form(i, **kwargs)
-        return form
-
-    @property
-    def empty_form(self):
-        kwargs = {'composicion_servicio': self.instance}
-        form = self.form(
-            auto_id=self.auto_id,
-            prefix=self.add_prefix('__prefix__'),
-            empty_permitted=True,
-            **kwargs
-        )
-        self.add_fields(form, None)
-        return form
-
-
-class ComponenteInlineForm(forms.ModelForm):
-    class Meta:
-        model = models.Componente
-        fields = ['composicion', 'producto', 'cantidad']
-        exclude = ['cuenta']
-
-    def __init__(self, *args, **kwargs):
-        self.composicion_servicio = kwargs.pop('composicion_servicio')
-        super(ComponenteInlineForm, self).__init__(*args, **kwargs)
-        switch = False
-        if self.composicion_servicio:
-            if self.composicion_servicio.cuenta:
-                self.fields['producto'].queryset = models.Operacion.objects.filter(cuenta=self.composicion_servicio.cuenta)
-                switch=True
-        if not switch:
-            self.fields['producto'].queryset = models.Operacion.objects.none()
-
-    def clean(self):
-        data = super(ComponenteInlineForm, self).clean()
-        if data.get('cantidad'):
-            if data.get('cantidad') < 0:
-                self.add_error('cantidad', 'La cantidad debe ser mayor a cero.')
-
-    def save(self, commit=True):
-        componente = super(ComponenteInlineForm, self).save(commit)
-        if self.composicion_servicio.cuenta:
-            componente.cuenta = self.composicion_servicio.cuenta
-            componente.save()
-        return componente
-
-
-class ComponenteForm(forms.ModelForm):
-    class Meta:
-        model = models.Componente
-        fields = ['composicion', 'producto', 'cantidad']
-        exclude = ['cuenta']
-
-    def __init__(self, *args, **kwargs):
-        super(ComponenteForm, self).__init__(*args, **kwargs)
-        ser = service.Service.get_instance()
-        self.cuenta= ser.getCuenta()
+        producto = super(CierreForm, self).save(commit)
         if self.cuenta:
-            self.fields['producto'].queryset = models.Operacion.objects.filter(cuenta=self.cuenta)
-            self.fields['composicion'].queryset = self.cuenta.composicionservicio_set.all()
-        else:
-            self.fields['producto'].queryset = models.Operacion.objects.none()
-            self.fields['composicion'].queryset = models.ComposicionServicio.objects.none()
-
-    def clean(self):
-        data = super(ComponenteForm, self).clean()
-        if data.get('cantidad'):
-            if data.get('cantidad') < 0:
-                self.add_error('cantidad', 'La cantidad debe ser mayor a cero.')
-        if not data.get('producto'):
-            self.add_error('producto', 'Debe seleccionar un prodicto.')
-        if not data.get('composicion'):
-            self.add_error('composicion', 'Debe seleccionar una composicion')
-
-    def save(self, commit=True):
-        componente = super(ComponenteForm, self).save(commit)
-        if self.cuenta:
-            componente.cuenta = self.cuenta
-            componente.save()
-        return componente
-
-
-class ComponenteAdminForm(forms.ModelForm):
-    class Meta:
-        model = models.Componente
-        fields = ['cuenta', 'composicion', 'producto', 'cantidad']
-
-    def __init__(self, *args, **kwargs):
-        super(ComponenteAdminForm, self).__init__(*args, **kwargs)
-        if self.instance.cuenta:
-            if self.fields.has_key('productos'):
-                self.fields['productos'].queryset = models.Operacion.objects.filter(cuenta=self.instance.cuenta)
-            if self.fields.has_key('composicion'):
-                self.fields['composicion'].queryset = self.instance.cuenta.composicionservicio_set.all()
-        else:
-            if self.fields.has_key('productos'):
-                self.fields['productos'].queryset = models.Operacion.objects.none()
-            if self.fields.has_key('composicion'):
-                self.fields['composicion'].queryset = models.ComposicionServicio.objects.none()
-
-    def clean(self):
-        data = super(ComponenteAdminForm, self).clean()
-        if data.get('cantidad'):
-            if data.get('cantidad') < 0:
-                self.add_error('cantidad', 'La cantidad debe ser mayor a cero.')
-        if not data.get('producto'):
-            self.add_error('producto', 'Debe seleccionar un prodicto.')
-        if not data.get('composicion'):
-            self.add_error('composicion', 'Debe seleccionar una composicion')
+            producto.cuenta=self.cuenta
+        producto.save()
+        return producto

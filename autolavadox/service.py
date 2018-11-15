@@ -4,7 +4,7 @@ from subcripcion import models as suscripcion
 from cuser.middleware import CuserMiddleware
 from django.db.models import Q
 from empleados import models as empleados
-
+from cliente import models as mcliente
 class Service():
     instance = None
 
@@ -27,6 +27,14 @@ class Service():
         #end if
         return False
     #end def
+
+    @classmethod
+    def isClienteLavadero(self,  id_user):
+        cliente = mcliente.Cliente.objects.filter(usuario__id=id_user).first()
+        if cliente:
+            return True
+        else:
+            return False
 
     @classmethod
     def isAdministrador(self,id_user):

@@ -10,7 +10,7 @@ import pytz
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
-
+from easy_select2 import apply_select2, Select2Multiple
 
 class ModuloForm(forms.ModelForm):
     class Meta:
@@ -47,7 +47,7 @@ class FuncionalidadForm(forms.ModelForm):
 class FacturaForm(forms.ModelForm):
     class Meta:
         model = models.Factura
-        fields = ['suscripcion','paga', 'estado']
+        fields = ['suscripcion','paga']
         exclude = []
     #end class
 
@@ -90,7 +90,7 @@ class InstModuloForm(forms.ModelForm):
 class PlanForm(forms.ModelForm):
     class Meta:
         model = models.Plan
-        fields = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion', 'modulos' ,'estado']
+        fields = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion' ,'estado']
         exclude = []
     #end class
 
@@ -156,7 +156,7 @@ class ClienteEditForm(forms.ModelForm):
     class Meta:
         model = models.Cliente
         fields = ['username','email', 'first_name','last_name','identificacion',
-         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo', 'inventario', 'ventas_sin_existencias']
+         'direccion','telefono','nombre_negocio','invima','nit','consecutivo','logo', 'turnero', 'inventario', 'ventas_sin_existencias']
         exclude = ['estado', 'password1', 'password2']
     # end class
 #end class
@@ -211,3 +211,28 @@ class SuscripcionFormAdmin(forms.ModelForm):
         self.request = request
     #end def
 #end class
+
+
+class SuscripcionInlineForm(forms.ModelForm):
+    class Meta:
+        fields = ['cuenta', 'plan', 'inicio', 'fin', 'activa']
+        widgets = {
+            'plan': apply_select2(forms.Select)
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SuscripcionInlineForm, self).__init__(*args, **kwargs)
+        self.fields['inicio'].widget =  widgets.AdminDateWidget()
+        self.fields['fin'].widget =  widgets.AdminDateWidget()
+
+    def clean(self):
+        data = super(SuscripcionInlineForm, self).clean()
+        if not data.get('plan'):
+            self.add_error('plan', 'Debe seleccionar un plan.')
+        if not data.get('inicio'):
+            self.add_error('inicio', 'Debe digitar fecha de inicio.')
+        if not data.get('plan'):
+            self.add_error('plan', 'Debe digitar fecha de fin.')
+        if data.get('inicio') and data.get('fin'):
+            if data.get('inicio') > data.get('fin'):
+                self.add_error('inicio', 'La fecha de inicio debe ser mayor a la final.')

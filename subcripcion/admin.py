@@ -6,30 +6,6 @@ import models
 import forms
 # Register your models here.
 
-class ModuloAdmin(admin.ModelAdmin):
-    list_display = ['nombre','descripcion', 'estado']
-    search_fields = ['nombre','descripcion']
-    form = forms.ModuloForm
-
-    def get_queryset(self, request):
-        queryset = super(ModuloAdmin, self).get_queryset(request)
-        return queryset.order_by('estado')
-    # end def
-#end class
-
-
-class FuncionalidadAdmin(admin.ModelAdmin):
-    list_display = ['modulo','nombre','descripcion','url', 'estado']
-    search_fields = ['nombre','descripcion']
-    form = forms.FuncionalidadForm
-
-    def get_queryset(self, request):
-        queryset = super(FuncionalidadAdmin, self).get_queryset(request)
-        return queryset.order_by('modulo','nombre','estado')
-    # end def
-#end class
-
-
 class InstModuloAdmin(admin.ModelAdmin):
     list_display = ['nombre','descripcion', 'estado']
     search_fields = ['nombre','descripcion']
@@ -46,7 +22,6 @@ class InstModuloAdmin(admin.ModelAdmin):
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion'  ,'estado']
     search_fields = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion' ,'estado']
-    filter_horizontal = ['modulos']
     form = forms.PlanForm
 
     def get_queryset(self, request):
@@ -72,6 +47,7 @@ class ClienteAdmin(admin.ModelAdmin):
 # Register your models here.
 class SuscripcionInline(admin.StackedInline):
     model = models.Suscripcion
+    form = forms.SuscripcionInlineForm
     extra = 1
 
     def get_queryset(self, request):
@@ -89,7 +65,7 @@ class CuentaAdmin(admin.ModelAdmin):
 
 
 class FacturaAdmin(admin.ModelAdmin):
-    list_display = ['suscripcion','cliente','paga', 'estado']
+    list_display = ['suscripcion','cliente','paga']
     search_fields=['suscripcion__cuenta__cliente__first_name', 'suscripcion__cuenta__cliente__last_name']
     form = forms.FacturaForm
 
@@ -102,9 +78,10 @@ class FacturaAdmin(admin.ModelAdmin):
 #end class
 
 
-#exileui.register(models.Funcionalidad)
-#exileui.register(models.Modulo, ModuloAdmin)
-#exileui.register(models.InstModulo, InstModuloAdmin)
+
+
+
+
 exileui.register(models.Plan, PlanAdmin)
 exileui.register(models.Suscripcion)
 exileui.register(models.Factura, FacturaAdmin)

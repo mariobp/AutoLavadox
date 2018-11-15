@@ -4,6 +4,9 @@ import models
 from django.utils.html import format_html
 import forms
 from django.db import connection
+
+from autolavadox import service
+from autolavadox.settings import SERVER_STATIC
 from autolavadox.views import set_queryset, get_cuenta
 from django.db.models import Q
 from autolavadox.service import Service
@@ -21,7 +24,7 @@ class BaseAdmin(admin.ModelAdmin):
 
 class TipoServicioAdmin(BaseAdmin):
     form = forms.AddTipoServicioForm
-    list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte']
+    list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte', 'cuenta']
     list_filter = ['id','inicio','fin',]
     search_fields = ['id','inicio','fin','total']
     list_display_links = ('id_cierre',)
@@ -57,7 +60,7 @@ class TipoServicioAdmin(BaseAdmin):
     # end def
 
     class Media:
-        js = ('https://storage.googleapis.com/autolavadox/static/cierre/js/cierre.js',)
+        js = ('{}/static/cierre/js/cierre.js'.format(SERVER_STATIC),)
     # end class
 
     id_cierre.allow_tags = True
@@ -69,7 +72,7 @@ class TipoServicioAdmin(BaseAdmin):
 
 class FacturaAdmin(BaseAdmin):
     form = forms.AddTipoServicioForm
-    list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte']
+    list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte', 'cuenta']
     list_filter = ['id','inicio','fin',]
     search_fields = ['id','inicio','fin','total']
     list_display_links = ('id_cierre',)
@@ -109,7 +112,57 @@ class FacturaAdmin(BaseAdmin):
     accion_reporte.short_description = 'Reporte Dia'
 # end class
 
+
+class TurnoAdmin(BaseAdmin):
+    list_display = ['nombre', 'inicio', 'fin', 'cuenta']
+    search_fields = ['nombre', 'inicio', 'fin', 'cuenta__cliente__nombre']
+    form = forms.TurnoAdminForm
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.TurnoForm
+        # end if
+        return super(TurnoAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
+
+
+class CierreAdmin(BaseAdmin):
+    list_display = ['turno', 'inicio', 'fin', 'total', 'total', 'comision', 'cuenta', 'imprimir_cierre']
+    search_fields = ['turno__nombre', 'cuenta__cliente__nombre']
+    form = forms.CierreAdminForm
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj:
+            return ('cuenta', 'total',  'comision')
+        if admin:
+            return ['turno', 'inicio', 'fin', 'total',  'comision']
+        return ('total',  'comision',)
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.CierreForm
+        # end if
+        return super(CierreAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
+
+    def imprimir_cierre(self, obj):
+        return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
+    # end def
+
+    imprimir_cierre.allow_tags = True
+    imprimir_cierre.short_description = 'Imprimir'
+
 exileui.register(models.TipoServicio, TipoServicioAdmin)
 exileui.register(models.Factura, FacturaAdmin)
-exileui.register(models.Turno)
-exileui.register(models.Cierre)
+exileui.register(models.Turno, TurnoAdmin)
+exileui.register(models.Cierre, CierreAdmin)

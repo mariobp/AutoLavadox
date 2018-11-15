@@ -155,10 +155,9 @@ class Suscripcion(models.Model):
     plan = models.ForeignKey(Plan)
     cuenta = models.ForeignKey(Cuenta, null=True, blank=True)
     inscripcion = models.DateTimeField(auto_now_add=True, verbose_name='Inscripción',blank=True, null=True)
-    inicio = models.DateTimeField(blank=True, null=True)
-    fin = models.DateTimeField(blank=True, null=True)
-    activa = models.BooleanField(default=False)
-    estado = models.BooleanField(default=True)
+    inicio = models.DateField(blank=True, null=True)
+    fin = models.DateField(blank=True, null=True)
+    activa = models.BooleanField(default=True)
 
     def __unicode__(self):
         if self.cuenta :
@@ -176,7 +175,7 @@ class Suscripcion(models.Model):
 
     class Meta:
         verbose_name = "Suscripción"
-        verbose_name_plural = "Subscripciones"
+        verbose_name_plural = "Suscripciones"
     # end class
 #end class
 
@@ -185,7 +184,6 @@ class Factura(models.Model):
     suscripcion = models.ForeignKey(Suscripcion)
     realizacion = models.DateTimeField(auto_now_add=True)
     paga = models.BooleanField(default=False)
-    estado = models.BooleanField(default=True)
 
     def __unicode__(self):
         return u'%s --> %s %s' % (self.suscripcion.plan.nombre,self.suscripcion.cuenta.cliente.first_name,self.suscripcion.cuenta.cliente.last_name)

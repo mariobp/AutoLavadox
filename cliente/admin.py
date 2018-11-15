@@ -29,6 +29,20 @@ class VehiculoAdmin(admin.ModelAdmin):
     form = forms.AddVehivuloFormAdmin
     inlines = [HistorialInline,]
 
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj:
+            return ('cliente',)
+        if admin and not obj:
+            return ('tipo', 'placa', 'marca', 'color', 'kilometraje')
+        return ()
+
+
     def get_queryset(self, request):
         queryset = super(VehiculoAdmin, self).get_queryset(request)
         ser = Service.get_instance()
@@ -39,6 +53,14 @@ class VehiculoAdmin(admin.ModelAdmin):
         #end if
         return queryset.order_by('-id')
     # end def
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.AddVehivuloFormAd
+        # end if
+        return super(VehiculoAdmin, self).get_form(request, obj, *args, **kwargs)
 # end class
 
 
@@ -46,27 +68,44 @@ class ClienteAdmin(admin.ModelAdmin):
     inlines = [VehiculoInline]
     list_display = ['identificacion','nombre', 'apellidos','dirreccion','correo','celular','nacimiento']
     search_fields = ['identificacion', 'nombre', 'apellidos', 'identificacion','correo','celular']
-    form = forms.AddCliente
+    form = forms.AddClienteAdmin
 
     def get_queryset(self, request):
         queryset = super(ClienteAdmin, self).get_queryset(request)
         queryset= set_queryset(queryset)
         return queryset.order_by('-id')
     # end def
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.AddCliente
+        # end if
+        return super(ClienteAdmin, self).get_form(request, obj, *args, **kwargs)
 # end class
 
 
 class TipoVehiculoAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'descripcion']
-    list_filter = ['nombre', 'descripcion']
-    list_fileds = ['nombre', 'descripcion']
-    form = forms.TipoServicioForm
+    list_display = ['nombre', 'descripcion', 'cuenta']
+    list_filter = ['nombre', 'descripcion', 'cuenta']
+    list_fileds = ['nombre', 'descripcion', 'cuenta']
+    search_fields = ['nombre', 'descripcion', 'cuenta__cliente__nombre']
+    form = forms.TipoServicioFormAdmin
 
     def get_queryset(self, request):
         queryset = super(TipoVehiculoAdmin, self).get_queryset(request)
         queryset= set_queryset(queryset)
         return queryset.filter(Q(estado=True)).order_by('-id')
     # end def
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.TipoServicioForm
+        # end if
+        return super(TipoVehiculoAdmin, self).get_form(request, obj, *args, **kwargs)
 # end class
 exileui.register(models.Cliente, ClienteAdmin)
 exileui.register(models.TipoVehiculo, TipoVehiculoAdmin)

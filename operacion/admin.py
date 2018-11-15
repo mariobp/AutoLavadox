@@ -25,9 +25,17 @@ from autolavadox import settings, service
 
 class ServicioInline(admin.StackedInline):
     model = models.Servicio
-    form = forms.ServicioForm
-    extra = 1
+    form = forms.ServicioInlineForm
+    formset = forms.SerivioInlineFormset
+    extra = 2
 # end class
+
+
+class ProductoVentaInlineAdmin(admin.StackedInline):
+    model = models.ProductoVenta
+    form = forms.ProductoVentaInlineForm
+    formset = forms.ProductoVentaInlineFormset
+    extra = 2
 
 
 class Serviciossource(ModelResource):
@@ -61,13 +69,35 @@ class Serviciossource(ModelResource):
 
 
 class ServicioAdmin(ExportMixin, admin.ModelAdmin):
-    form = forms.ServicioForm
     list_display = ['orden','placa_nombre',  'tipo', 'inicio', 'fin', 'valor', 'comision', 'estado']
     list_filter = [('inicio', DateRangeEX)]
     search_fields = ['orden__id', ]
     list_editable = ['estado']
     resource_class = Serviciossource
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
+    form = forms.ServicioForm
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj:
+            return ('cuenta',)
+        if admin and not obj:
+            return ('tipo' ,'orden', 'operario', )
+        return ()
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if admin:
+            kwargs['form'] = forms.ServicioAdminForm
+
+        # end if
+        return super(ServicioAdmin, self).get_form(request, obj, *args, **kwargs)
 
     def placa_nombre(self, obj):
         if obj.orden :
@@ -82,7 +112,8 @@ class ServicioAdmin(ExportMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        obj.comision = obj.tipo.comision
+        if obj.tipo:
+            obj.comision = obj.tipo.comision
         obj.save()
     # end if
 
@@ -161,7 +192,7 @@ class OrdenInforme(ModelResource):
 
 
 class OrdenAdmin(ExportMixin, admin.ModelAdmin):
-    inlines = [ServicioInline]
+    inlines = [ServicioInline, ProductoVentaInlineAdmin]
     list_display = ['id_reporte', 'fecha_orden', 'fecha_orden_fin', 'vehiculo', 'nombre_cliente','identificacion_cliente', 'valor', 'comision', 'cancelada', 'cerrada', 'pago', 'imprimir_orden']
     list_filter = [('fin', DateRangeEX)]
     search_fields = ['entrada', 'vehiculo__placa','vehiculo__cliente__nombre', 'valor', 'comision', 'pago',]
@@ -203,16 +234,44 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
         obj.save()
         total = 0
         comi = 0
+        if obj.cuenta:
+            if obj.cuenta.cliente:
+                if obj.cuenta.cliente.inventario:
+                    pv_operaciones = obj.historiadeserviciooperacion_set.all()
+                    for pv_ope in pv_operaciones:
+                        pv_ope.producto.cantidad = pv_ope.producto.cantidad + pv_ope.cantidad
+                        pv_ope.save()
+                    obj.historiadeserviciooperacion_set.all().clear()
         for s in models.Servicio.objects.filter(orden=obj):
-            if s.status and s.estado :
+            if s.status and s.estado:
                 s.valor = s.tipo.costo
                 s.comision = s.tipo.comision
                 comi += s.comision
                 total += s.valor
                 s.save()
-            # end if
+                composicion_ = s.tipo.composicionservicio_set.all().values_list('id', flat=True)
+                if composicion_:
+                    componentes = models.Componente.objects.filter(composicion__id__in=composicion_)
+                    for component in componentes:
+                        historial_venta = models.HistoriaDeServicioOperacion(orden=obj, producto=component.producto, cantidad=component.cantidad)
+                        historial_venta.save()
+                    #end if
         # end for
-        obj.valor = total
+        total_venta_productos = 0
+        if obj.cuenta:
+            if obj.cuenta.cliente:
+                if obj.cuenta.cliente.inventario:
+                    for pv in obj.historiadeservicioventa_set.all():
+                        pv.producto.existencias = pv.producto.existencias + pv.cantidad
+                        pv.producto.save()
+                    obj.historiadeservicioventa_set.all().clear()
+                    for pv in obj.productoventa_set.all():
+                        pro_venta = models.HistoriaDeServicioVenta(orden=obj, producto=pv, cantidad=pv.cantidad)
+                        pro_venta.save()
+                        total_venta_productos += pv.producto.precio_venta * pv.cantidad
+                        pv.total = pv.producto.precio_venta * pv.cantidad
+                        pv.save()
+        obj.valor = total + total_venta_productos
         obj.comision = comi
         obj.save()
     # end if
@@ -365,7 +424,7 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
     filter_horizontal = ('vehiculos',)
     resource_class = TipoInforme
     formats = (base_formats.XLSX,base_formats.XLS,base_formats.CSV)
-    form = forms.AddTipoServicioForm
+    form = forms.AddTipoServicioFormAdmin
 
     def vehiculoTipo(self, obj):
         l = []
@@ -376,11 +435,25 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
         return ','.join([str(i) for i in l]) if l  else 'No asignado.'
     # end def
 
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj and admin:
+            return ('cuenta', )
+        if admin:
+            return ('nombre', 'vehiculos', 'costo', 'comision', 'state', )
+        return ()
+
+
     def get_form(self, request, obj=None, *args, **kwargs):
         ser = Service.get_instance()
         tem_cuenta,is_user,admin = ser.isUser()
-        if admin and obj:
-            kwargs['form'] = forms.AddTipoServicioFormAdmin
+        if not admin :
+            kwargs['form'] = forms.AddTipoServicioForm
         # end if
         return super(TipoAdmin, self).get_form(request, obj, *args, **kwargs)
     # end def
@@ -398,3 +471,94 @@ class TipoAdmin(ExportMixin, admin.ModelAdmin):
 exileui.register(models.TipoServicio, TipoAdmin)
 exileui.register(models.Servicio, ServicioAdmin)
 exileui.register(models.Orden, OrdenAdmin)
+
+class ComponenteInlineAdmin(admin.StackedInline):
+    model = models.Componente
+    extra = 2
+    form = forms.ComponenteInlineForm
+    formset = forms.ComponenteInlineFormset
+
+
+class ComposicionServicioAdmin(admin.ModelAdmin):
+    inlines = [ComponenteInlineAdmin]
+    list_display = ['servicio', 'cuenta']
+    search_fields = ['cuenta__cliente__nombre', 'servicio__nombre']
+    form = forms.ComposicionServicioAdminForm
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.ComposicionServicioForm
+        # end if
+        return super(ComposicionServicioAdmin, self).get_form(request, obj, *args, **kwargs)
+
+    def get_queryset(self, request):
+        queryset = super(ComposicionServicioAdmin, self).get_queryset(request)
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if tem_cuenta and is_user:
+            cuenta = ser.getCuenta()
+            queryset = queryset.filter(cuenta=cuenta)
+        # end if
+        return queryset.order_by('-id')
+    # end def
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj:
+
+            return ('cuenta',)
+        if admin:
+            return ('servicio',)
+        return ()
+
+
+class ComponenteAdmin(admin.ModelAdmin):
+    list_display = ['composicion', 'producto', 'cantidad', 'cuenta']
+    search_fields = ['cuenta__cliente__nombre', 'producto__nombre', 'composicion__servicio__nombre']
+    form = forms.ComponenteAdminForm
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not admin:
+            kwargs['form'] = forms.ComponenteForm
+        # end if
+        return super(ComponenteAdmin, self).get_form(request, obj, *args, **kwargs)
+
+    def get_queryset(self, request):
+        queryset = super(ComponenteAdmin, self).get_queryset(request)
+        ser = Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if tem_cuenta and is_user:
+            cuenta = ser.getCuenta()
+            queryset = queryset.filter(cuenta=cuenta)
+        # end if
+        return queryset.order_by('-id')
+    # end def
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if obj:
+            return ('cuenta',)
+        if admin:
+            return ('composicion', 'producto', 'cantidad', )
+        return ()
+
+exileui.register(models.ComposicionServicio, ComposicionServicioAdmin)
+exileui.register(models.Componente, ComponenteAdmin)
+exileui.register(models.HistoriaDeServicioVenta)
+exileui.register(models.HistoriaDeServicioOperacion)
+
+

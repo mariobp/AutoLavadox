@@ -3,6 +3,7 @@ from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 import models
 import nested_admin
 import forms
+from autolavadox import service
 from autolavadox.views import set_queryset
 
 
@@ -13,15 +14,22 @@ class BaseAdmin(admin.ModelAdmin):
     # end def
 #end class
 
+
 class OperarioAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
-    list_display = ('identificacion', 'email', 'first_name', 'last_name',
+    list_display = ('username', 'identificacion', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     list_filter =[('nacimiento', DateRangeEX)]
     search_fields = (list_display)
-    form = forms.OperarioForm
+    form = forms.OperarioAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
-        if obj:
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if admin and obj:
+            kwargs['form'] = forms.OperarioAdminFormEdit
+        if not admin and not obj:
+            kwargs['form'] = forms.OperarioForm
+        if obj and not admin:
             kwargs['form'] = forms.OperarioFormEdit
         # end if
         return super(OperarioAdmin, self).get_form(request, obj, *args, **kwargs)
@@ -35,12 +43,18 @@ class OperarioAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
 
 class RecepcionistaAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
-                    'direccion', 'telefono', 'nacimiento')
+                    'direccion', 'telefono', 'identificacion', 'cuenta')
     search_fields = list_display
-    form = forms.RecepcionistaForm
+    form = forms.RecepcionistaAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
-        if obj:
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if admin and obj:
+            kwargs['form'] = forms.RecepcionistaAdminFormEdit
+        if not admin and not obj:
+            kwargs['form'] = forms.RecepcionistaForm
+        if obj and not admin:
             kwargs['form'] = forms.RecepcionistaFormEdit
         # end if
         return super(RecepcionistaAdmin, self).get_form(request, obj, *args, **kwargs)
@@ -50,12 +64,18 @@ class RecepcionistaAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
 
 class CajeroAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
-                    'direccion', 'telefono', 'nacimiento')
+                    'direccion', 'telefono', 'identificacion', 'cuenta')
     search_fields = list_display
-    form = forms.CajeroForm
+    form = forms.CajeroAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
-        if obj:
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if admin and obj:
+            kwargs['form'] = forms.CajeroAdminFormEdit
+        if not admin and not obj:
+            kwargs['form'] = forms.CajeroForm
+        if obj and not admin:
             kwargs['form'] = forms.CajeroFormEdit
         # end if
         return super(CajeroAdmin, self).get_form(request, obj, *args, **kwargs)
@@ -67,13 +87,19 @@ class AdministradorAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     search_fields = list_display
-    form = forms.AdministradorForm
+    form = forms.AdministradorAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
-        if obj:
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if admin and obj:
+            kwargs['form'] = forms.AdministradorAdminFormEdit
+        if not admin and not obj:
+            kwargs['form'] = forms.AdministradorForm
+        if obj and not admin:
             kwargs['form'] = forms.AdministradorFormEdit
         # end if
-        return super(CajeroAdmin, self).get_form(request, obj, *args, **kwargs)
+        return super(AdministradorAdmin, self).get_form(request, obj, *args, **kwargs)
     # end def
 # end class
 

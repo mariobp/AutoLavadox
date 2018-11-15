@@ -11,12 +11,10 @@ class TiemposOrden(models.Model):
     cuenta = models.ForeignKey(suscripcion.Cuenta, related_name='tiempo_cuenta', null=True, blank=True)
 
     def __unicode__(self):
-        print self.orden.vehiculo
         return '%s' % (self.orden.vehiculo.placa)
     # end def
 
     def __str__(self):
-        print self.orden.vehiculo
         return '%s' % (self.orden.vehiculo.placa)
     # end def
 

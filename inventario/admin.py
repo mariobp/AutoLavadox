@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+from django.utils.html import format_html
 from exileui.admin import exileui, ExStacked, ExTabular, DateRangeEX
 from django.contrib import admin
 import models
@@ -73,6 +75,19 @@ class ProductoVentaAdmin(admin.ModelAdmin):
         # end if
         return super(ProductoVentaAdmin, self).get_form(request, obj, *args, **kwargs)
 
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not obj and admin:
+            return ('nombre', 'descripcion',  'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion')
+        if obj and admin:
+            return ['cuenta']
+        return ()
+
 
     def get_queryset(self, request):
         queryset = super(ProductoVentaAdmin, self).get_queryset(request)
@@ -112,29 +127,14 @@ class ProductoOperacionAdmin(admin.ModelAdmin):
     # end def
 
 
-class ComponenteInlineAdmin(admin.StackedInline):
-    model = models.Componente
-    extra = 0
-    form = forms.ComponenteInlineForm
-    formset = forms.ComponenteInlineFormset
 
-
-class ComposicionServicioAdmin(admin.ModelAdmin):
-    inlines = [ComponenteInlineAdmin]
-    list_display = ['servicio', 'cuenta']
-    search_fields = ['cuenta__cliente__nombre', 'servicio__nombre']
-    form = forms.ComposicionServicioAdminForm
-
-    def get_form(self, request, obj=None, *args, **kwargs):
-        ser = Service.get_instance()
-        tem_cuenta, is_user, admin = ser.isUser()
-        if not admin:
-            kwargs['form'] = forms.ComposicionServicioForm
-        # end if
-        return super(ComposicionServicioAdmin, self).get_form(request, obj, *args, **kwargs)
+class CierreAdmin(admin.ModelAdmin):
+    list_display = ['cuenta', 'inicio', 'fin', 'utilidad_producto_venta', 'utilidad_producto_operacion', 'imprimir_cierre']
+    search_fields = ['cuenta__cliente__nombre']
+    form = forms.CierreadminForm
 
     def get_queryset(self, request):
-        queryset = super(ComposicionServicioAdmin, self).get_queryset(request)
+        queryset = super(CierreAdmin, self).get_queryset(request)
         ser = Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
         if tem_cuenta and is_user:
@@ -152,52 +152,25 @@ class ComposicionServicioAdmin(admin.ModelAdmin):
         ser = service.Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
         if obj:
-
-            return ('cuenta',)
+            return ('cuenta', 'costo_producto_venta', 'utilidad_producto_venta', 'total_producto_venta', 'costo_producto_operacion', 'utilidad_producto_operacion', 'total_producto_operacion')
         if admin:
-            return ('servicio',)
-        return ()
-
-
-class ComponenteAdmin(admin.ModelAdmin):
-    list_display = ['composicion', 'producto', 'cantidad', 'cuenta']
-    search_fields = ['cuenta__cliente__nombre', 'producto__nombre', 'composicion__servicio__nombre']
-    form = forms.ComponenteAdminForm
+            return ( 'inicio', 'fin', 'costo_producto_venta', 'utilidad_producto_venta', 'total_producto_venta', 'costo_producto_operacion', 'utilidad_producto_operacion', 'total_producto_operacion', )
+        return ('costo_producto_venta', 'utilidad_producto_venta', 'total_producto_venta', 'costo_producto_operacion', 'utilidad_producto_operacion', 'total_producto_operacion',)
 
     def get_form(self, request, obj=None, *args, **kwargs):
         ser = Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
         if not admin:
-            kwargs['form'] = forms.ComponenteForm
+            kwargs['form'] = forms.CierreForm
         # end if
-        return super(ComponenteAdmin, self).get_form(request, obj, *args, **kwargs)
+        return super(CierreAdmin, self).get_form(request, obj, *args, **kwargs)
 
-    def get_queryset(self, request):
-        queryset = super(ComponenteAdmin, self).get_queryset(request)
-        ser = Service.get_instance()
-        tem_cuenta, is_user, admin = ser.isUser()
-        if tem_cuenta and is_user:
-            cuenta = ser.getCuenta()
-            queryset = queryset.filter(cuenta=cuenta)
-        # end if
-        return queryset.order_by('-id')
+    def imprimir_cierre(self, obj):
+        return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
     # end def
 
-    def get_readonly_fields(self, request, obj=None):
-        """ Set readonly attributes
-         subproject is readonly when the object already exists
-         fields are always readonly
-        """
-        ser = service.Service.get_instance()
-        tem_cuenta, is_user, admin = ser.isUser()
-        if obj:
-
-            return ('cuenta',)
-        if admin:
-            return ('composicion', 'producto', 'cantidad', )
-        return ()
-
-
+    imprimir_cierre.allow_tags = True
+    imprimir_cierre.short_description = 'Imprimir'
 
 
 # Register your models here.
@@ -205,5 +178,4 @@ exileui.register(models.Presentacion, PresentacionAdmin)
 exileui.register(models.Producto, ProductoAdmin)
 exileui.register(models.Venta, ProductoVentaAdmin)
 exileui.register(models.Operacion, ProductoOperacionAdmin)
-exileui.register(models.ComposicionServicio, ComposicionServicioAdmin)
-exileui.register(models.Componente, ComponenteAdmin)
+exileui.register(models.Cierre, CierreAdmin)
