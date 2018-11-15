@@ -284,7 +284,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
-        #'HOST' :'localhost',
+        'HOST' :'localhost',
         #'HOST': 'ec2-184-73-84-219.compute-1.amazonaws.com',
         #'USER': 'epic',
         'USER': 'postgres',
