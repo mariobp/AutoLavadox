@@ -26,7 +26,7 @@ SECRET_KEY = '&up7i-+v$lvt_s5^@c63f@jwp)ddr8=qqh*b9_nqs2pxr25ytz'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '*','https://www.autolavadox.appspot.com','https://storage.googleapis.com'
+    'localhost', '*','http://ec2-184-73-84-219.compute-1.amazonaws.com','https://storage.googleapis.com'
 ]
 
 EXILE_UI = {
@@ -284,12 +284,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
-        'HOST' :'localhost',
-        #'HOST': 'ec2-18-223-116-221.us-east-2.compute.amazonaws.com',
+        #'HOST' :'localhost',
+        #'HOST': 'ec2-184-73-84-219.compute-1.amazonaws.com',
         #'USER': 'epic',
         'USER': 'postgres',
-        'PASSWORD': '123456',
-        #'PASSWORD': '96522569*74522547',
+        #'PASSWORD': '123456',
+        'PASSWORD': '85412369**$%%&*(/%$#qazxswEDC',
         'POST': '5432'
     }
 }
@@ -328,18 +328,20 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+"""
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/home/dark/practicas/AutoLavadox/media'
 MEDIA_ROOT = '/home/dark/practicas/AutoLavadox/media'
-LOGOUT_URL = '/accounts/login/'"""
+LOGOUT_URL = '/accounts/login/'
+
+"""
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/AutoLavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
-LOGOUT_URL = '/accounts/login/'"""
-SERVER_STATIC='127.0.0.1:8000'
-SERVER_M='127.0.0.1:8000'
+LOGOUT_URL = '/accounts/login/'
+SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
+SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
