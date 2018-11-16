@@ -14,7 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
+SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -36,9 +37,9 @@ EXILE_UI = {
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
-            'dashboard': 'http://127.0.0.1:8000/media/logo/carrito_mojado.svg',
-            'page': 'http://127.0.0.1:8000/media/logo/carrito_mojado.svg',
-            'login': 'http://127.0.0.1:8000/media/logo/carrito_mojado.png'
+            'dashboard': '{}/media/logo/carrito_mojado.svg'.format(SERVER_STATIC),
+            'page': '{}/media/logo/carrito_mojado.svg'.format(SERVER_STATIC),
+            'login': '{}/media/logo/carrito_mojado.png'.format(SERVER_STATIC)
         },
         'icons': {
             'empleados': {
@@ -329,7 +330,7 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+"""
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
 MEDIA_URL = '/media/'
@@ -346,5 +347,4 @@ MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
-SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
-SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'"""
+
