@@ -137,3 +137,18 @@ md-tab-content{
     height: 64px;
   }
 }
+
+
+
+.label-button-turno {
+  background-color: rgb(0,176,255); /* Green */
+  border: none;
+  color: white;
+  padding: 15px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  height: 9px;
+  margin-left: 10px;
+}

@@ -225,6 +225,10 @@ class AddCliente(BaseForm):
         self.fields['nacimiento'].widget = DatePickerWidget(
             attrs={'class': 'dateclien'},
             format="%d/%m/%Y")
+
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        self.cuenta = ser.getCuenta()
     # end def
 
     class Media:
@@ -240,7 +244,7 @@ class AddCliente(BaseForm):
     def clean(self):
         data = super(AddCliente, self).clean()
         if data.get('identificacion'):
-            cliente = models.Cliente.objects.filter(identificacion=data.get('identificacion')).first()
+            cliente = models.Cliente.objects.filter(Q(identificacion=data.get('identificacion'),  cuenta=self.cuenta) & ~Q(id=self.instance.id if self.instance else 0)).first()
             if cliente:
                 self.add_error('identificacion', 'Existe un cliente registrado con este documento.')
 
@@ -255,7 +259,7 @@ class AddCliente(BaseForm):
         elif admin:
             print 'Es un super usuario'
         #end if
-        if not cliente.usuario:
+        if not cliente.usuario and cliente.identificacion:
             usuario = User.objects.filter(username=cliente.identificacion).first()
             if not usuario:
                 usuario = User.objects.create_user(username=cliente.identificacion,
@@ -294,8 +298,8 @@ class AddClienteAdmin(BaseForm):
 
     def clean(self):
         data = super(AddClienteAdmin, self).clean()
-        if data.get('identificacion'):
-            cliente = models.Cliente.objects.filter(identificacion=data.get('identificacion')).first()
+        if data.get('identificacion') and data.get('cuenta'):
+            cliente = models.Cliente.objects.filter(Q(identificacion=data.get('identificacion'), cuenta=data.get('cuenta'))&~Q(id=self.instance.id if self.instance else 0)).first()
             if cliente:
                 self.add_error('identificacion', 'Existe un cliente registrado con este documento.')
         if not data.get('cuenta'):
@@ -303,7 +307,7 @@ class AddClienteAdmin(BaseForm):
 
     def save(self, commit=True):
         cliente = super(AddClienteAdmin, self).save(commit)
-        if not cliente.usuario:
+        if not cliente.usuario and cliente.identificacion:
             usuario = User.objects.filter(username=cliente.identificacion).first()
             if not usuario:
                 usuario = User.objects.create_user(username=cliente.identificacion,

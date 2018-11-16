@@ -126,6 +126,19 @@ class ProductoOperacionAdmin(admin.ModelAdmin):
         return queryset.order_by('-id')
     # end def
 
+    def get_readonly_fields(self, request, obj=None):
+        """ Set readonly attributes
+         subproject is readonly when the object already exists
+         fields are always readonly
+        """
+        ser = service.Service.get_instance()
+        tem_cuenta, is_user, admin = ser.isUser()
+        if not obj and admin:
+            return ('nombre', 'descripcion',  'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion')
+        if obj and admin:
+            return ['cuenta']
+        return ()
+
 
 
 class CierreAdmin(admin.ModelAdmin):

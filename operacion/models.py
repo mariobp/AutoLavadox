@@ -153,7 +153,7 @@ class HistoriaDeServicioVenta(models.Model):
 
 class HistoriaDeServicioOperacion(models.Model):
     orden = models.ForeignKey(Orden)
-    producto = models.ForeignKey(inventario.Venta)
+    producto = models.ForeignKey(inventario.Operacion)
     cantidad = models.FloatField(default=0)
     activo = models.BooleanField(default=True)
 

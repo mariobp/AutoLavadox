@@ -224,6 +224,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'nested_admin',
     'django_select2',
     'daterange_filter',
@@ -328,13 +329,15 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-"""
+
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/home/dark/practicas/AutoLavadox/media'
 MEDIA_ROOT = '/home/dark/practicas/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
+SERVER_STATIC = ''
+SERVER_M = ''
 
 """
 STATIC_URL = '/static/'
@@ -344,4 +347,4 @@ HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
 SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
-SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
+SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'"""

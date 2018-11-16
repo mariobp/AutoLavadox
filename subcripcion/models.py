@@ -24,6 +24,7 @@ class Cliente(User):
     inventario = models.BooleanField(default=False)
     ventas_sin_existencias = models.BooleanField(default=False, verbose_name='Ventas sin existencias para la operacion')
     turnero = models.IntegerField(default=0, verbose_name='Contador Turnero')
+    mostrar_turno = models.BooleanField(default=True, verbose_name='Mostrar turno')
 
     class Meta:
         verbose_name = "Cliente"

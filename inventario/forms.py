@@ -145,6 +145,10 @@ class ProductoVentaForm(forms.ModelForm):
         model = models.Venta
         fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion']
         exclude = ['cuenta']
+        widgets = {
+            'cuenta': apply_select2(forms.Select),
+            'presentacion': apply_select2(forms.Select)
+        }
 
     def __init__(self, *args, **kwargs):
         super(ProductoVentaForm, self).__init__(*args, **kwargs)
@@ -152,6 +156,7 @@ class ProductoVentaForm(forms.ModelForm):
         tem_cuenta, is_user, admin = ser.isUser()
         if tem_cuenta and is_user:
             self.cuenta = ser.getCuenta()
+            self.fields['presentacion'].queryset = self.cuenta.presentacion_set.all()
 
     def clean(self):
         data = super(ProductoVentaForm, self).clean()
@@ -167,9 +172,9 @@ class ProductoVentaForm(forms.ModelForm):
                 if existir_producto:
                     self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
 
-        if data.get('existencia'):
-            if data.get('existencia') < 0:
-                self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
+        if data.get('existencias'):
+            if data.get('existencias') < 0:
+                self.add_error('existencias', 'Las existencias deben mayores igual a cero.')
 
         if data.get('stock_minimo'):
             if data.get('stock_minimo') < 0:
@@ -181,7 +186,11 @@ class ProductoVentaForm(forms.ModelForm):
 
         if data.get('precio_venta'):
             if data.get('precio_venta') < 0:
-                self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
+                self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+
+        if not data.get('presentacion'):
+            self.add_error('presentacion', 'Debe seleccionar una presentacion.')
+
 
     def save(self, commit=True):
         producto = super(ProductoVentaForm, self).save(commit)
@@ -218,8 +227,8 @@ class ProductoVentaAdminForm(forms.ModelForm):
                 self.add_error('cuenta', 'Debe asociar una cuenta.')
         if self.fields.has_key('nombre'):
             if data.get('nombre'):
-                productos = data.get('cuenta').producto_set.all()
-                productos = data.get('cuenta').producto_set.all().values_list('id', flat=True)
+                productos = self.instance.cuenta.producto_set.all()
+                productos = self.instance.cuenta.producto_set.all().values_list('id', flat=True)
                 productos = models.Venta.objects.filter(id__in=list(productos) if productos else [])
                 if productos:
                     existir_producto = productos.filter(Q(nombre=data.get('nombre').title())&~Q(id=self.instance.id if self.instance else 0))
@@ -228,9 +237,9 @@ class ProductoVentaAdminForm(forms.ModelForm):
             else:
                 self.add_error('nombre', 'Debe digitar el nombre.')
         if self.fields.has_key('existencia'):
-            if data.get('existencia'):
-                if data.get('existencia') < 0:
-                    self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
+            if data.get('existencias'):
+                if data.get('existencias') < 0:
+                    self.add_error('existencias', 'Las existencias deben mayores igual a cero.')
         if self.fields.has_key('stock_minimo'):
             if data.get('stock_minimo'):
                 if data.get('stock_minimo') < 0:
@@ -243,10 +252,13 @@ class ProductoVentaAdminForm(forms.ModelForm):
             if data.get('precio_venta'):
                 if data.get('precio_venta') < 0:
                     self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('tipo'):
+            if not data.get('tipo'):
+                self.add_error('tipo', 'Debe seleccionar un Tipo.')
 
     def save(self, commit=True):
         venta = super(ProductoVentaAdminForm, self).save(commit)
-        if self.fields.has_key('nombre') :
+        if self.fields.has_key('nombre'):
             venta.nombre = venta.nombre.title() if venta.nombre else ''
             venta.save()
         return venta
@@ -258,6 +270,10 @@ class ProductoOperacionForm(forms.ModelForm):
         model = models.Operacion
         fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion']
         exclude = ['cuenta']
+        widgets = {
+            'cuenta': apply_select2(forms.Select),
+            'presentacion': apply_select2(forms.Select)
+        }
 
     def __init__(self, *args, **kwargs):
         super(ProductoOperacionForm, self).__init__(*args, **kwargs)
@@ -265,6 +281,7 @@ class ProductoOperacionForm(forms.ModelForm):
         tem_cuenta, is_user, admin = ser.isUser()
         if tem_cuenta and is_user:
             self.cuenta = ser.getCuenta()
+            self.fields['presentacion'].queryset = self.cuenta.presentacion_set.all()
         self.fields['precio_venta'].label = 'Precio de operacion'
 
     def clean(self):
@@ -272,7 +289,7 @@ class ProductoOperacionForm(forms.ModelForm):
         productos = None
         if self.cuenta:
             productos = self.cuenta.producto_set.all().values_list('id', flat=True)
-            productos = models.Operacion.objects.filter(id__in=list(productos) if productos else [])
+            productos = models.Venta.objects.filter(id__in=list(productos) if productos else [])
 
         if data.get('nombre'):
             if productos:
@@ -281,9 +298,9 @@ class ProductoOperacionForm(forms.ModelForm):
                 if existir_producto:
                     self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
 
-        if data.get('existencia'):
-            if data.get('existencia') < 0:
-                self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
+        if data.get('existencias'):
+            if data.get('existencias') < 0:
+                self.add_error('existencias', 'Las existencias deben mayores igual a cero.')
 
         if data.get('stock_minimo'):
             if data.get('stock_minimo') < 0:
@@ -295,7 +312,10 @@ class ProductoOperacionForm(forms.ModelForm):
 
         if data.get('precio_venta'):
             if data.get('precio_venta') < 0:
-                self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
+                self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+
+        if not data.get('presentacion'):
+            self.add_error('presentacion', 'Debe seleccionar una presentacion.')
 
     def save(self, commit=True):
         producto = super(ProductoOperacionForm, self).save(commit)
@@ -311,45 +331,62 @@ class ProductoOperacionAdminForm(forms.ModelForm):
         model = models.Operacion
         fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
         exclude = []
+        widgets = {
+            'cuenta': apply_select2(forms.Select),
+            'presentacion': apply_select2(forms.Select)
+        }
 
     def __init__(self, *args, **kwargs):
         super(ProductoOperacionAdminForm, self).__init__(*args, **kwargs)
-        self.fields['precio_venta'].label = 'Precio de operacion'
+        if  self.fields.has_key('precio_venta'):
+            self.fields['precio_venta'].label = 'Precio de operacion'
+        if self.fields.has_key('presentacion'):
+            self.fields['presentacion'].queryset = self.instance.cuenta.presentacion_set.all()
 
     def clean(self):
         data = super(ProductoOperacionAdminForm, self).clean()
         productos = None
-        if not data.get('cuenta'):
-            self.add_error('cuenta', 'Debe asociar una cuenta.')
-
-        if data.get('cuenta'):
-            productos = data.get('cuenta').producto_set.all().values_list('id', flat=True)
-            productos = models.Operacion.objects.filter(id__in=list(productos) if productos else [])
-
-        if data.get('nombre'):
-            if productos:
-                existir_producto = productos.filter(Q(nombre=data.get('nombre').title())&~Q(id=self.instance.id if self.instance else 0))
-                if existir_producto:
-                    self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
-        if data.get('existencia'):
-            if data.get('existencia') < 0:
-                self.add_error('existencia', 'Las existencias deben mayores igual a cero.')
-
-        if data.get('stock_minimo'):
-            if data.get('stock_minimo') < 0:
-                self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
-
-        if data.get('precio_compra'):
-            if data.get('precio_compra') < 0:
-                self.add_error('precio_compra', 'El precio de venta debe mayores igual a cero.')
-
-        if data.get('precio_venta'):
-            if data.get('precio_venta') < 0:
-                self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('presentacion'):
+            if not data.get('presentacion'): self.add_error('presentacion', 'Debe selecionar una opcion.')
+        if self.fields.has_key('cuenta'):
+            if not data.get('cuenta'):
+                self.add_error('cuenta', 'Debe asociar una cuenta.')
+        if self.fields.has_key('nombre'):
+            if data.get('nombre'):
+                productos = self.instance.cuenta.producto_set.all()
+                productos = self.instance.cuenta.producto_set.all().values_list('id', flat=True)
+                productos = models.Venta.objects.filter(id__in=list(productos) if productos else [])
+                if productos:
+                    existir_producto = productos.filter(
+                        Q(nombre=data.get('nombre').title()) & ~Q(id=self.instance.id if self.instance else 0))
+                    if existir_producto:
+                        self.add_error('nombre', 'Existe un producto regitrado con este nombre.')
+            else:
+                self.add_error('nombre', 'Debe digitar el nombre.')
+        if self.fields.has_key('existencia'):
+            if data.get('existencias'):
+                if data.get('existencias') < 0:
+                    self.add_error('existencias', 'Las existencias deben mayores igual a cero.')
+        if self.fields.has_key('stock_minimo'):
+            if data.get('stock_minimo'):
+                if data.get('stock_minimo') < 0:
+                    self.add_error('stock_minimo', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('precio_compra'):
+            if data.get('precio_compra'):
+                if data.get('precio_compra') < 0:
+                    self.add_error('precio_compra', 'El precio de venta debe mayores igual a cero.')
+        if self.fields.has_key('precio_venta'):
+            if data.get('precio_venta'):
+                if data.get('precio_venta') < 0:
+                    self.add_error('precio_venta', 'Las stock deben mayores igual a cero.')
+        if self.fields.has_key('tipo'):
+            if not data.get('tipo'):
+                self.add_error('tipo', 'Debe seleccionar un Tipo.')
 
     def save(self, commit=True):
         producto = super(ProductoOperacionAdminForm, self).save(commit)
-        producto.nombre = producto.nombre.title()
+        if producto.nombre:
+            producto.nombre = producto.nombre.title()
         producto.save()
         return producto
 

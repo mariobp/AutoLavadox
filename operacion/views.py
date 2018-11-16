@@ -313,7 +313,7 @@ class CancelService(supra.SupraFormView):
 class GetOrdenesPendientes(supra.SupraListView):
     model = cliente.Vehiculo
     list_display = ['ordenv', 'placa', 'marca', 'kilometraje', 'color',
-                    'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id']
+                    'nombre', 'apellidos', 'cedula', 'celular', 'tipov', 'tipo', 'id', 'view_turno', 'turno']
     paginate_by = 100
 
     class Renderer:
@@ -324,6 +324,20 @@ class GetOrdenesPendientes(supra.SupraListView):
         tipov = 'tipo__nombre'
         celular = 'cliente__celular'
     # end class
+
+    def view_turno(self, obj, row):
+        ser = Service.get_instance()
+        cuenta = ser.getCuenta()
+        if cuenta:
+            if cuenta.cliente:
+                return cuenta.cliente.mostrar_turno
+        return False
+
+    def turno(self, obj, row):
+        ordenes = obj.orden_set.all().first()
+        if ordenes:
+            return ordenes.turno
+        return 'No definido'
 
     def get_queryset(self):
         queryset = super(GetOrdenesPendientes, self).get_queryset()

@@ -18,7 +18,7 @@ from autolavadox.service import Service
 from django.db.models import Q
 from autolavadox.views import BaseAdmin, set_queryset
 from autolavadox import settings, service
-
+from inventario import models  as inventario
 
 # Register your models here.
 
@@ -230,8 +230,14 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
         return super(OrdenAdmin, self).get_form(request, obj, *args, **kwargs)
     # end def
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.save()
+        formset.save_m2m()
+
     def save_model(self, request, obj, form, change):
-        obj.save()
+        #obj.save()
         total = 0
         comi = 0
         if obj.cuenta:
@@ -239,11 +245,13 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
                 if obj.cuenta.cliente.inventario:
                     pv_operaciones = obj.historiadeserviciooperacion_set.all()
                     for pv_ope in pv_operaciones:
-                        pv_ope.producto.cantidad = pv_ope.producto.cantidad + pv_ope.cantidad
-                        pv_ope.save()
-                    obj.historiadeserviciooperacion_set.all().clear()
+                        __pv_operacion = inventario.Operacion.objects.get(id=pv_ope.producto.id)
+                        __pv_operacion.existencias = pv_ope.producto.existencias + pv_ope.cantidad
+                        __pv_operacion.save()
+                    obj.historiadeserviciooperacion_set.all().delete()
         for s in models.Servicio.objects.filter(orden=obj):
             if s.status and s.estado:
+                print 'Entro en los productos'
                 s.valor = s.tipo.costo
                 s.comision = s.tipo.comision
                 comi += s.comision
@@ -253,6 +261,8 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
                 if composicion_:
                     componentes = models.Componente.objects.filter(composicion__id__in=composicion_)
                     for component in componentes:
+                        component.producto.existencias = component.producto.existencias - component.cantidad
+                        component.producto.save()
                         historial_venta = models.HistoriaDeServicioOperacion(orden=obj, producto=component.producto, cantidad=component.cantidad)
                         historial_venta.save()
                     #end if
@@ -264,16 +274,22 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
                     for pv in obj.historiadeservicioventa_set.all():
                         pv.producto.existencias = pv.producto.existencias + pv.cantidad
                         pv.producto.save()
-                    obj.historiadeservicioventa_set.all().clear()
+                    obj.historiadeservicioventa_set.all().delete()
                     for pv in obj.productoventa_set.all():
-                        pro_venta = models.HistoriaDeServicioVenta(orden=obj, producto=pv, cantidad=pv.cantidad)
+                        pro_venta = models.HistoriaDeServicioVenta(orden=obj, producto=pv.producto, cantidad=pv.cantidad)
                         pro_venta.save()
                         total_venta_productos += pv.producto.precio_venta * pv.cantidad
                         pv.total = pv.producto.precio_venta * pv.cantidad
                         pv.save()
         obj.valor = total + total_venta_productos
         obj.comision = comi
+        orden__ = models.Orden.objects.get(id=obj.id)
+        orden__.valor = total + total_venta_productos
+        orden__.comision = comi
+        orden__.save()
+        print 'Este debe ser el valor de la comision ', orden__.valor
         obj.save()
+        super(OrdenAdmin, self).save_model(request, obj, form, change)
     # end if
 
     def id_reporte(self, obj):
@@ -558,7 +574,18 @@ class ComponenteAdmin(admin.ModelAdmin):
 
 exileui.register(models.ComposicionServicio, ComposicionServicioAdmin)
 exileui.register(models.Componente, ComponenteAdmin)
-exileui.register(models.HistoriaDeServicioVenta)
-exileui.register(models.HistoriaDeServicioOperacion)
+
+
+class HistorialDeServicioVentaAdmin(admin.ModelAdmin):
+    list_display = ['orden', 'producto', 'cantidad']
+
+exileui.register(models.HistoriaDeServicioVenta, HistorialDeServicioVentaAdmin)
+
+
+class HistorialDeServicioOperacionAdmin(admin.ModelAdmin):
+    list_display = ['orden', 'producto', 'cantidad']
+
+
+exileui.register(models.HistoriaDeServicioOperacion,  HistorialDeServicioOperacionAdmin)
 
 

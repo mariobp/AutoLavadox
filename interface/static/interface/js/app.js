@@ -196,7 +196,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       2 - Cedula de clientes .
       3 - Telefonos.
     */
-    console.log('?????????????????? ',allVehiculo);
     var __this = this;
       this.sincronizacion = function(identificador){
         $SQLite.ready(function () { // The DB is created and prepared async.
@@ -236,7 +235,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
               },
               function () { console.err('Error!'); },
               function (data) {
-                console.log("este el elemnto a validar existencia ==> ",data);
                 __this.setElemenData(1,JSON.parse(data.item.values_));
               }
             );
@@ -259,7 +257,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
             },
             function () { console.err('Error!'); },
             function (data) {
-              console.log("este el elemnto a validar existencia ==> ",data);
               __this.setElemenData(2,JSON.parse(data.item.values_));
             }
           );
