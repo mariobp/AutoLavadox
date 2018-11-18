@@ -187,7 +187,7 @@ class CierreAdmin(admin.ModelAdmin):
 
 # Register your models here.
 exileui.register(models.Presentacion, PresentacionAdmin)
-exileui.register(models.Producto, ProductoAdmin)
+#exileui.register(models.Producto, ProductoAdmin)
 exileui.register(models.Venta, ProductoVentaAdmin)
 exileui.register(models.Operacion, ProductoOperacionAdmin)
 exileui.register(models.Cierre, CierreAdmin)
