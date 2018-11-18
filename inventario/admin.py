@@ -12,7 +12,8 @@ from autolavadox.service import Service
 
 class PresentacionAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'activo', 'cuenta']
-    search_fields = ['nombre', 'cuenta__cliente__nombre']
+    search_fields = ['nombre']
+    list_filter = ['cuenta']
     form = forms.PresentacionForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -38,7 +39,8 @@ class PresentacionAdmin(admin.ModelAdmin):
 
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
-    search_fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion__nombre', 'cuenta__cliente__nombre']
+    search_fields = ['nombre']
+    list_filter = ['cuenta']
     form = forms.ProductoAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -64,7 +66,8 @@ class ProductoAdmin(admin.ModelAdmin):
 
 class ProductoVentaAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
-    search_fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion__nombre', 'cuenta__cliente__nombre']
+    search_fields = ['nombre', 'descripcion']
+    list_filter = ['cuenta']
     form = forms.ProductoVentaAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -103,7 +106,8 @@ class ProductoVentaAdmin(admin.ModelAdmin):
 
 class ProductoOperacionAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
-    search_fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion__nombre', 'cuenta__cliente__nombre']
+    search_fields = ['nombre', 'descripcion']
+    list_filter = ['cuenta']
     form = forms.ProductoOperacionAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -143,7 +147,7 @@ class ProductoOperacionAdmin(admin.ModelAdmin):
 
 class CierreAdmin(admin.ModelAdmin):
     list_display = ['cuenta', 'inicio', 'fin', 'utilidad_producto_venta', 'utilidad_producto_operacion', 'imprimir_cierre']
-    search_fields = ['cuenta__cliente__nombre']
+    list_filter = ['cuenta']
     form = forms.CierreadminForm
 
     def get_queryset(self, request):
