@@ -11,8 +11,8 @@ from django.contrib.admin import widgets
 class PresentacionForm(forms.ModelForm):
     class Meta:
         model = models.Presentacion
-        fields = ['nombre', 'activo']
-        exclude = []
+        fields = ['nombre']
+        exclude = ['activo']
 
     def __init__(self, *args, **kwargs):
         super(PresentacionForm, self).__init__(*args, **kwargs)
@@ -41,8 +41,8 @@ class PresentacionForm(forms.ModelForm):
 class PresentacionAdminForm(forms.ModelForm):
     class Meta:
         model = models.Presentacion
-        fields = ['nombre', 'activo', 'cuenta']
-        exclude = []
+        fields = ['nombre', 'cuenta']
+        exclude = [ 'activo']
 
 
 class ProductoForm(forms.ModelForm):
