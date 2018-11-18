@@ -573,19 +573,3 @@ class ComponenteAdmin(admin.ModelAdmin):
         return ()
 
 exileui.register(models.ComposicionServicio, ComposicionServicioAdmin)
-#exileui.register(models.Componente, ComponenteAdmin)
-
-
-class HistorialDeServicioVentaAdmin(admin.ModelAdmin):
-    list_display = ['orden', 'producto', 'cantidad']
-
-exileui.register(models.HistoriaDeServicioVenta, HistorialDeServicioVentaAdmin)
-
-
-class HistorialDeServicioOperacionAdmin(admin.ModelAdmin):
-    list_display = ['orden', 'producto', 'cantidad']
-
-
-exileui.register(models.HistoriaDeServicioOperacion,  HistorialDeServicioOperacionAdmin)
-
-
