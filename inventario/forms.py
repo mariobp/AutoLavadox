@@ -15,6 +15,7 @@ class PresentacionForm(forms.ModelForm):
         exclude = []
 
     def __init__(self, *args, **kwargs):
+        super(PresentacionForm, self).__init__(*args, **kwargs)
         ser = service.Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
         if tem_cuenta and is_user:
@@ -22,7 +23,7 @@ class PresentacionForm(forms.ModelForm):
 
 
     def clean(self):
-        data = super(PresentacionAdminForm, self).clean()
+        data = super(PresentacionForm, self).clean()
         if data.get('nombre'):
             presentacion = models.Presentacion.objects.filter(Q(nombre=data.get('nombre').title(), cuenta=self.cuenta)&~Q(id= self.instance.id if self.instance else 0)).first()
             if presentacion:
