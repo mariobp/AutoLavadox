@@ -573,7 +573,7 @@ class ComponenteAdmin(admin.ModelAdmin):
         return ()
 
 exileui.register(models.ComposicionServicio, ComposicionServicioAdmin)
-exileui.register(models.Componente, ComponenteAdmin)
+#exileui.register(models.Componente, ComponenteAdmin)
 
 
 class HistorialDeServicioVentaAdmin(admin.ModelAdmin):

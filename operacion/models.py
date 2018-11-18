@@ -99,7 +99,7 @@ class Servicio(models.Model):
 
 
 class ComposicionServicio(models.Model):
-    servicio = models.ForeignKey(TipoServicio, null=True, blank=True)
+    servicio = models.ForeignKey(TipoServicio, null=True, blank=True, verbose_name='Tipo de Servicio')
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     def __unicode__(self):
