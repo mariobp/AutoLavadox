@@ -58,6 +58,7 @@ class ProductoForm(forms.ModelForm):
         tem_cuenta, is_user, admin = ser.isUser()
         if tem_cuenta and is_user:
             self.cuenta = ser.getCuenta()
+        self.fields['presentacion'].queryset = models.Presentacion.objects.filter(cuenta=self.cuenta)
 
     def clean(self):
         data = super(ProductoForm, self).clean()
@@ -102,6 +103,11 @@ class ProductoAdminForm(forms.ModelForm):
         model = models.Producto
         fields = ['nombre', 'descripcion', 'existencias', 'stock_minimo', 'precio_compra', 'precio_venta', 'presentacion', 'cuenta']
         exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super(ProductoAdminForm, self).__init__(*args, **kwargs)
+        if self.fields.has_key('presentacion'):
+            self.fields['presentacion'].queryset = models.Presentacion.objects.filter(cuenta=self.instance.cuenta)
 
     def clean(self):
         data = super(ProductoAdminForm, self).clean()
