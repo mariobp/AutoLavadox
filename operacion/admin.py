@@ -263,7 +263,11 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
                     for component in componentes:
                         component.producto.existencias = component.producto.existencias - component.cantidad
                         component.producto.save()
-                        historial_venta = models.HistoriaDeServicioOperacion(orden=obj, producto=component.producto, cantidad=component.cantidad)
+                        historial_venta = models.HistoriaDeServicioOperacion(orden=obj, producto=component.producto,
+                                                                             cantidad=component.cantidad,
+                                                                             total=component.cantidad*component.producto.precio_venta,
+                                                                             compra=component.cantidad*component.producto.precio_compra
+                                                                             )
                         historial_venta.save()
                     #end if
         # end for
@@ -276,7 +280,12 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
                         pv.producto.save()
                     obj.historiadeservicioventa_set.all().delete()
                     for pv in obj.productoventa_set.all():
-                        pro_venta = models.HistoriaDeServicioVenta(orden=obj, producto=pv.producto, cantidad=pv.cantidad)
+                        pro_venta = models.HistoriaDeServicioVenta(orden=obj,
+                                                                   producto=pv.producto,
+                                                                   cantidad=pv.cantidad,
+                                                                    total = pv.cantidad * pv.producto.precio_venta,
+                                                                    compra = pv.cantidad * pv.producto.precio_compra
+                        )
                         pro_venta.save()
                         total_venta_productos += pv.producto.precio_venta * pv.cantidad
                         pv.total = pv.producto.precio_venta * pv.cantidad

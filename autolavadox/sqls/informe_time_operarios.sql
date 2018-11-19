@@ -12,7 +12,10 @@ $BODY$
 		  empleados json;
 		 begin
 		 	empleados:=(SELECT COALESCE(array_to_json(array_agg(row_to_json(p2))), '[]') from (
-				select p.identificacion,u.first_name,u.last_name,p.telefono ,
+				select case when p.identificacion is not null then p.identificacion else '' end as "identificacion",
+				       case when u.first_name is not null then u.first_name else ''  end as "first_name",
+				       case when u.last_name is not null then u.last_name else '' end as "last_name",
+				       case when p.telefono is not null then p.telefono else '' end as "telefono",
 				(SELECT COALESCE(array_to_json(array_agg(row_to_json(p))), '[]') from (
 					select d2.nombre,case when d2.min>0 and d2.exis>0 then trunc(cast((d2.min/d2.exis) as numeric),2) else 0 end as total from (select d1.id,d1.nombre,sum(minutos) as min, sum(existencia) as exis from (select t.id,t.nombre,
 		       case when s.inicio is not null and s.fin is not null then
@@ -37,7 +40,7 @@ $BODY$
 		         inner join auth_user as u on (u.id=p.user_ptr_id)
 		      ) p2);
 		      tipos_servi := (SELECT COALESCE(array_to_json(array_agg(row_to_json(p22))), '[]') from (
-				select nombre from operacion_tiposervicio order by id asc
+				select case when nombre is not null then nombre else '' end as "nombre" from operacion_tiposervicio order by id asc
 		      ) p22);
 		      return (SELECT COALESCE(array_to_json(array_agg(row_to_json(p))), '[]') from (
 				select empleados ,tipos_servi as servicios

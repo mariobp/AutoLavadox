@@ -12,7 +12,7 @@ declare
     servi json;
 begin
   traba := (SELECT COALESCE(array_to_json(array_agg(row_to_json(p2))), '[]') from (
-		select p.identificacion,u.last_name as apellido,u.first_name as nombre,p.direccion,p.telefono ,
+		select case when p.identificacion is not null then p.identificacion else '' end "identificacion", case when u.last_name is not null then u.last_name else '' end as apellido,case when u.first_name is not null then u.first_name else '' end as nombre,case when p.direccion is not null then p.direccion else '' end as "direccion",case when p.telefono is not null then p.telefono else '' end as "telefono" ,
         (SELECT COALESCE(array_to_json(array_agg(row_to_json(p))), '[]') from (
                 select t2.id, t2.nombre,t2.total from
                 (
@@ -33,7 +33,7 @@ begin
          inner join auth_user as u on(u.id=p.user_ptr_id)
 	) p2);
     servi := (SELECT COALESCE(array_to_json(array_agg(row_to_json(p3))), '[]') from (
-		select nombre from operacion_tiposervicio order by id asc
+		select case when nombre is not null then nombre else '' end as "nombre" from operacion_tiposervicio order by id asc
 	) p3);
     return (SELECT COALESCE(array_to_json(array_agg(row_to_json(p4))), '[]') from (
 		select servi,traba
