@@ -56,6 +56,7 @@ class Cierre(models.Model):
     turno = models.ForeignKey(Turno, null=True, blank=True)
     total = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total factura')
     comision = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total comisión')
+    producto = models.FloatField(default=0.0, null=True, blank=True,verbose_name='Total producto')
     inicio = models.DateField(null=True, blank=True)
     fin = models.DateField(null=True, blank=True)
     cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)

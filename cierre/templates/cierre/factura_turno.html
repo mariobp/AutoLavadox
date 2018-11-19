@@ -1,0 +1,83 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Total Factura Tipo</title>
+  <style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{background-color:#f5f5f5}
+</style>
+
+</head>
+<body>
+  <h1>Reporte de venta facura entre <span>{{ inicio }}</span> y <span>{{ fin }}</span></h1>
+    {% if True %}
+        <H2>TIPOS DE SERVICIOS</H2>
+        <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo Servicio</th>
+            <th>Total Servicios</th>
+            <th>Total Comision</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in fac %}
+            <tr>
+              <td>{{ o.nombre }}</td>
+              <td>$ {{ o.valor|intcomma }}</td>
+              <td>$ {{ o.comision|intcomma }}</td>
+              <td>$ {{ o.total|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="2">TOTAL</td>
+            <td>$ {{ fac_res.0.valor|intcomma }}</td>
+            <td>$ {{ fac_res.0.comision|intcomma }}</td>
+            <td>$ {{ fac_res.0.total|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+        <br><br>
+        <H2>PRODUCTOS DE VENTA</H2>
+        <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in pro %}
+            <tr>
+              <td>{{ o.nombre }}</td>
+              <td>$ {{ o.total|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td >TOTAL</td>
+            <td>$ {{ pro_res.0.total|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+    {% else %}
+      No Existe la factura
+    {% endif %}
+</body>
+</html>

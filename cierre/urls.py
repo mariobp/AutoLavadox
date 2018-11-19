@@ -6,4 +6,5 @@ import views
 urlpatterns = [
     url(r'^factura/(?P<pk>\d+)/$', views.FacturaT.as_view(), name='facturat'),
     url(r'^factura/tipo/(?P<pk>\d+)/$', views.FacturaTipo.as_view(), name='factura'),
+    url(r'^factura/turno/(?P<pk>\d+)/$', views.FacturaTurno.as_view(), name='factura_turno'),
 ]

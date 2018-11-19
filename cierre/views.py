@@ -79,3 +79,25 @@ class FacturaTipo(PDFTemplateView):
         )
     # end def
 # end class
+
+
+class FacturaTurno(PDFTemplateView):
+    template_name = "cierre/factura_turno.html"
+
+    def get_context_data(self, **kwargs):
+        factura = get_object_or_404(models.Cierre, pk=kwargs['pk'])
+        cursor = connection.cursor()
+        sql = 'select get_cierre_turno(%d,%d)' % (factura.id, factura.cuenta.id)
+        cursor.execute(sql)
+        # end if
+        row = cursor.fetchone()
+        resul = row[0][0]
+        print resul
+        return super(FacturaTurno, self).get_context_data(
+            pagesize="A5", fin=factura.fin, inicio=factura.inicio, fac=resul['descripcion'],
+            fac_res=resul['total'], pro= resul['productos'], pro_res= resul['productos_total'],
+            title="Reporte Dia",
+            **kwargs
+        )
+        # end def
+

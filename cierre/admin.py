@@ -4,7 +4,7 @@ import models
 from django.utils.html import format_html
 import forms
 from django.db import connection
-
+import json
 from autolavadox import service
 from autolavadox.settings import SERVER_STATIC
 from autolavadox.views import set_queryset, get_cuenta
@@ -129,7 +129,7 @@ class TurnoAdmin(BaseAdmin):
 
 
 class CierreAdmin(BaseAdmin):
-    list_display = ['turno', 'inicio', 'fin', 'total', 'total', 'comision', 'cuenta', 'imprimir_cierre']
+    list_display = ['turno', 'inicio', 'fin', 'total', 'comision', 'producto', 'cuenta', 'imprimir_cierre']
     search_fields = ['turno__nombre', 'cuenta__cliente__nombre']
     form = forms.CierreAdminForm
 
@@ -146,6 +146,10 @@ class CierreAdmin(BaseAdmin):
             return ['turno', 'inicio', 'fin', 'total',  'comision']
         return ('total',  'comision',)
 
+    class Media:
+        js = ('/static/cierre/js/turno.js',)
+    # end class
+
     def get_form(self, request, obj=None, *args, **kwargs):
         ser = service.Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
@@ -156,8 +160,23 @@ class CierreAdmin(BaseAdmin):
     # end def
 
     def imprimir_cierre(self, obj):
-        return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
+        return format_html("<a href='/cierre/factura/turno/{0}/' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
     # end def
+
+
+    def save_model(self, request, obj, form, change):
+        #obj.save()
+        cursor = connection.cursor()
+        sql = 'select get_cierre_turno(%d,%d)' % (obj.id, obj.cuenta.id)
+        cursor.execute(sql)
+        # end if
+        row = cursor.fetchone()
+        resul = row[0][0]
+        obj.comision = resul['total'][0].get('comision') if resul['total'] else 0
+        obj.total = resul['total'][0].get('total') if resul['total'] else 0
+        obj.producto = resul['productos_total'][0].get('total') if resul['productos_total'] else 0
+        obj.save()
+    # end if
 
     imprimir_cierre.allow_tags = True
     imprimir_cierre.short_description = 'Imprimir'
