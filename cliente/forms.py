@@ -156,11 +156,11 @@ class AddVehivuloFormAdmin(forms.ModelForm):
 
     def save(self, commit=True):
         vehiculo = super(AddVehivuloFormAdmin, self).save(commit)
+        vehiculo.save()
         if vehiculo.kilometraje:
             historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
             historial.save()
         # end if
-        vehiculo.save()
         return vehiculo
     # end def
 # end class
@@ -210,11 +210,11 @@ class AddVehivuloFormAd(forms.ModelForm):
 
     def save(self, commit=True):
         vehiculo = super(AddVehivuloFormAd, self).save(commit)
+        vehiculo.save()
         if vehiculo.kilometraje:
             historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
             historial.save()
         # end if
-        vehiculo.save()
         return vehiculo
     # end def
 # end class
