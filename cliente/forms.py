@@ -160,6 +160,7 @@ class AddVehivuloFormAdmin(forms.ModelForm):
             historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
             historial.save()
         # end if
+        vehiculo.save()
         return vehiculo
     # end def
 # end class
@@ -213,6 +214,7 @@ class AddVehivuloFormAd(forms.ModelForm):
             historial = models.HistorialKilometraje(vehiculo=vehiculo, kilometraje=vehiculo.kilometraje)
             historial.save()
         # end if
+        vehiculo.save()
         return vehiculo
     # end def
 # end class
