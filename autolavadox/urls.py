@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^cliente/', include('cliente.urls', namespace='cliente')),
     url(r'^operacion/', include('operacion.urls', namespace='operacion')),
     url(r'^cierre/', include('cierre.urls', namespace='cierre')),
+    url(r'^inventario/', include('inventario.urls', namespace='inventario')),
     url(r'^favicon\.ico$', favicon_view),
 ]
 

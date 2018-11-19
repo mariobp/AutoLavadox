@@ -192,7 +192,7 @@ class CierreAdmin(admin.ModelAdmin):
         obj.utilidad_producto_operacion = resul['operacion_total'][0].get('utilidad') if resul['operacion_total'] else 0
         obj.total_producto_operacion = resul['operacion_total'][0].get('total') if resul['operacion_total'] else 0
         obj.save()
-    # end if
+    #end if
 
     def imprimir_cierre(self, obj):
         return format_html("<a href='/inventario/cierre/{0}/' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)

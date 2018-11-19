@@ -373,6 +373,7 @@ class ReporteComisionE(View):
         else:
             sql = 'select report_empleados_comision(\'%s\',\'%s\')'%(ini,fin)
         #end if
+        print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         row = cursor.fetchone()
@@ -405,7 +406,7 @@ class ReporteComisionE(View):
             ser = traba[i]['trabajos']
             y = 5
             total_ser = 0
-            while (y - 5) < len(ser) :
+            while (y - 5) < len(ser):
                 ws.write(r, y, (ser[(y - 5)]['total']), font_style)
                 total_ser = total_ser + (ser[(y - 5)]['total'])
                 y = y + 1
