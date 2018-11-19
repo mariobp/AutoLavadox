@@ -1,0 +1,97 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Total Factura Tipo</title>
+  <style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{background-color:#f5f5f5}
+</style>
+
+</head>
+<body>
+  <h1>Reporte de venta de productos entre <span>{{ inicio }}</span> y <span>{{ fin }}</span></h1>
+    {% if True %}
+        <H2>PRODUCTOS DE VENTAS</H2>
+        <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Existencias</th>
+            <th>Cant. Vendidas</th>
+            <th>Total Compra</th>
+            <th>Utilidad</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in venta %}
+            <tr>
+              <td>{{ o.nombre }}</td>
+              <td>{{ o.existencias }}</td>
+              <td>{{ o.cantidad }}</td>
+              <td>$ {{ o.compra|intcomma }}</td>
+              <td>$ {{ o.utilidad|intcomma }}</td>
+              <td>$ {{ o.total|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>$ {{ venta_total.0.compra|intcomma }}</td>
+            <td>$ {{ venta_total.0.utilidad|intcomma }}</td>
+            <td>$ {{ venta_total.0.total|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+        <br><br>
+        <H2>PRODUCTOS DE OPERACION</H2>
+        <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Existencias</th>
+            <th>Cant. Vendidas</th>
+            <th>Total Compra</th>
+            <th>Utilidad</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in operacion %}
+            <tr>
+              <td>{{ o.nombre }}</td>
+              <td>{{ o.existencias }}</td>
+              <td>{{ o.cantidad }}</td>
+              <td>$ {{ o.compra|intcomma }}</td>
+              <td>$ {{ o.utilidad|intcomma }}</td>
+              <td>$ {{ o.total|intcomma }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3">TOTAL</td>
+            <td>$ {{ operacion_total.0.compra|intcomma }}</td>
+            <td>$ {{ operacion_total.0.utilidad|intcomma }}</td>
+            <td>$ {{ operacion_total.0.total|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+    {% else %}
+      No Existe la factura
+    {% endif %}
+</body>
+</html>

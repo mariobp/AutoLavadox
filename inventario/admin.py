@@ -8,6 +8,7 @@ import models
 import forms
 from autolavadox import service
 from autolavadox.service import Service
+from django.db import connection
 
 
 class PresentacionAdmin(admin.ModelAdmin):
@@ -140,7 +141,6 @@ class ProductoOperacionAdmin(admin.ModelAdmin):
         return ()
 
 
-
 class CierreAdmin(admin.ModelAdmin):
     list_display = ['cuenta', 'inicio', 'fin', 'utilidad_producto_venta', 'utilidad_producto_operacion', 'imprimir_cierre']
     form = forms.CierreadminForm
@@ -177,9 +177,29 @@ class CierreAdmin(admin.ModelAdmin):
         # end if
         return super(CierreAdmin, self).get_form(request, obj, *args, **kwargs)
 
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        cursor = connection.cursor()
+        sql = 'select get_cierre_inventario(%d,%d)' % (obj.id, obj.cuenta.id)
+        cursor.execute(sql)
+        # end if
+        row = cursor.fetchone()
+        resul = row[0][0]
+        obj.costo_producto_venta = resul['venta_total'][0].get('compra') if resul['venta_total'] else 0
+        obj.utilidad_producto_venta = resul['venta_total'][0].get('utilidad') if resul['venta_total'] else 0
+        obj.total_producto_venta = resul['venta_total'][0].get('total') if resul['venta_total'] else 0
+        obj.costo_producto_operacion = resul['operacion_total'][0].get('compra') if resul['operacion_total'] else 0
+        obj.utilidad_producto_operacion = resul['operacion_total'][0].get('utilidad') if resul['operacion_total'] else 0
+        obj.total_producto_operacion = resul['operacion_total'][0].get('total') if resul['operacion_total'] else 0
+        obj.save()
+    # end if
+
     def imprimir_cierre(self, obj):
-        return format_html("<a href='{0}' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
+        return format_html("<a href='/inventario/cierre/{0}/' class='imprimir'><i class='micon'>print</i>Imprimir</a>", obj.id)
     # end def
+
+    class Media:
+        js = ('/inventario/js/cierre.js')
 
     imprimir_cierre.allow_tags = True
     imprimir_cierre.short_description = 'Imprimir'
