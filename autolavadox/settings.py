@@ -285,13 +285,13 @@ WSGI_APPLICATION = 'autolavadox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'autolavadox',
+        'NAME': 'autolavadox2',
         'HOST' :'localhost',
         #'HOST': 'ec2-184-73-84-219.compute-1.amazonaws.com',
         #'USER': 'epic',
         'USER': 'postgres',
-        #'PASSWORD': '123456',
-        'PASSWORD': '85412369**$%%&*(/%$#qazxswEDC',
+        'PASSWORD': '123456',
+        #'PASSWORD': '85412369**$%%&*(/%$#qazxswEDC',
         'POST': '5432'
     }
 }
@@ -330,15 +330,15 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-"""
+
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
 MEDIA_URL = '/media/'
 HOST_MEDIA = '/home/dark/practicas/AutoLavadox/media'
 MEDIA_ROOT = '/home/dark/practicas/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
-SERVER_STATIC = ''
-SERVER_M = ''
+SERVER_STATIC = '127.0.0.1:8000'
+SERVER_M = '127.0.0.1:8000'
 
 """
 STATIC_URL = '/static/'
@@ -347,4 +347,4 @@ MEDIA_URL = '/media/'
 HOST_MEDIA = '/media/'
 MEDIA_ROOT = '/var/www/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
-
+"""
