@@ -110,9 +110,10 @@ class AddVehivuloFormAdmin(forms.ModelForm):
     class Meta:
         model = models.Vehiculo
         exclude = ()
-        fields = ['cliente', 'tipo', 'placa', 'marca', 'color', 'kilometraje']
+        fields = ['cuenta','cliente', 'tipo', 'placa', 'marca', 'color', 'kilometraje']
         widgets = {
             'tipo': apply_select2(forms.Select),
+            'cuenta': apply_select2(forms.Select),
             'cliente': apply_select2(forms.Select)
         }
     # end class
@@ -122,18 +123,17 @@ class AddVehivuloFormAdmin(forms.ModelForm):
         servi = Service.get_instance()
         cuent,user,admin=servi.isUser()
         self.cuenta = False
-        if self.instance.cliente:
-            if self.instance.cliente.cuenta:
-                self.cuenta = self.instance.cliente.cuenta
+        if self.instance:
+            if self.instance.cuenta:
+                self.cuenta = self.instance.cuenta
         if admin and self.cuenta:
-            cuenta = servi.getCuenta()
             if self.fields.has_key('cliente'):
                 self.fields['cliente'].queryset = models.Cliente.objects.filter(cuenta=self.cuenta)
             if self.fields.has_key('tipo'):
                 self.fields['tipo'].queryset = models.TipoVehiculo.objects.filter(estado=True, cuenta=self.cuenta)
         else:
             if self.fields.has_key('cliente'):
-                self.fields['cliente'].queryset = models.Cliente.objects.all()
+                self.fields['cliente'].queryset = models.Cliente.objects.none()
 
     #end def
 

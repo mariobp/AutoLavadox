@@ -23,11 +23,20 @@ class BaseAdmin(admin.ModelAdmin):
 
 
 class TipoServicioAdmin(BaseAdmin):
-    form = forms.AddTipoServicioForm
+    form = forms.AddTipoServicioAdminForm
     list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte', 'cuenta']
     list_filter = ['id','inicio','fin',]
     search_fields = ['id','inicio','fin','total']
     list_display_links = ('id_cierre',)
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if not admin :
+            kwargs['form'] = forms.AddTipoServicioForm
+        # end if
+        return super(TipoServicioAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
 
     def id_cierre(self, obj):
         i = 0
@@ -71,11 +80,20 @@ class TipoServicioAdmin(BaseAdmin):
 
 
 class FacturaAdmin(BaseAdmin):
-    form = forms.AddTipoServicioForm
+    form = forms.AddTipoServicioAdminForm
     list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte', 'cuenta']
     list_filter = ['id','inicio','fin',]
     search_fields = ['id','inicio','fin','total']
     list_display_links = ('id_cierre',)
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        ser = Service.get_instance()
+        tem_cuenta,is_user,admin = ser.isUser()
+        if not admin :
+            kwargs['form'] = forms.AddTipoServicioForm
+        # end if
+        return super(FacturaAdmin, self).get_form(request, obj, *args, **kwargs)
+    # end def
 
     def id_cierre(self, obj):
         i = 0

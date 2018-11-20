@@ -65,6 +65,7 @@ class Vehiculo(models.Model):
     kilometraje = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.ForeignKey(TipoVehiculo, null=True, blank=True)
     cliente = models.ForeignKey(Cliente, null=True, blank=True)
+    cuenta = models.ForeignKey(suscripcion.Cuenta, null=True, blank=True)
 
     def __unicode__(self):
         return self.placa if self.placa else 'Sin Asignar'

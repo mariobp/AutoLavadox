@@ -36,10 +36,10 @@ class VehiculoAdmin(admin.ModelAdmin):
         """
         ser = service.Service.get_instance()
         tem_cuenta, is_user, admin = ser.isUser()
-        if obj:
-            return ('cliente',)
+        if obj and admin:
+            return ('cuenta',)
         if admin and not obj:
-            return ('tipo', 'placa', 'marca', 'color', 'kilometraje')
+            return ('cliente','tipo', 'placa', 'marca', 'color', 'kilometraje',)
         return ()
 
 
@@ -49,7 +49,7 @@ class VehiculoAdmin(admin.ModelAdmin):
         tem_cuenta,is_user,admin = ser.isUser()
         if tem_cuenta and is_user :
             cuenta = ser.getCuenta()
-            queryset = queryset.filter(cliente__cuenta=cuenta)
+            #queryset = queryset.filter(cliente__cuenta=cuenta)
         #end if
         return queryset.order_by('-id')
     # end def

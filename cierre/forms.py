@@ -25,11 +25,12 @@ class BaseForm(forms.ModelForm):
     #end def
 #end class
 
+
 class AddTipoServicioForm(BaseForm):
     def __init__(self, *args, **kwargs):
         super(AddTipoServicioForm, self).__init__(*args, **kwargs)
-        self.fields['inicio'].widget = widgets.AdminTimeWidget()
-        self.fields['fin'].widget = widgets.AdminTimeWidget()
+        self.fields['inicio'].widget = widgets.AdminDateWidget()
+        self.fields['fin'].widget = widgets.AdminDateWidget()
     # end def
 
     def clean(self):
@@ -41,7 +42,7 @@ class AddTipoServicioForm(BaseForm):
         if not data.get('inicio') :
             self.add_error('fin', 'Debe digitar la fecha de fin de reporte')
         # end if
-        if data.get('fin')   and data.get('inicio')  :
+        if data.get('fin')  and data.get('inicio')  :
             if data.get('fin') < data.get('inicio') :
                 self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
             # end if
@@ -55,6 +56,41 @@ class AddTipoServicioForm(BaseForm):
     class Meta:
         model = models.TipoServicio
         fields = ['inicio', 'fin']
+        exclude = ['total',]
+    # end class
+# end class
+
+
+class AddTipoServicioAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AddTipoServicioAdminForm, self).__init__(*args, **kwargs)
+        self.fields['inicio'].widget = widgets.AdminDateWidget()
+        self.fields['fin'].widget = widgets.AdminDateWidget()
+    # end def
+
+    def clean(self):
+        data = super(AddTipoServicioAdminForm, self).clean()
+        print data,data.get('fin')
+        if not data.get('fin') :
+            self.add_error('fin', 'Debe digitar la fecha de fin de reporte')
+        # end if
+        if not data.get('inicio') :
+            self.add_error('fin', 'Debe digitar la fecha de fin de reporte')
+        # end if
+        if data.get('fin')  and data.get('inicio')  :
+            if data.get('fin') < data.get('inicio') :
+                self.add_error('inicio', 'La fecha de inio debe ser menor a la de fin')
+            # end if
+        #end if
+    # end def
+
+    class Media:
+        js = ('{}/static/cierre/js/date.js'.format(SERVER_STATIC),)
+    # end class
+
+    class Meta:
+        model = models.TipoServicio
+        fields = ['cuenta', 'inicio', 'fin']
         exclude = ['total',]
     # end class
 # end class
