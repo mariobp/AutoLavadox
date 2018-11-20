@@ -1,7 +1,3 @@
--- Function: public.get_orden_cliente(integer, integer)
-
--- DROP FUNCTION public.get_orden_cliente(integer, integer);
-
 CREATE OR REPLACE FUNCTION public.get_orden_cliente(
     id_orden integer,
     id_cuenta integer)
@@ -37,10 +33,29 @@ begin
 				from operacion_servicio as ser
 				inner join operacion_tiposervicio as tp_ser on ( ser.tipo_id=tp_ser.id and ser.orden_id=id_orden)
 			    ) p1) as servicios,
+			    (SELECT COALESCE(array_to_json(array_agg(row_to_json(p1))), '[]') from (
+				select pro_tem.nombre,  to_char(pro_ven.total, 'FM999,999,999,990') as valor
+				from  operacion_productoventa as pro_ven
+				inner join inventario_producto as pro_tem on (pro_ven.orden_id=id_orden and pro_ven.producto_id=pro_tem.id)
+			    ) p1) as productos,
 			    (
-				select  to_char(sum(ser.valor), 'FM$999,999,999,990')
-				from operacion_servicio as ser
-				inner join operacion_tiposervicio as tp_ser on ( ser.tipo_id=tp_ser.id and ser.orden_id=id_orden)
+				select to_char(
+				case when (
+						select sum(tp_ser.valor) from (select torden.id from operacion_orden as torden where torden.id=448) as orden
+									inner join operacion_servicio as tp_ser on (tp_ser.orden_id=orden.id)
+					 ) is not null then
+						(
+							select sum(tp_ser.valor) from (select torden.id from operacion_orden as torden where torden.id=448) as orden
+							inner join operacion_servicio as tp_ser on (tp_ser.orden_id=orden.id)
+						) else 0 end +
+				case when (
+						select sum(pro_ven.total) from (select torden.id from operacion_orden as torden where torden.id=448) as orden
+						left join operacion_productoventa as pro_ven on (pro_ven.orden_id=orden.id)
+					) is not null then (
+						select sum(pro_ven.total) from (select torden.id from operacion_orden as torden where torden.id=448) as orden
+						left join operacion_productoventa as pro_ven on (pro_ven.orden_id=orden.id)
+					) else 0 end
+				, 'FM999,999,999,990')
 			    ) as total,cast(o.id as text) as id, cast(o.numero as text) as identificador,cast(o.entrada as date) as entrada, case when o.fin is null then cast(o.entrada as date) else cast(o.fin as date) end as salida
 	        from operacion_orden as o where o.id= id_orden
         ) p4);

@@ -383,9 +383,9 @@ class OrdenAdmin(ExportMixin, admin.ModelAdmin):
     # end def
 
     class Media:
-        js = ('/home/coviyarce/webapps/static_autolavadox/operacion/js/json3.min.js','/home/coviyarce/webapps/static_autolavadox/operacion/js/operacion.js',)
+        js = ('/static/operacion/js/json3.min.js','/static/operacion/js/operacion.js',)
         css = {
-            'all': ('/home/coviyarce/webapps/static_autolavadox/operacion/css/operacion.css',)
+            'all': ('/static/operacion/css/operacion.css',)
         }
     # end class
 

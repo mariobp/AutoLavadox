@@ -491,8 +491,13 @@ class InfoOrden(View):
         cursor.execute('select get_orden_cliente(%s::integer,%d::integer)'%(orden, cuenta_id if cuenta else 0))
         row = cursor.fetchone()
         print 'Esto es lo q debe contener ',len(row[0])
-        if len(row[0]) :
-            return HttpResponse(json.dumps(row[0][0]), content_type='application/json',status=200)
+        if len(row[0]):
+            row2 = row[0][0]
+            productos = row2.get('productos', False)
+            if productos and row2.get('servicios', False):
+                for pro in productos:
+                    row2.get('servicios').append(pro)
+            return HttpResponse(json.dumps(row2), content_type='application/json',status=200)
         #end if
         return HttpResponse(json.dumps({}), content_type='application/json',status=200)
     #end class
