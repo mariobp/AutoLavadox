@@ -41,70 +41,6 @@ class Cliente(User):
 # end class
 
 
-class Modulo(models.Model):
-    nombre = models.CharField(max_length=30, unique=True)
-    descripcion = models.CharField(max_length=800, blank=True, null=True)
-    estado = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return u'%s' % (self.nombre)
-    # end def
-
-    def __str__(self):
-        return u'%s' % (self.nombre)
-    # end def
-
-    class Meta:
-        verbose_name = "Modulo"
-        verbose_name_plural = "Modulos"
-    # end class
-# end class
-
-
-class Funcionalidad(models.Model):
-    modulo = models.ForeignKey(Modulo)
-    nombre = models.CharField(max_length=30, unique=True)
-    url = models.CharField(max_length=300, blank=True, null=True)
-    descripcion = models.CharField(max_length=800, blank=True, null=True)
-    estado = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return u'%s --> %s' % (self.modulo.nombre, self.nombre)
-    # end def
-
-    def __str__(self):
-        return u'%s --> %s' % (self.modulo.nombre, self.nombre)
-    # end def
-
-    class Meta:
-        verbose_name = "Funcionalidad"
-        verbose_name_plural = "Funcionalidades"
-    # end class
-# end class
-
-
-class InstModulo(models.Model):
-    nombre = models.CharField(max_length=200)
-    descripcion = models.CharField(max_length=800, null=True, blank=True)
-    modulo = models.ForeignKey(Modulo)
-    funcionalidades = models.ManyToManyField(Funcionalidad)
-    estado = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return u'%s --> %s' % (self.modulo.nombre, self.nombre)
-    # end def
-
-    def __str__(self):
-        return u'%s --> %s' % (self.modulo.nombre, self.nombre)
-    # end def
-
-    class Meta:
-        verbose_name = "Modulo plan"
-        verbose_name_plural = "Modulos de planes"
-    # end class
-# end class
-
-
 class Plan(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=800, null=True, blank=True)
@@ -115,7 +51,6 @@ class Plan(models.Model):
     gerente = models.BooleanField(default=True, verbose_name='App gerente')
     duracion = models.IntegerField(verbose_name='Dias de duración en meses',default=0)
     valor = models.FloatField(default=0)
-    modulos = models.ManyToManyField(InstModulo)
     estado = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -179,23 +114,3 @@ class Suscripcion(models.Model):
         verbose_name_plural = "Suscripciones"
     # end class
 #end class
-
-
-class Factura(models.Model):
-    suscripcion = models.ForeignKey(Suscripcion)
-    realizacion = models.DateTimeField(auto_now_add=True)
-    paga = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return u'%s --> %s %s' % (self.suscripcion.plan.nombre,self.suscripcion.cuenta.cliente.first_name,self.suscripcion.cuenta.cliente.last_name)
-    # end def
-
-    def __str__(self):
-        return u'%s' % (self.suscripcion.plan.nombre)
-    # end def
-
-    class Meta:
-        verbose_name = "Factura"
-        verbose_name_plural = "Facturas"
-    # end class
-# end class

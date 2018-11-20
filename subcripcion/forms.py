@@ -5,86 +5,12 @@ from django.contrib.admin import widgets
 import models
 from cuser.middleware import CuserMiddleware
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from easy_select2 import apply_select2, Select2Multiple
-
-class ModuloForm(forms.ModelForm):
-    class Meta:
-        model = models.Modulo
-        fields = ['nombre','descripcion','estado']
-        exclude = []
-    #end class
-
-    def save(self, commit=True):
-        modulo = super(ModuloForm, self).save(commit)
-        modulo.nombre = modulo.nombre.title()
-        modulo.save()
-        return modulo
-    # end def
-#end class
-
-
-class FuncionalidadForm(forms.ModelForm):
-    class Meta:
-        model = models.Funcionalidad
-        fields = ['modulo','nombre','url', 'descripcion', 'estado']
-        exclude = []
-    #end class
-
-    def save(self, commit=True):
-        modulo = super(FuncionalidadForm, self).save(commit)
-        modulo.nombre = modulo.nombre.title()
-        modulo.save()
-        return modulo
-    # end def
-#end class
-
-
-class FacturaForm(forms.ModelForm):
-    class Meta:
-        model = models.Factura
-        fields = ['suscripcion','paga']
-        exclude = []
-    #end class
-
-    def save(self, commit=True):
-        factura = super(FacturaForm, self).save(commit)
-        print 'este es el servicio de factura ',commit
-        if factura.paga :
-            print 'Factura pagada'
-            factura.realizada = timezone.now()
-            suscrip = models.Suscripcion.objects.filter(id=factura.suscripcion.id).first()
-            if suscrip :
-                suscrip.inicio = factura.realizacion
-                suscrip.fin = datetime(suscrip.inicio.year, suscrip.inicio.month + suscrip.plan.duracion, suscrip.inicio.day, 23, 59, 59,tzinfo=pytz.UTC)
-                print suscrip.fin
-                suscrip.save()
-            # end if
-        #end if
-        factura.save()
-        return factura
-    # end def
-#end class
-
-
-class InstModuloForm(forms.ModelForm):
-    class Meta:
-        model = models.InstModulo
-        fields = ['nombre', 'descripcion', 'modulo', 'funcionalidades', 'estado']
-        exclude = []
-    #end class
-
-    def save(self, commit=True):
-        modulo = super(InstModuloForm, self).save(commit)
-        modulo.nombre = modulo.nombre.title()
-        modulo.save()
-        return modulo
-    # end def
-#end class
 
 
 class PlanForm(forms.ModelForm):
@@ -104,6 +30,7 @@ class PlanForm(forms.ModelForm):
 
 
 class ClienteForm(UserCreationForm):
+    plan = forms.ModelChoiceField(queryset=models.Plan.objects.filter(estado=True))
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
         self.fields['password1'].label = "Contraseña"
@@ -119,6 +46,8 @@ class ClienteForm(UserCreationForm):
             if models.Cliente.objects.filter(identificacion=data.get('identificacion')).first():
                 self.add_error('identificacion','El cliente se encuentra registrado')
             #end def
+        if not data.get('plan'):
+            self.add_error('plan', 'Debe Seleccionar un plan.')
     #end def
 
     class Meta:
@@ -135,6 +64,8 @@ class ClienteForm(UserCreationForm):
         cliente.save()
         cuenta = models.Cuenta(cliente=cliente,estado=True)
         cuenta.save()
+        suscripcion =models.Suscripcion(plan=self.cleaned_data["plan"], cuenta=cuenta, inicio=datetime.today(), fin=datetime.today() + timedelta(days=365))
+        suscripcion.save()
         usuario = User.objects.filter(id=cliente.id).first()
         grupo = Group.objects.get(name='Administrador')
         if usuario and grupo :

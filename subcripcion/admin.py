@@ -6,18 +6,6 @@ import models
 import forms
 # Register your models here.
 
-class InstModuloAdmin(admin.ModelAdmin):
-    list_display = ['nombre','descripcion', 'estado']
-    search_fields = ['nombre','descripcion']
-    filter_horizontal = ['funcionalidades']
-    form = forms.InstModuloForm
-
-    def get_queryset(self, request):
-        queryset = super(InstModuloAdmin, self).get_queryset(request)
-        return queryset.order_by('modulo','nombre','estado')
-    # end def
-#end class
-
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'cajeros', 'operadores','recepcionistas', 'descripcion', 'valor', 'duracion'  ,'estado']
@@ -32,7 +20,8 @@ class PlanAdmin(admin.ModelAdmin):
 
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ['identificacion','first_name','direccion']
+    list_display = ['identificacion','first_name', 'last_name', 'direccion']
+    search_fields = ['identificacion', 'firt_name', 'last_name']
     form = forms.ClienteForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -64,26 +53,7 @@ class CuentaAdmin(admin.ModelAdmin):
 #end class
 
 
-class FacturaAdmin(admin.ModelAdmin):
-    list_display = ['suscripcion','cliente','paga']
-    search_fields=['suscripcion__cuenta__cliente__first_name', 'suscripcion__cuenta__cliente__last_name']
-    form = forms.FacturaForm
-
-    def cliente(self, obj):
-        return '%s %s'%(obj.suscripcion.cuenta.cliente.first_name, obj.suscripcion.cuenta.cliente.last_name)
-    #end def
-
-    cliente.allow_tags = True
-    cliente.short_description = 'Cliente'
-#end class
-
-
-
-
-
-
 exileui.register(models.Plan, PlanAdmin)
 exileui.register(models.Suscripcion)
-exileui.register(models.Factura, FacturaAdmin)
 exileui.register(models.Cuenta, CuentaAdmin)
 exileui.register(models.Cliente, ClienteAdmin)
