@@ -90,7 +90,7 @@ class TipoVehiculoAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion', 'cuenta']
     list_filter = ['nombre']
     list_fileds = ['nombre', 'descripcion', 'cuenta']
-    search_fields = ['nombre', 'descripcion', 'cuenta__cliente__nombre']
+    search_fields = ['nombre', 'descripcion']
     form = forms.TipoServicioFormAdmin
 
     def get_queryset(self, request):
