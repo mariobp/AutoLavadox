@@ -7,8 +7,10 @@ import django.db.models.deletion
 
 
 def load_data_from_sql(apps, schema_editor):
-    archivos = os.listdir('/home/dark/practicas/AutoLavadox/autolavadox/sqls')
-    ruta = '/home/dark/practicas/AutoLavadox/autolavadox/sqls/'
+    archivos = os.listdir('/var/www/AutoLavadox/autolavadox/sqls')
+    #archivos = os.listdir('/home/dark/practicas/AutoLavadox/autolavadox/sqls')
+    ruta = '/var/www/AutoLavadox/autolavadox/sqls/'
+    #ruta = '/home/dark/practicas/AutoLavadox/autolavadox/sqls/'
     for file_path in archivos:
         sql_statement = open('{}{}'.format(ruta,file_path)).read()
         with connection.cursor() as c:
