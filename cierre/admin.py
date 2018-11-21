@@ -148,7 +148,7 @@ class TurnoAdmin(BaseAdmin):
 
 class CierreAdmin(BaseAdmin):
     list_display = ['turno', 'inicio', 'fin', 'total', 'comision', 'producto', 'cuenta', 'imprimir_cierre']
-    search_fields = ['turno__nombre', 'cuenta__cliente__nombre']
+    search_fields = ['turno__nombre']
     form = forms.CierreAdminForm
 
     def get_readonly_fields(self, request, obj=None):
