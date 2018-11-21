@@ -133,7 +133,7 @@ class FacturaAdmin(BaseAdmin):
 
 class TurnoAdmin(BaseAdmin):
     list_display = ['nombre', 'inicio', 'fin', 'cuenta']
-    search_fields = ['nombre', 'inicio', 'fin', 'cuenta__cliente__nombre']
+    search_fields = ['nombre', 'inicio', 'fin']
     form = forms.TurnoAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
