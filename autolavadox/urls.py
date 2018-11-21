@@ -21,7 +21,7 @@ from exileui.admin import exileui
 import settings
 from django.views.generic.base import RedirectView
 from empleados import views as empleado
-favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
+favicon_view = RedirectView.as_view(url='/static/autolavadox/favicon.ico', permanent=True)
 
 urlpatterns = [
     url(r'^dashboard/logout/$', empleado.Logout.as_view()),
