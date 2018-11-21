@@ -19,7 +19,7 @@ class OperarioAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'identificacion', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
     list_filter =[('nacimiento', DateRangeEX)]
-    search_fields = (list_display)
+    search_fields = ('username', 'email', 'first_name', 'last_name')
     form = forms.OperarioAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -44,7 +44,7 @@ class OperarioAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
 class RecepcionistaAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'identificacion', 'cuenta')
-    search_fields = list_display
+    search_fields = ('username', 'email', 'first_name', 'last_name')
     form = forms.RecepcionistaAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -65,7 +65,7 @@ class RecepcionistaAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
 class CajeroAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'identificacion', 'cuenta')
-    search_fields = list_display
+    search_fields = ('username', 'email', 'first_name', 'last_name')
     form = forms.CajeroAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -86,7 +86,7 @@ class CajeroAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
 class AdministradorAdmin(nested_admin.NestedModelAdmin, BaseAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name',
                     'direccion', 'telefono', 'nacimiento')
-    search_fields = list_display
+    search_fields = ('username', 'email', 'first_name', 'last_name')
     form = forms.AdministradorAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
