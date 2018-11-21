@@ -638,7 +638,7 @@ class AdministradorForm(UserCreationForm):
     # end class
 
     def clean(self):
-        data = super(AdministradorAdminForm, self).clean()
+        data = super(AdministradorForm, self).clean()
         if not data.get('identificacion'):
             self.add_error('identificacion', 'Debe digitar el numero de identificacion.')
 

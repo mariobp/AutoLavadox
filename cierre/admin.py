@@ -83,7 +83,6 @@ class FacturaAdmin(BaseAdmin):
     form = forms.AddTipoServicioAdminForm
     list_display = ['id_cierre','inicio','fin','total','comision','accion_reporte', 'cuenta']
     list_filter = ['id','inicio','fin',]
-    search_fields = ['id','inicio','fin','total']
     list_display_links = ('id_cierre',)
 
     def get_form(self, request, obj=None, *args, **kwargs):
@@ -148,7 +147,7 @@ class TurnoAdmin(BaseAdmin):
 
 class CierreAdmin(BaseAdmin):
     list_display = ['turno', 'inicio', 'fin', 'total', 'comision', 'producto', 'cuenta', 'imprimir_cierre']
-    search_fields = ['turno__nombre']
+    search_fields = ['turno__nombre', 'id']
     form = forms.CierreAdminForm
 
     def get_readonly_fields(self, request, obj=None):
