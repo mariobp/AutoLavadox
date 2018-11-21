@@ -14,8 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
-SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
+SERVER_STATIC='http://ec2-52-90-91-114.compute-1.amazonaws.com'
+SERVER_M='http://ec2-52-90-91-114.compute-1.amazonaws.com'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -287,11 +287,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
         'HOST' :'localhost',
-        #'HOST': 'ec2-184-73-84-219.compute-1.amazonaws.com',
-        #'USER': 'epic',
         'USER': 'postgres',
-        #'PASSWORD': '123456',
-        'PASSWORD': '85412369**$%%&*(/%$#qazxswEDC',
+        'PASSWORD': 'admin123456',
         'POST': '5432'
     }
 }
