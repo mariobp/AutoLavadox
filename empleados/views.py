@@ -276,7 +276,7 @@ class ExcelEmpleados(View):
         font_style.font.bold = True
         cuenta, cuenta_id = get_cuenta()
         if cuenta:
-            sql='select informe_time_operarios_cuenta(\'%s\', \'%s\',%d::cuenta)'%(ini,fin,cuenta_id)
+            sql='select informe_time_operarios_cuenta(\'%s\', \'%s\',%d::integer)'%(ini,fin,cuenta_id)
         else:
             sql='select informe_time_operarios(\'%s\', \'%s\')'%(ini,fin)
         cursor=connection.cursor()
@@ -296,7 +296,7 @@ class ExcelEmpleados(View):
         ws.write(1,3,fin.encode('utf-8'), font_style)
         exc_row=2
         while r <len(servicios):
-            ws.write(exc_row, r, (servicios[r]['nombre']).encode('utf-8'), font_style)
+            ws.write(exc_row, r, (servicios[r]['nombre']).encode('utf-8') if servicios[r]['nombre'] else '', font_style)
             r=r + 1
         # end for
         exc_row = exc_row + 1
@@ -390,7 +390,7 @@ class ReporteComisionE(View):
         ws.write(2,4,'Telefono'.encode('utf-8'),font_style)
         w = 5
         while (w-5) < len(servi) :
-            ws.write(2,w,servi[w-5]['nombre'].encode('utf-8'),font_style)
+            ws.write(2,w,servi[w-5]['nombre'].encode('utf-8') if servi[w-5]['nombre'] else '',font_style)
             w = w + 1
         # end while
         ws.write(2,w,'Total'.encode('utf-8'),font_style)
