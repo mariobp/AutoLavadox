@@ -507,7 +507,7 @@ class ComponenteInlineAdmin(admin.StackedInline):
 class ComposicionServicioAdmin(admin.ModelAdmin):
     inlines = [ComponenteInlineAdmin]
     list_display = ['servicio', 'cuenta']
-    search_fields = ['cuenta__cliente__nombre', 'servicio__nombre']
+    search_fields = ['servicio__nombre']
     form = forms.ComposicionServicioAdminForm
 
     def get_form(self, request, obj=None, *args, **kwargs):
