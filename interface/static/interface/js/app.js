@@ -99,7 +99,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       return [];
     };
     this.iniciarData = function(id,datos){
-      console.log("esto es lo q esta en la data ........>> ",data);
       var r =false;
       stop: for (var i in data) {
         if (data[i].id == id) {
@@ -111,7 +110,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       if (!r){
         data.push({id:id,elements:datos});
       }
-      console.log("esto es lo q esta en la data ::::::>> ",data);
     };
     this.actualizarVehiculo = function(search) {
       $http({
@@ -222,7 +220,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
             this.selectFirst('SELECT * FROM itens_ WHERE identificador = ? LIMIT 1', [ identificador ])
                   .then(
               function () {
-                console.log('Empty Result! esta limpio');
                 $http({
                   'url': '/cliente/vehiculo/list/?q=',
                   'method': 'GET'
@@ -244,7 +241,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           this.selectFirst('SELECT * FROM itens_ WHERE identificador = ? LIMIT 1', [ identificador ])
                 .then(
             function () {
-              console.log('Empty Result! esta limpio');
               $http({
                 'url': '/cliente/list/cliente/all/?q=',
                 'method': 'GET'
@@ -271,7 +267,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       };
       this.updateItem = function(identificador,search){
         if(identificador == 1){
-          console.log('esta es la placa a consultar --> ',search);
           $http({
             'url': '/cliente/vehiculo/list/?q=' + search,
             'method': 'GET'
@@ -862,9 +857,7 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
         'url': '/empleados/get/turno/',
         'method': 'GET'
       }).then(function doneCallbacks(response) {
-        console.log($scope.view_turno,'  ',response.data.turno);
         $scope.view_turno = response.data.turno;
-        console.log($scope.view_turno);
       }, function failCallbacks(response) {
         if (response.status == 500) {
           $scope.dialogError();
@@ -894,7 +887,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       }*/
       managerData.existItem(1);
       managerData.existItem(2);
-      console.log("Respuesta de la existencia de dato ==> ",allVehiculo,"   ",);
     }
 
     //Invocar servicios
@@ -1374,7 +1366,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
       });
     };
     $scope.asignarPreOperarioDialog = function(servicio, ev) {
-      console.log('Este es estado antes de enviar ', $scope.serv5, '  ', $scope.serv6);
       $scope.serv6 = false;
       $scope.serv5 = false;
       var dialog = $mdDialog.show({
@@ -1488,7 +1479,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     }
 
     $scope.asignarOperario = function() {
-      console.log(servicio);
       if (orden) {
         $mdDialog.hide();
         $mdToast.show(
@@ -1587,7 +1577,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     }
 
     $scope.asignarOperarioPre = function() {
-      console.log(servicio);
       if (orden) {
         // $mdDialog.hide();
         // $mdToast.show(
@@ -1693,34 +1682,28 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     };
 
     $scope.textChange2 = function(search) {
-      console.log(search);
       $scope.identificacion = search;
     };
 
     $scope.textChange3 = function(search) {
-      console.log(search);
       $scope.celular = search;
     };
 
     $scope.clienteActual = function(ev) {
-      console.log("Se selecciono el servicio **************************** ************  ",ev);
       $scope.data.nombre = this.selectedCliente.nombre;
       $scope.data.apellidos = this.selectedCliente.apellidos;
       $scope.data.celular = this.selectedCliente.celular;
       $scope.data.cliente = this.selectedCliente.id;
       $scope.data.identificacion = this.selectedCliente.identificacion;
-      console.log(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null);
-      console.log(this.selectedCliente.celular == null && this.selectedCliente.identificacion != null);
-      console.log(this.selectedCliente.celular != null && this.selectedCliente.identificacion == null);
-      console.log(this.selectedCliente.celular ,"  ", this.selectedCliente.identificacion);
+
       if(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null){
-        console.log("entro en la primera ");
+
         this.selectedCliente = "";
       }else if(this.selectedCliente.celular == null && this.selectedCliente.identificacion != null){
-        console.log("entro en la 2");
+
         this.selectedCliente = this.selectedCliente.celular;
       }else if(this.selectedCliente.celular != null && this.selectedCliente.identificacion == null){
-        console.log("entro en la 3");
+
         this.selectedCliente = this.selectedCliente.celular;
       }else if(!(this.selectedCliente.celular == null && this.selectedCliente.identificacion == null)){
         if(this.selectedCliente.celular == "" && this.selectedCliente.identificacion != ""){
@@ -1732,16 +1715,14 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           //this.selectedCliente = this.selectedCliente.celular;
         }
       }
-      console.log($scope.selectedCliente,'  ',$scope.data);
+
     };
 
     $scope.listClientes = function(searchText) {
       var v = [];
       var t = allVehiculo.getDataElement(2);
-      console.log(t);
       var semaforo = false;
       for (var x in t) {
-        console.log(t[x].identificacion,"  ",t[x].celular);
         semaforo =false;
         if (t[x].identificacion != null){
           if (t[x].identificacion.includes(searchText)){
@@ -1778,7 +1759,7 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     };
 
 
-    console.log(info);
+
     $scope.enviar = function() {
       $scope.cargando = true;
       if ($scope.data.cliente) {
@@ -1808,7 +1789,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           // console.log('=================><=================================');
            allVehiculo.actualizarCliente(info.identificacion);
           allVehiculo.actualizarVehiculo(info.placa);
-          console.log("placa q estoy enviando --> ",info.placa);
           managerData.updateItem(1,info.placa);
           managerData.updateItem(2,info.identificacion);
           // /***************************************/
@@ -1831,7 +1811,7 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           $scope.cargando = false;
           $scope.data = {};
         }, function failCallbacks(response) {
-          console.log('Respuesta del server --->', response);
+
           $scope.cargando = false;
           if (response.status == 400) {
             if (response.data.cliente) {
@@ -1862,8 +1842,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           }
         });
       } else {
-        console.log($scope.identificacion);
-        console.log($scope.celular);
         var dataSend = {};
         dataSend.nombre = $scope.data.nombre;
         dataSend.apellidos = $scope.data.apellidos;
@@ -1888,7 +1866,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
         }).then(function doneCallbacks(response) {
           console.log(response);
           /******** AGREGANDO VEHICULOS **********/
-          console.log('=================><=================================');
           allVehiculo.actualizarCliente($scope.identificacion);
           allVehiculo.actualizarVehiculo($scope.data.placa);
           managerData.updateItem(1,$scope.data.placa);
@@ -1900,7 +1877,6 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
           item.tipo = $scope.data.tipo;
           //hacer busqueda del vehiculo
           function getVehiculo() {
-            console.log(item.placa);
             $http({
               'url': '/cliente/vehiculo/?q=' + item.placa,
               'method': 'GET'
