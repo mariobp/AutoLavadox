@@ -14,8 +14,6 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SERVER_STATIC='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
-SERVER_M='http://ec2-184-73-84-219.compute-1.amazonaws.com:8030'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -27,7 +25,7 @@ SECRET_KEY = '&up7i-+v$lvt_s5^@c63f@jwp)ddr8=qqh*b9_nqs2pxr25ytz'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '*','http://ec2-184-73-84-219.compute-1.amazonaws.com','https://storage.googleapis.com'
+    'localhost', '*'
 ]
 
 EXILE_UI = {
@@ -37,9 +35,9 @@ EXILE_UI = {
     'dash_template': 'admin/dash/newdash.html',
     'media': {
         'logo': {
-            'dashboard': '{}/media/logo/carrito_mojado.svg'.format(SERVER_STATIC),
-            'page': '{}/media/logo/carrito_mojado.svg'.format(SERVER_STATIC),
-            'login': '{}/media/logo/carrito_mojado.png'.format(SERVER_STATIC)
+            'dashboard': '/media/logo/carrito_mojado.svg',
+            'page': '/media/logo/carrito_mojado.svg',
+            'login': '/media/logo/carrito_mojado.png'
         },
         'icons': {
             'empleados': {
@@ -286,8 +284,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'autolavadox',
-        'HOST' :'localhost',
-        #'HOST': 'ec2-184-73-84-219.compute-1.amazonaws.com',
+        #'HOST' :'localhost',
+        'HOST': 'ec2-3-80-211-24.compute-1.amazonaws.com',
         #'USER': 'epic',
         'USER': 'postgres',
         #'PASSWORD': '123456',
@@ -332,14 +330,13 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 """
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/dark/practicas/AutoLavadox/static'
+STATIC_ROOT = '/home/dark/Documentos/AutoLavadox/static'
 MEDIA_URL = '/media/'
-HOST_MEDIA = '/home/dark/practicas/AutoLavadox/media'
-MEDIA_ROOT = '/home/dark/practicas/AutoLavadox/media'
+HOST_MEDIA = '/home/dark/Documentos/AutoLavadox/media'
+MEDIA_ROOT = '/home/dark/Documentos/AutoLavadox/media'
 LOGOUT_URL = '/accounts/login/'
 SERVER_STATIC = ''
 SERVER_M = ''
-
 """
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/AutoLavadox/static'

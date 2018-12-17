@@ -6,7 +6,6 @@ from exileui.widgets import DatePickerWidget
 import models
 from django.contrib.admin import widgets
 from autolavadox import service
-from autolavadox.settings import SERVER_STATIC
 from subcripcion import models as suscripcion
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
@@ -40,7 +39,7 @@ class OperarioForm(UserCreationForm):
                 self.add_error('identificacion', 'Debe registrar un numero de identificacion.')
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -79,7 +78,7 @@ class OperarioAdminForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -125,7 +124,7 @@ class OperarioFormEdit(forms.ModelForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -166,7 +165,7 @@ class OperarioAdminFormEdit(forms.ModelForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -226,7 +225,7 @@ class RecepcionistaForm(UserCreationForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -279,7 +278,7 @@ class RecepcionistaAdminForm(UserCreationForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -327,7 +326,7 @@ class RecepcionistaFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -385,7 +384,7 @@ class RecepcionistaAdminFormEdit(forms.ModelForm):
 
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):
@@ -417,7 +416,7 @@ class CajeroForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -473,7 +472,7 @@ class CajeroAdminForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -533,7 +532,7 @@ class CajeroFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -583,7 +582,7 @@ class CajeroAdminFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -628,7 +627,7 @@ class AdministradorForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     class Meta:
@@ -680,7 +679,7 @@ class AdministradorAdminForm(UserCreationForm):
     # end def
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
 
     # end class
 
@@ -733,7 +732,7 @@ class AdministradorFormEdit(forms.ModelForm):
     # end class
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def clean(self):
@@ -785,7 +784,7 @@ class AdministradorAdminFormEdit(forms.ModelForm):
             self.add_error('identificacion', 'Debe digitar el numero de identificacion.')
 
     class Media:
-        js = ('{}/static/empleados/js/dateoperario.js'.format(SERVER_STATIC),)
+        js = ('/static/empleados/js/dateoperario.js',)
     # end class
 
     def save(self, commit=True):

@@ -38,4 +38,5 @@ urlpatterns += [
 urlpatterns += [
     url(r'^add/suscripcion/$',
         login_required(views.AddSuscripcion.as_view()), name='add_suscripcion'),
+
 ]

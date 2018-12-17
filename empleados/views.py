@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from django.http import JsonResponse
 from django.shortcuts import render
 import models
 from supra import views as supra
@@ -420,3 +421,11 @@ class ReporteComisionE(View):
         wb.save(response)
         return response
     # end class
+
+
+class ConfiguracionTurno(View):
+    def get(self, request, *args, **kwargs):
+        servi = Service.get_instance()
+        cuenta = servi.getCuenta()
+        info = {'turno': cuenta.cliente.mostrar_turno if cuenta else False}
+        return JsonResponse(info)

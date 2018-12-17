@@ -5,7 +5,6 @@ from exileui.widgets import DatePickerWidget
 from autolavadox import service
 from django.db.models import Q
 from django.contrib.admin import widgets
-from autolavadox.settings import SERVER_STATIC
 from easy_select2 import apply_select2, Select2Multiple
 
 class BaseForm(forms.ModelForm):
@@ -50,7 +49,7 @@ class AddTipoServicioForm(BaseForm):
     # end def
 
     class Media:
-        js = ('{}/static/cierre/js/date.js'.format(SERVER_STATIC),)
+        js = ('{}/static/cierre/js/date.js',)
     # end class
 
     class Meta:
@@ -85,7 +84,7 @@ class AddTipoServicioAdminForm(forms.ModelForm):
     # end def
 
     class Media:
-        js = ('{}/static/cierre/js/date.js'.format(SERVER_STATIC),)
+        js = ('/static/cierre/js/date.js',)
     # end class
 
     class Meta:
@@ -104,7 +103,7 @@ class AddFacturaForm(BaseForm):
     # end def
 
     class Media:
-        js = ('{}/static/cierre/js/date.js'.format(SERVER_STATIC),)
+        js = ('/static/cierre/js/date.js',)
     # end class
 
     class Meta:

@@ -6,7 +6,6 @@ import forms
 from django.db import connection
 import json
 from autolavadox import service
-from autolavadox.settings import SERVER_STATIC
 from autolavadox.views import set_queryset, get_cuenta
 from django.db.models import Q
 from autolavadox.service import Service
@@ -69,7 +68,7 @@ class TipoServicioAdmin(BaseAdmin):
     # end def
 
     class Media:
-        js = ('{}/static/cierre/js/cierre.js'.format(SERVER_STATIC),)
+        js = ('/static/cierre/js/cierre.js',)
     # end class
 
     id_cierre.allow_tags = True

@@ -13,4 +13,5 @@ urlpatterns += [
     url(r'^excel/periodo/$', views.Excel.as_view(), name='operarios'),
     url(r'^excel/empleados/$', views.ExcelEmpleados.as_view(), name='excel_empleados'),
     url(r'^report/comi/$', views.ReporteComisionE.as_view(), name='excel_comision_empleados'),
+    url(r'^get/turno/$',views.ConfiguracionTurno.as_view(), name='get_turno'),
 ]

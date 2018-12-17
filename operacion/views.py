@@ -69,6 +69,98 @@ class AddOrdenForm(supra.SupraFormView):
     def dispatch(self, *args, **kwargs):
         return super(AddOrdenForm, self).dispatch(*args, **kwargs)
     # end def
+
+    def form_valid(self, form):
+        instance = form.save()
+        for inline in self.validated_inilines:
+            inline.instance = instance
+            inline.save()
+        # end for
+        json_dict = self.format_json([instance])
+        return HttpResponse(json.dumps(json_dict[0]), status=200, content_type="application/json")
+
+    # end def
+
+    def format_json(cls, queryset, extra=None, time=0, list_display=[]):
+        from django.db.models.query import QuerySet
+        object_list = []
+
+        if isinstance(queryset, QuerySet):
+            list_d = []
+            for lis in list_display:
+                if isinstance(lis, tuple):
+                    list_d.append(lis[0])
+                else:
+                    list_d.append(lis)
+                    # end if
+            # end for
+            rows = queryset.values(*list_d)
+        else:
+            rows = queryset
+        # end if
+        i = 0
+        for row in rows:
+            dct = {}
+
+            if isinstance(row, dict):
+                if isinstance(queryset[i], dict) and not 'pk' in queryset[i]:
+                    pk = queryset[i].pk
+                    row['pk'] = pk
+                    # end if
+            # end if
+            obj = row
+
+            if list_display == [] or list_display == None:
+                if isinstance(row, dict):
+                    list_display = row
+                else:
+                    list_display = row.__dict__
+                    row = row.__dict__
+                    # end if
+            # end if
+
+            for col in list_display:
+                if isinstance(col, tuple):
+                    encode = col[1]
+                    col = col[0]
+                else:
+                    encode = None
+                # end if
+
+                if col != '_state' and col in row:
+                    val = row[col]
+                else:
+                    val = None
+                # end if
+                if encode == 'json':
+                    if isinstance(val, dict) or isinstance(val, list):
+                        dct[col] = val
+                    else:
+                        dct[col] = json.loads(val)
+                        # end if
+                elif isinstance(val, datetime.datetime):
+                    dct[col] = val.strftime(cls.datetime_format)
+                elif isinstance(val, datetime.date):
+                    dct[col] = val.strftime(cls.date_format)
+                elif isinstance(val, dict) or isinstance(val, list):
+                    dct[col] = cls.format_json(val, extra, time=time + 1)
+                elif hasattr(val, 'all'):
+                    dct[col] = cls.format_json(val.all(), extra, time=time + 1)
+                elif isinstance(val, models.Model):
+                    dct[col] = unicode(val)
+                else:
+                    dct[col] = val
+                    # end if
+                    # setattr(obj, col, dct[col])
+            # end for
+            if extra and callable(extra):
+                dct = extra(dct, queryset[i], row)
+            # end if
+            object_list.append(dct)
+            i = i + 1
+        # end for
+        return object_list
+    # end def
 # end class
 
 

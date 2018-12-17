@@ -368,6 +368,7 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
     $scope.serv7 = false;
     $scope.serv8 = false;
     $scope.dialogOpen = false;
+    $scope.view_turno = false;
     var promise_element = null;
     var data = {};
 
@@ -857,6 +858,18 @@ angular.module('App', ['ngMaterial', 'ngMessages','ngSQLite'])
 
     //Ordenes sin terminar
     $scope.ordenesPendientes = function() {
+      $http({
+        'url': '/empleados/get/turno/',
+        'method': 'GET'
+      }).then(function doneCallbacks(response) {
+        console.log($scope.view_turno,'  ',response.data.turno);
+        $scope.view_turno = response.data.turno;
+        console.log($scope.view_turno);
+      }, function failCallbacks(response) {
+        if (response.status == 500) {
+          $scope.dialogError();
+        }
+      });
       $http({
         'url': '/operacion/get/ordenes/pendientes/',
         'method': 'GET'
